@@ -1,26 +1,38 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Enable static exports for Amplify
-  output: 'export',
-  
   // Optimize for production
   compress: true,
-  
-  // Disable server-side features for static export
-  trailingSlash: true,
   
   // Environment variables
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
   },
   
-  // Image optimization
+  // Image optimization (Vercel handles this automatically)
   images: {
-    unoptimized: true, // Required for static export
+    domains: ['localhost', 'your-api-domain.com'], // Add your API domain here
   },
   
-  // Disable features that don't work with static export
+  // Enable experimental features if needed
+  experimental: {
+    // Add any experimental features here
+  },
+  
+  // Redirects and rewrites for Vercel
+  async redirects() {
+    return [
+      // Add any redirects here
+    ];
+  },
+  
+  async rewrites() {
+    return [
+      // Add any rewrites here
+    ];
+  },
+  
+  // ESLint and TypeScript configuration
   eslint: {
     ignoreDuringBuilds: false,
   },

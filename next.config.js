@@ -4,12 +4,13 @@ const withNextIntl = require('next-intl/plugin')(
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
+  // Remove output: 'export' for Vercel deployment
   images: {
     domains: [
       'localhost',
       'store.storeimages.cdn-apple.com',
       'example.com',
+      'adjxk71gc3.execute-api.ap-southeast-1.amazonaws.com',
       // Add your image domains here
     ],
     remotePatterns: [

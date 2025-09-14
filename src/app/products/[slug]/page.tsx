@@ -1,9 +1,9 @@
 import React from 'react';
 import { ProductDetailClient } from './ProductDetailClient';
 
-// Generate static params for static export
+// Generate static params for ISR (Incremental Static Regeneration)
 export async function generateStaticParams() {
-  // For static export, we'll generate a few common product slugs
+  // For Vercel, we can generate some common product slugs
   // In a real app, you might want to fetch this from your API
   const commonSlugs = [
     'iphone-15-pro-max',
@@ -20,6 +20,8 @@ export async function generateStaticParams() {
   }));
 }
 
+// Enable ISR for better performance
+export const revalidate = 3600; // Revalidate every hour
 
 export default function ProductDetailPage() {
   return <ProductDetailClient />;
