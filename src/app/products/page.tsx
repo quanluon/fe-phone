@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { 
@@ -18,7 +18,7 @@ import { useBrands } from '@/hooks/useBrands';
 import { Product, ProductQuery, ProductType } from '@/types';
 import { PRODUCT_TYPE_LABELS, SORT_OPTIONS } from '@/lib/constants';
 
-export default function ProductsPage() {
+function ProductsContent() {
   const t = useTranslations();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -333,6 +333,21 @@ export default function ProductsPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading products...</p>
+        </div>
+      </div>
+    }>
+      <ProductsContent />
+    </Suspense>
   );
 }
 

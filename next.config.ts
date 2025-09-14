@@ -2,15 +2,13 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   // Enable static exports for Amplify
-  output: 'standalone',
+  output: 'export',
   
   // Optimize for production
   compress: true,
   
-  // Enable experimental features if needed
-  experimental: {
-    // Add any experimental features here
-  },
+  // Disable server-side features for static export
+  trailingSlash: true,
   
   // Environment variables
   env: {
@@ -22,17 +20,12 @@ const nextConfig: NextConfig = {
     unoptimized: true, // Required for static export
   },
   
-  // Redirects and rewrites
-  async redirects() {
-    return [
-      // Add any redirects here
-    ];
+  // Disable features that don't work with static export
+  eslint: {
+    ignoreDuringBuilds: false,
   },
-  
-  async rewrites() {
-    return [
-      // Add any rewrites here
-    ];
+  typescript: {
+    ignoreBuildErrors: false,
   },
 };
 
