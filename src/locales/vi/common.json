@@ -29,14 +29,49 @@
     "hero": {
       "saleOff": "GIẢM GIÁ 30%",
       "headphoneTitle": "Tai Nghe Chống Ồn Không Dây Thật",
-      "headphoneDescription": "Lorem ipsum dolor sit, consectetur elit nunc suscipit non ipsum nec suscipit.",
+      "headphoneDescription": "Trải nghiệm âm thanh tuyệt vời với công nghệ chống ồn tiên tiến và chất lượng âm thanh cao cấp.",
       "shopNow": "Mua Ngay",
       "iphoneTitle": "iPhone 16 Pro & 16 Pro Max",
-      "limitedOffer": "ƯU ĐÃI CÓ HẠN",
+      "iphoneDescription": "Điện thoại thông minh mới nhất với camera chuyên nghiệp và hiệu năng vượt trội.",
       "macbookTitle": "MacBook Pro M4",
-      "macbookDescription": "CPU 14 nhân với 10 nhân hiệu suất và 4 nhân tiết kiệm điện",
+      "macbookDescription": "Laptop chuyên nghiệp với chip M4 mạnh mẽ, hoàn hảo cho công việc và sáng tạo.",
+      "limitedOffer": "ƯU ĐÃI CÓ HẠN",
       "saveUp": "Tiết kiệm đến",
-      "code": "Mã:"
+      "code": "Mã:",
+      "slides": {
+        "headphones": {
+          "title": "Tai Nghe Chống Ồn Không Dây Thật",
+          "description": "Trải nghiệm âm thanh tuyệt vời với công nghệ chống ồn tiên tiến và chất lượng âm thanh cao cấp.",
+          "discount": "30%",
+          "discountText": "GIẢM GIÁ",
+          "buttonText": "Mua Ngay"
+        },
+        "iphone": {
+          "title": "iPhone 16 Pro & 16 Pro Max",
+          "description": "Điện thoại thông minh mới nhất với camera chuyên nghiệp và hiệu năng vượt trội.",
+          "discount": "20%",
+          "discountText": "GIẢM GIÁ",
+          "buttonText": "Khám Phá"
+        },
+        "macbook": {
+          "title": "MacBook Pro M4",
+          "description": "Laptop chuyên nghiệp với chip M4 mạnh mẽ, hoàn hảo cho công việc và sáng tạo.",
+          "discount": "15%",
+          "discountText": "GIẢM GIÁ",
+          "buttonText": "Tìm Hiểu"
+        }
+      },
+      "promotions": {
+        "iphone": {
+          "title": "iPhone 16 Pro & 16 Pro Max",
+          "subtitle": "ƯU ĐÃI CÓ HẠN"
+        },
+        "macbook": {
+          "title": "MacBook Pro M4",
+          "subtitle": "CPU 14 nhân với 10 nhân hiệu suất và 4 nhân tiết kiệm điện",
+          "savings": "Tiết kiệm đến ₫3.750.000"
+        }
+      }
     },
     "categories": {
       "title": "Duyệt Theo Danh Mục",
@@ -68,6 +103,10 @@
     "viewProduct": "Xem Sản Phẩm",
     "addToWishlist": "Thêm Vào Yêu Thích",
     "removeFromWishlist": "Xóa Khỏi Yêu Thích",
+    "inCart": "Trong giỏ",
+    "allInCart": "Tất cả trong giỏ",
+    "allItemsInCart": "Tất cả sản phẩm trong giỏ",
+    "inCartCount": "trong giỏ",
     "detail": {
       "productNotFound": "Không Tìm Thấy Sản Phẩm",
       "productNotFoundDescription": "Sản phẩm bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.",
@@ -106,7 +145,30 @@
     "allTypes": "Tất cả loại",
     "noProductsFound": "Không tìm thấy sản phẩm",
     "loadMore": "Tải thêm sản phẩm",
-    "productsFound": "sản phẩm được tìm thấy"
+    "productsFound": "sản phẩm được tìm thấy",
+    "discoverProducts": "Khám phá những sản phẩm tuyệt vời của chúng tôi",
+    "loadingProducts": "Đang tải sản phẩm...",
+    "errorLoadingProducts": "Lỗi khi tải sản phẩm",
+    "tryAgain": "Thử Lại",
+    "clearAllFilters": "Xóa Tất Cả Bộ Lọc",
+    "productsCount": "{count} sản phẩm",
+    "productTypes": {
+      "iphone": "iPhone",
+      "ipad": "iPad",
+      "imac": "iMac",
+      "macbook": "MacBook",
+      "watch": "Apple Watch",
+      "airpods": "AirPods",
+      "accessories": "Phụ Kiện"
+    },
+    "sortOptions": {
+      "newestFirst": "Mới Nhất Trước",
+      "oldestFirst": "Cũ Nhất Trước",
+      "priceLowToHigh": "Giá: Thấp đến Cao",
+      "priceHighToLow": "Giá: Cao đến Thấp",
+      "nameAToZ": "Tên: A đến Z",
+      "nameZToA": "Tên: Z đến A"
+    }
   },
   "cart": {
     "title": "Giỏ Hàng",
@@ -127,7 +189,17 @@
     "free": "Miễn Phí",
     "tax": "Thuế",
     "calculatedAtCheckout": "Tính khi thanh toán",
-    "youMightAlsoLike": "Bạn có thể thích"
+    "youMightAlsoLike": "Bạn có thể thích",
+    "validation": {
+      "cannotAddToCart": "Không thể thêm vào giỏ hàng",
+      "cannotUpdateQuantity": "Không thể cập nhật số lượng",
+      "invalidQuantity": "Số lượng không hợp lệ",
+      "insufficientStock": "Chỉ còn {stock} sản phẩm trong kho. Bạn yêu cầu {quantity} sản phẩm.",
+      "outOfStock": "{productName} ({color}) hiện đang hết hàng",
+      "quantityMustBeGreaterThanZero": "Số lượng phải lớn hơn 0",
+      "addedToCart": "{productName} ({color}) đã được thêm vào giỏ hàng",
+      "removedFromCart": "{productName} ({color}) đã được xóa khỏi giỏ hàng"
+    }
   },
   "wishlist": {
     "title": "Danh Sách Yêu Thích",
@@ -178,6 +250,16 @@
     "enterEmail": "Nhập email của bạn",
     "subscribe": "Đăng Ký",
     "allRightsReserved": "Tất cả quyền được bảo lưu."
+  },
+  "imagePreview": {
+    "resetZoom": "Đặt lại zoom",
+    "zoomIn": "Phóng to",
+    "zoomOut": "Thu nhỏ",
+    "close": "Đóng",
+    "previousImage": "Ảnh trước",
+    "nextImage": "Ảnh tiếp theo",
+    "imageCounter": "{current} / {total}",
+    "thumbnail": "Ảnh thu nhỏ {index}"
   },
   "common": {
     "loading": "Đang tải...",
@@ -282,6 +364,26 @@
     "thisYear": "Năm nay",
     "lastYear": "Năm ngoái",
     "nextYear": "Năm sau"
+  },
+  "errors": {
+    "failedToLoadCategories": "Không thể tải danh mục"
+  },
+  "hero": {
+    "previousSlide": "Slide trước",
+    "nextSlide": "Slide tiếp theo",
+    "goToSlide": "Chuyển đến slide {index}"
+  },
+  "notFound": {
+    "title": "Không Tìm Thấy Trang",
+    "subtitle": "404",
+    "description": "Xin lỗi, trang bạn đang tìm kiếm không tồn tại hoặc đã được di chuyển.",
+    "suggestions": "Dưới đây là một số gợi ý:",
+    "checkUrl": "Kiểm tra URL có lỗi chính tả không",
+    "goBack": "Quay lại trang trước",
+    "visitHome": "Truy cập trang chủ của chúng tôi",
+    "comingSoon": "Sắp Ra Mắt",
+    "buttonHome": "Về Trang Chủ",
+    "buttonBack": "Quay Lại"
   }
 }
 

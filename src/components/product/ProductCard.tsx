@@ -10,7 +10,7 @@ import { Product, ProductVariant } from '@/types';
 import { Card, Badge } from '@/components/ui';
 import { Button } from '@/components/ui/Button';
 import { formatCurrency, calculateDiscount, getImageUrl } from '@/lib/utils';
-import { useCartStore } from '@/stores/cart';
+import { useCartWithTranslations } from '@/hooks/useCartWithTranslations';
 import { useWishlistStore } from '@/stores/wishlist';
 import { useUIStore } from '@/stores/ui';
 
@@ -33,7 +33,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(product.variants[0]);
   const [isHovered, setIsHovered] = useState(false);
   
-  const { addItem: addToCart } = useCartStore();
+  const { addItem: addToCart, getItemQuantity } = useCartWithTranslations();
   const { isInWishlist, toggleItem: toggleWishlist } = useWishlistStore();
   const { currency } = useUIStore();
 
@@ -42,11 +42,20 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     ? calculateDiscount(selectedVariant.price, selectedVariant.originalPrice)
     : 0;
 
+  // Calculate available stock considering cart quantity
+  const cartQuantity = getItemQuantity(product._id, selectedVariant._id);
+  const availableStock = selectedVariant.stock - cartQuantity;
+
   const handleAddToCart = () => {
     if (onAddToCart) {
       onAddToCart(product, selectedVariant);
     } else {
-      addToCart(product, selectedVariant);
+      const result = addToCart(product, selectedVariant);
+      
+      // If validation failed, the error toast is already shown by the store
+      if (!result.isValid) {
+        console.warn('Cart validation failed:', result.error);
+      }
     }
   };
 
@@ -66,7 +75,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
   return (
     <Card 
-      className={`group relative overflow-hidden transition-all duration-300 hover:shadow-lg ${className}`}
+      variant="outlined"
+      className={`group relative overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-blue-300 ${className}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -120,10 +130,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               size="sm"
               className="flex-1"
               onClick={handleAddToCart}
-              disabled={selectedVariant.stock === 0}
+              disabled={availableStock === 0}
             >
               <ShoppingCartIcon className="h-4 w-4 mr-1" />
-              {selectedVariant.stock === 0 ? t('outOfStock') : t('addToCart')}
+              {availableStock === 0 
+                ? (cartQuantity > 0 ? t('product.inCart') : t('product.outOfStock'))
+                : t('addToCart')
+              }
             </Button>
             <Button
               size="sm"
@@ -188,12 +201,19 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
         {/* Stock Status */}
         <div className="text-xs text-gray-500">
-          {selectedVariant.stock > 0 ? (
+          {availableStock > 0 ? (
             <span className="text-green-600">
-              {selectedVariant.stock} {t('inStock')}
+              {availableStock} {t('inStock')}
+              {cartQuantity > 0 && (
+                <span className="text-blue-600 ml-1">
+                  ({cartQuantity} {t('product.inCartCount')})
+                </span>
+              )}
             </span>
           ) : (
-            <span className="text-red-600">{t('outOfStock')}</span>
+            <span className="text-red-600">
+              {cartQuantity > 0 ? t('product.allInCart') : t('product.outOfStock')}
+            </span>
           )}
         </div>
       </div>

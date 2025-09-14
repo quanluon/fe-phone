@@ -48,7 +48,7 @@ export const Header: React.FC = () => {
   return (
     <>
       {/* Top Bar */}
-      <div className="bg-blue-900 text-white py-2">
+      <div className="bg-blue-700 text-white py-2">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between text-sm">
             {/* Left side - Country & Currency */}
@@ -59,7 +59,7 @@ export const Header: React.FC = () => {
                 className="bg-transparent border-none text-white focus:outline-none cursor-pointer text-xs sm:text-sm"
               >
                 {COUNTRY_OPTIONS.map((option) => (
-                  <option key={option.value} value={option.value} className="bg-blue-900">
+                  <option key={option.value} value={option.value} className="bg-blue-700">
                     {option.label}
                   </option>
                 ))}

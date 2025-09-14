@@ -29,14 +29,49 @@
     "hero": {
       "saleOff": "30% SALE OFF",
       "headphoneTitle": "True Wireless Noise Cancelling Headphone",
-      "headphoneDescription": "Lorem ipsum dolor sit, consectetur elit nunc suscipit non ipsum nec suscipit.",
+      "headphoneDescription": "Experience amazing sound with advanced noise cancellation technology and premium audio quality.",
       "shopNow": "Shop Now",
       "iphoneTitle": "iPhone 16 Pro & 16 Pro Max",
-      "limitedOffer": "LIMITED TIME OFFER",
+      "iphoneDescription": "Latest smartphone with professional camera and outstanding performance.",
       "macbookTitle": "MacBook Pro M4",
-      "macbookDescription": "14-core CPU with 10 and 4 efficiency cores",
+      "macbookDescription": "Professional laptop with powerful M4 chip, perfect for work and creativity.",
+      "limitedOffer": "LIMITED TIME OFFER",
       "saveUp": "Save up to",
-      "code": "Code:"
+      "code": "Code:",
+      "slides": {
+        "headphones": {
+          "title": "True Wireless Noise Cancelling Headphone",
+          "description": "Experience amazing sound with advanced noise cancellation technology and premium audio quality.",
+          "discount": "30%",
+          "discountText": "SALE OFF",
+          "buttonText": "Shop Now"
+        },
+        "iphone": {
+          "title": "iPhone 16 Pro & 16 Pro Max",
+          "description": "Latest smartphone with professional camera and outstanding performance.",
+          "discount": "20%",
+          "discountText": "SALE OFF",
+          "buttonText": "Explore"
+        },
+        "macbook": {
+          "title": "MacBook Pro M4",
+          "description": "Professional laptop with powerful M4 chip, perfect for work and creativity.",
+          "discount": "15%",
+          "discountText": "SALE OFF",
+          "buttonText": "Learn More"
+        }
+      },
+      "promotions": {
+        "iphone": {
+          "title": "iPhone 16 Pro & 16 Pro Max",
+          "subtitle": "LIMITED TIME OFFER"
+        },
+        "macbook": {
+          "title": "MacBook Pro M4",
+          "subtitle": "14-core CPU with 10 performance and 4 efficiency cores",
+          "savings": "Save up to ₫3,750,000"
+        }
+      }
     },
     "categories": {
       "title": "Browse by Category",
@@ -68,6 +103,10 @@
     "viewProduct": "View Product",
     "addToWishlist": "Add to Wishlist",
     "removeFromWishlist": "Remove from Wishlist",
+    "inCart": "In cart",
+    "allInCart": "All in cart",
+    "allItemsInCart": "All items in cart",
+    "inCartCount": "in cart",
     "detail": {
       "productNotFound": "Product Not Found",
       "productNotFoundDescription": "The product you're looking for doesn't exist or has been removed.",
@@ -106,7 +145,30 @@
     "allTypes": "All Types",
     "noProductsFound": "No products found",
     "loadMore": "Load More Products",
-    "productsFound": "products found"
+    "productsFound": "products found",
+    "discoverProducts": "Discover our amazing products",
+    "loadingProducts": "Loading products...",
+    "errorLoadingProducts": "Error loading products",
+    "tryAgain": "Try Again",
+    "clearAllFilters": "Clear All Filters",
+    "productsCount": "{count} products",
+    "productTypes": {
+      "iphone": "iPhone",
+      "ipad": "iPad",
+      "imac": "iMac",
+      "macbook": "MacBook",
+      "watch": "Apple Watch",
+      "airpods": "AirPods",
+      "accessories": "Accessories"
+    },
+    "sortOptions": {
+      "newestFirst": "Newest First",
+      "oldestFirst": "Oldest First",
+      "priceLowToHigh": "Price: Low to High",
+      "priceHighToLow": "Price: High to Low",
+      "nameAToZ": "Name: A to Z",
+      "nameZToA": "Name: Z to A"
+    }
   },
   "cart": {
     "title": "Shopping Cart",
@@ -127,7 +189,17 @@
     "free": "Free",
     "tax": "Tax",
     "calculatedAtCheckout": "Calculated at checkout",
-    "youMightAlsoLike": "You might also like"
+    "youMightAlsoLike": "You might also like",
+    "validation": {
+      "cannotAddToCart": "Cannot add to cart",
+      "cannotUpdateQuantity": "Cannot update quantity",
+      "invalidQuantity": "Invalid quantity",
+      "insufficientStock": "Only {stock} items available in stock. You requested {quantity} items.",
+      "outOfStock": "{productName} ({color}) is currently out of stock",
+      "quantityMustBeGreaterThanZero": "Quantity must be greater than 0",
+      "addedToCart": "{productName} ({color}) has been added to your cart",
+      "removedFromCart": "{productName} ({color}) has been removed from your cart"
+    }
   },
   "wishlist": {
     "title": "Wishlist",
@@ -178,6 +250,16 @@
     "enterEmail": "Enter your email",
     "subscribe": "Subscribe",
     "allRightsReserved": "All rights reserved."
+  },
+  "imagePreview": {
+    "resetZoom": "Reset zoom",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "close": "Close",
+    "previousImage": "Previous image",
+    "nextImage": "Next image",
+    "imageCounter": "{current} / {total}",
+    "thumbnail": "Thumbnail {index}"
   },
   "common": {
     "loading": "Loading...",
@@ -282,6 +364,26 @@
     "thisYear": "This Year",
     "lastYear": "Last Year",
     "nextYear": "Next Year"
+  },
+  "errors": {
+    "failedToLoadCategories": "Failed to load categories"
+  },
+  "hero": {
+    "previousSlide": "Previous slide",
+    "nextSlide": "Next slide",
+    "goToSlide": "Go to slide {index}"
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "subtitle": "404",
+    "description": "Sorry, the page you are looking for doesn't exist or has been moved.",
+    "suggestions": "Here are some suggestions:",
+    "checkUrl": "Check the URL for typos",
+    "goBack": "Go back to the previous page",
+    "visitHome": "Visit our homepage",
+    "comingSoon": "Coming Soon",
+    "buttonHome": "Go to Homepage",
+    "buttonBack": "Go Back"
   }
 }
 

@@ -17,7 +17,8 @@ import {
 import { HeartIcon as HeartSolidIcon, StarIcon as StarSolidIcon } from '@heroicons/react/24/solid';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
-import { useCartStore } from '@/stores/cart';
+import { ImagePreviewModal } from '@/components/ui/ImagePreviewModal';
+import { useCartWithTranslations } from '@/hooks/useCartWithTranslations';
 import { useWishlistStore } from '@/stores/wishlist';
 import { useUIStore } from '@/stores/ui';
 import { useProduct } from '@/hooks/useProducts';
@@ -46,8 +47,9 @@ export function ProductDetailClient() {
   const [quantity, setQuantity] = useState(1);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [activeTab, setActiveTab] = useState<'description' | 'specifications'>('description');
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   
-  const { addItem: addToCart } = useCartStore();
+  const { addItem: addToCart, getItemQuantity } = useCartWithTranslations();
   const { isInWishlist, toggleItem: toggleWishlist } = useWishlistStore();
   const { currency } = useUIStore();
 
@@ -63,12 +65,21 @@ export function ProductDetailClient() {
     ? calculateDiscount(selectedVariant.price, selectedVariant.originalPrice)
     : 0;
 
+  // Calculate available stock considering cart quantity
+  const cartQuantity = selectedVariant ? getItemQuantity(productData._id, selectedVariant._id) : 0;
+  const availableStock = selectedVariant ? selectedVariant.stock - cartQuantity : 0;
+
   const handleAddToCart = async () => {
     if (!productData || !selectedVariant) return;
     
     setIsAddingToCart(true);
     try {
-      addToCart(productData, selectedVariant, quantity);
+      const result = addToCart(productData, selectedVariant, quantity);
+      
+      // If validation failed, the error toast is already shown by the store
+      if (!result.isValid) {
+        console.warn('Cart validation failed:', result.error);
+      }
     } catch (error) {
       console.error('Error adding to cart:', error);
     } finally {
@@ -94,6 +105,11 @@ export function ProductDetailClient() {
       navigator.clipboard.writeText(window.location.href);
       // Toast notification will be shown by the toast system
     }
+  };
+
+  const handleImageClick = (index: number) => {
+    setSelectedImageIndex(index);
+    setIsPreviewModalOpen(true);
   };
 
   // Helper function to group attributes by category
@@ -203,7 +219,10 @@ export function ProductDetailClient() {
           {/* Product Images */}
           <div className="space-y-4">
             {/* Main Image */}
-            <div className="aspect-square bg-white rounded-lg overflow-hidden">
+            <div 
+              className="aspect-square bg-white rounded-lg overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
+              onClick={() => handleImageClick(selectedImageIndex)}
+            >
               <Image
                 src={getImageUrl(allImages[selectedImageIndex])}
                 alt={productData.name}
@@ -220,8 +239,11 @@ export function ProductDetailClient() {
                 {allImages.map((image, index) => (
                   <button
                     key={index}
-                    onClick={() => setSelectedImageIndex(index)}
-                    className={`aspect-square bg-white rounded-lg overflow-hidden border-2 ${
+                    onClick={() => {
+                      setSelectedImageIndex(index);
+                      handleImageClick(index);
+                    }}
+                    className={`aspect-square bg-white rounded-lg overflow-hidden border-2 transition-all hover:border-blue-300 ${
                       selectedImageIndex === index ? 'border-blue-500' : 'border-gray-200'
                     }`}
                   >
@@ -346,15 +368,29 @@ export function ProductDetailClient() {
                   </button>
                   <span className="w-12 text-center">{quantity}</span>
                   <button
-                    onClick={() => setQuantity(Math.min(selectedVariant.stock, quantity + 1))}
-                    className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50"
+                    onClick={() => setQuantity(Math.min(availableStock, quantity + 1))}
+                    disabled={quantity >= availableStock}
+                    className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     +
                   </button>
                 </div>
-                <p className="text-sm text-gray-500 mt-1">
-                  {selectedVariant.stock} {t('available')}
-                </p>
+                <div className="text-sm text-gray-500 mt-1">
+                  {availableStock > 0 ? (
+                    <span>
+                      {availableStock} {t('available')}
+                      {cartQuantity > 0 && (
+                        <span className="text-blue-600 ml-1">
+                          ({cartQuantity} {t('product.inCartCount')})
+                        </span>
+                      )}
+                    </span>
+                  ) : (
+                    <span className="text-red-600">
+                      {cartQuantity > 0 ? t('product.allItemsInCart') : t('product.outOfStock')}
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -363,11 +399,16 @@ export function ProductDetailClient() {
               <Button
                 size="lg"
                 onClick={handleAddToCart}
-                disabled={selectedVariant.stock === 0 || isAddingToCart}
+                disabled={availableStock === 0 || isAddingToCart}
                 className="flex-1"
               >
                 <ShoppingCartIcon className="h-5 w-5 mr-2" />
-                {selectedVariant.stock === 0 ? t('outOfStock') : isAddingToCart ? t('adding') : t('addToCart')}
+                {availableStock === 0 
+                  ? (cartQuantity > 0 ? t('product.allItemsInCart') : t('product.outOfStock'))
+                  : isAddingToCart 
+                    ? t('adding') 
+                    : t('addToCart')
+                }
               </Button>
               
               <Button
@@ -475,6 +516,16 @@ export function ProductDetailClient() {
             </div>
           </div>
         </div>
+
+        {/* Image Preview Modal */}
+        <ImagePreviewModal
+          isOpen={isPreviewModalOpen}
+          onClose={() => setIsPreviewModalOpen(false)}
+          images={allImages.map(img => getImageUrl(img))}
+          currentIndex={selectedImageIndex}
+          onIndexChange={setSelectedImageIndex}
+          productName={productData.name}
+        />
 
       </div>
     </div>

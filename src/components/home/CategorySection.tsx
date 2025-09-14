@@ -7,6 +7,7 @@ import { CATEGORY_ICONS } from '@/lib/constants';
 
 export const CategorySection: React.FC = () => {
   const t = useTranslations('home.categories');
+  const tErrors = useTranslations('errors');
   const { data: categories, isLoading, error } = useCategories();
 
   if (isLoading) {
@@ -33,7 +34,7 @@ export const CategorySection: React.FC = () => {
       <section className="py-8 sm:py-10 lg:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <p className="text-gray-500">Failed to load categories</p>
+            <p className="text-gray-500">{tErrors('failedToLoadCategories')}</p>
           </div>
         </div>
       </section>

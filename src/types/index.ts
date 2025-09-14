@@ -120,6 +120,21 @@ export interface Cart {
   totalPrice: number;
 }
 
+// Cart Validation Types
+export interface CartValidationError {
+  type: 'insufficient_stock' | 'out_of_stock' | 'invalid_quantity';
+  message: string;
+  currentStock: number;
+  requestedQuantity: number;
+  currentCartQuantity?: number;
+}
+
+export interface CartValidationResult {
+  isValid: boolean;
+  error?: CartValidationError;
+  maxAllowedQuantity: number;
+}
+
 // User Types
 export interface User {
   _id: string;
@@ -227,4 +242,7 @@ export type Currency = 'USD' | 'VND';
 
 // Country Types
 export type Country = 'US' | 'VN';
+
+// Hero Types
+export * from './hero';
 

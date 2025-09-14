@@ -1,0 +1,64 @@
+{
+  "heroSlides": [
+    {
+      "id": 1,
+      "title": "Tai Nghe Chống Ồn Không Dây Thật",
+      "description": "Trải nghiệm âm thanh tuyệt vời với công nghệ chống ồn tiên tiến và chất lượng âm thanh cao cấp.",
+      "discount": "30%",
+      "discountText": "SALE OFF",
+      "buttonText": "Mua Ngay",
+      "buttonLink": "/products?productType=airpods",
+      "image": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/airpods-pro-3-hero-select-202509_FMT_WHH?wid=752&hei=636&fmt=jpeg&qlt=90&.v=1754965266122",
+      "imageAlt": "Tai nghe chống ồn không dây",
+      "backgroundColor": "from-blue-50 to-purple-50",
+      "textColor": "text-blue-600"
+    },
+    {
+      "id": 2,
+      "title": "iPhone 16 Pro & 16 Pro Max",
+      "description": "Điện thoại thông minh mới nhất với camera chuyên nghiệp và hiệu năng vượt trội.",
+      "discount": "20%",
+      "discountText": "SALE OFF",
+      "buttonText": "Khám Phá",
+      "buttonLink": "/products?productType=iphone",
+      "image": "https://pngimg.com/uploads/iphone16/iphone16_PNG13.png",
+      "imageAlt": "iPhone 16 Pro",
+      "backgroundColor": "from-gray-50 to-blue-50",
+      "textColor": "text-gray-800"
+    },
+    {
+      "id": 3,
+      "title": "MacBook Pro M4",
+      "description": "Laptop chuyên nghiệp với chip M4 mạnh mẽ, hoàn hảo cho công việc và sáng tạo.",
+      "discount": "15%",
+      "discountText": "SALE OFF",
+      "buttonText": "Tìm Hiểu",
+      "buttonLink": "/products?productType=macbook",
+      "image": "https://mac-center.com.pe/cdn/shop/files/MacBook_Pro_16-inch_M4_Pro_or_Max_chip_Silver_PDP_Image_Position_1__COES.jpg?v=1730313393",
+      "imageAlt": "MacBook Pro M4",
+      "backgroundColor": "from-green-50 to-blue-50",
+      "textColor": "text-green-600"
+    }
+  ],
+  "sidePromotions": [
+    {
+      "id": 1,
+      "title": "iPhone 16 Pro & 16 Pro Max",
+      "subtitle": "LIMITED TIME OFFER",
+      "currentPrice": 32000000,
+      "originalPrice": 40000000,
+      "image": "https://pngimg.com/uploads/iphone16/iphone16_PNG13.png",
+      "imageAlt": "iPhone 16 Pro",
+      "link": "/products?productType=iphone"
+    },
+    {
+      "id": 2,
+      "title": "MacBook Pro M4",
+      "subtitle": "CPU 14 nhân với 10 nhân hiệu suất và 4 nhân tiết kiệm điện",
+      "savings": "Tiết kiệm đến ₫3.750.000",
+      "image": "https://mac-center.com.pe/cdn/shop/files/MacBook_Pro_16-inch_M4_Pro_or_Max_chip_Silver_PDP_Image_Position_1__COES.jpg?v=1730313393",
+      "imageAlt": "MacBook Pro M4",
+      "link": "/products?productType=macbook"
+    }
+  ]
+}

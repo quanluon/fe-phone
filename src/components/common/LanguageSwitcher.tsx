@@ -28,7 +28,7 @@ export const LanguageSwitcher: React.FC = () => {
         className="appearance-none bg-transparent border-none text-white focus:outline-none cursor-pointer pr-6"
       >
         {LANGUAGE_OPTIONS.map((option) => (
-          <option key={option.value} value={option.value} className="bg-blue-900 text-white">
+          <option key={option.value} value={option.value} className="bg-blue-700 text-white">
             {option.label}
           </option>
         ))}

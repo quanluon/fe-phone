@@ -19,9 +19,28 @@ import { Product, ProductQuery, ProductType } from '@/types';
 import { PRODUCT_TYPE_LABELS, SORT_OPTIONS } from '@/lib/constants';
 
 function ProductsContent() {
-  const t = useTranslations();
+  const t = useTranslations('products');
   const searchParams = useSearchParams();
   const router = useRouter();
+
+  // Helper function to get translated product type label
+  const getProductTypeLabel = (type: string) => {
+    return t(`productTypes.${type}` as keyof typeof t) || type;
+  };
+
+  // Helper function to get translated sort option label
+  const getSortOptionLabel = (value: string) => {
+    const sortKeyMap: Record<string, string> = {
+      'created_at_desc': 'newestFirst',
+      'created_at_asc': 'oldestFirst',
+      'price_asc': 'priceLowToHigh',
+      'price_desc': 'priceHighToLow',
+      'name_asc': 'nameAToZ',
+      'name_desc': 'nameZToA'
+    };
+    const key = sortKeyMap[value] || value;
+    return t(`sortOptions.${key}` as keyof typeof t) || value;
+  };
   
   const [showFilters, setShowFilters] = useState(false);
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
@@ -104,10 +123,10 @@ function ProductsContent() {
         {/* Header */}
         <div className="mb-6">
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-            {t('products.title', { default: 'Products' })}
+            {t('title')}
           </h1>
           <p className="text-gray-600">
-            {products?.pagination?.total ? `${products.pagination.total} products found` : 'Discover our amazing products'}
+            {products?.pagination?.total ? t('productsCount', { count: products.pagination.total }) : t('discoverProducts')}
           </p>
         </div>
 
@@ -116,7 +135,7 @@ function ProductsContent() {
           <div className={`lg:w-80 ${showFilters ? 'block' : 'hidden lg:block'}`}>
             <div className="bg-white rounded-lg shadow-sm p-6 sticky top-24">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-semibold text-gray-900">Filters</h2>
+                <h2 className="text-lg font-semibold text-gray-900">{t('filters')}</h2>
                 <button
                   onClick={() => setShowFilters(false)}
                   className="lg:hidden p-1 text-gray-400 hover:text-gray-600"
@@ -128,12 +147,12 @@ function ProductsContent() {
               {/* Search */}
               <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Search
+                  {t('search')}
                 </label>
                 <form onSubmit={handleSearch}>
                   <Input
                     type="text"
-                    placeholder="Search products..."
+                    placeholder={t('search') + '...'}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     leftIcon={<MagnifyingGlassIcon className="h-4 w-4" />}
@@ -144,7 +163,7 @@ function ProductsContent() {
               {/* Category Filter */}
               <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Category
+                  {t('category')}
                 </label>
                 <select
                   value={selectedCategory}
@@ -154,7 +173,7 @@ function ProductsContent() {
                   }}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="">All Categories</option>
+                  <option value="">{t('allCategories')}</option>
                   {categories?.data?.map((category) => (
                     <option key={category._id} value={category._id}>
                       {category.name}
@@ -166,7 +185,7 @@ function ProductsContent() {
               {/* Brand Filter */}
               <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Brand
+                  {t('brand')}
                 </label>
                 <select
                   value={selectedBrand}
@@ -176,7 +195,7 @@ function ProductsContent() {
                   }}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="">All Brands</option>
+                  <option value="">{t('allBrands')}</option>
                   {brands?.data?.map((brand) => (
                     <option key={brand._id} value={brand._id}>
                       {brand.name}
@@ -188,7 +207,7 @@ function ProductsContent() {
               {/* Product Type Filter */}
               <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Product Type
+                  {t('productType')}
                 </label>
                 <select
                   value={selectedType}
@@ -198,10 +217,10 @@ function ProductsContent() {
                   }}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="">All Types</option>
-                  {Object.entries(PRODUCT_TYPE_LABELS).map(([key, label]) => (
+                  <option value="">{t('allTypes')}</option>
+                  {Object.entries(PRODUCT_TYPE_LABELS).map(([key]) => (
                     <option key={key} value={key}>
-                      {label}
+                      {getProductTypeLabel(key)}
                     </option>
                   ))}
                 </select>
@@ -210,19 +229,19 @@ function ProductsContent() {
               {/* Price Range */}
               <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Price Range
+                  {t('priceRange')}
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   <Input
                     type="number"
-                    placeholder="Min"
+                    placeholder={t('minPrice')}
                     value={priceRange.min}
                     onChange={(e) => setPriceRange(prev => ({ ...prev, min: e.target.value }))}
                     onBlur={handleFilterChange}
                   />
                   <Input
                     type="number"
-                    placeholder="Max"
+                    placeholder={t('maxPrice')}
                     value={priceRange.max}
                     onChange={(e) => setPriceRange(prev => ({ ...prev, max: e.target.value }))}
                     onBlur={handleFilterChange}
@@ -237,7 +256,7 @@ function ProductsContent() {
                   onClick={clearFilters}
                   className="w-full"
                 >
-                  Clear All Filters ({activeFiltersCount})
+                  {t('clearAllFilters')} ({activeFiltersCount})
                 </Button>
               )}
             </div>
@@ -254,7 +273,7 @@ function ProductsContent() {
                     className="lg:hidden flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 border border-gray-300 rounded-md"
                   >
                     <FunnelIcon className="h-4 w-4" />
-                    Filters
+                    {t('filters')}
                     {activeFiltersCount > 0 && (
                       <Badge variant="default" size="sm">
                         {activeFiltersCount}
@@ -263,12 +282,12 @@ function ProductsContent() {
                   </button>
                   
                   <div className="text-sm text-gray-600">
-                    {products?.pagination?.total ? `${products.pagination.total} products` : 'Loading...'}
+                    {products?.pagination?.total ? t('productsCount', { count: products.pagination.total }) : t('loadingProducts')}
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <label className="text-sm text-gray-600">Sort by:</label>
+                  <label className="text-sm text-gray-600">{t('sortBy')}:</label>
                   <select
                     value={sortBy}
                     onChange={(e) => {
@@ -279,7 +298,7 @@ function ProductsContent() {
                   >
                     {SORT_OPTIONS.map((option) => (
                       <option key={option.value} value={option.value}>
-                        {option.label}
+                        {getSortOptionLabel(option.value)}
                       </option>
                     ))}
                   </select>
@@ -301,16 +320,16 @@ function ProductsContent() {
               </div>
             ) : error ? (
               <div className="text-center py-12">
-                <div className="text-red-600 mb-4">Error loading products</div>
+                <div className="text-red-600 mb-4">{t('errorLoadingProducts')}</div>
                 <Button onClick={() => window.location.reload()}>
-                  Try Again
+                  {t('tryAgain')}
                 </Button>
               </div>
             ) : !products?.data?.length ? (
               <div className="text-center py-12">
-                <div className="text-gray-500 mb-4">No products found</div>
+                <div className="text-gray-500 mb-4">{t('noProductsFound')}</div>
                 <Button onClick={clearFilters}>
-                  Clear Filters
+                  {t('clearFilters')}
                 </Button>
               </div>
             ) : (
@@ -325,7 +344,7 @@ function ProductsContent() {
             {products?.data?.length && products.pagination.total > products.data.length && (
               <div className="text-center mt-8">
                 <Button size="lg" variant="outline">
-                  Load More Products
+                  {t('loadMore')}
                 </Button>
               </div>
             )}

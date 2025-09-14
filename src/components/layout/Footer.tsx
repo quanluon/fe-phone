@@ -47,8 +47,7 @@ export const Footer: React.FC = () => {
               <span className="text-lg sm:text-xl font-bold">{CONTACT_INFO.name}</span>
             </Link>
             <p className="text-sm sm:text-base text-gray-300 mb-4 sm:mb-6 max-w-md">
-              Your trusted destination for the latest Apple products and accessories. 
-              We offer competitive prices, fast shipping, and exceptional customer service.
+              {t('description')}
             </p>
             
             {/* Contact Info */}
