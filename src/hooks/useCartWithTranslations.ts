@@ -13,7 +13,7 @@ export function useCartWithTranslations() {
     const result = originalAddItem(product, variant, quantity);
     
     if (!result.isValid && result.error) {
-      const { type, currentStock, requestedQuantity, currentCartQuantity } = result.error;
+      const { type, currentStock, requestedQuantity } = result.error;
       
       let message: string;
       let title: string;
@@ -102,9 +102,20 @@ export function useCartWithTranslations() {
     return result;
   };
 
+  const cartStore = useCartStore();
+  
   return {
     addItem,
     updateQuantity,
-    ...useCartStore(),
+    // Include all other methods from the cart store
+    removeItem: cartStore.removeItem,
+    clearCart: cartStore.clearCart,
+    getItemQuantity: cartStore.getItemQuantity,
+    isInCart: cartStore.isInCart,
+    validateCartItem: cartStore.validateCartItem,
+    // Include state
+    items: cartStore.items,
+    totalItems: cartStore.totalItems,
+    totalPrice: cartStore.totalPrice,
   };
 }
