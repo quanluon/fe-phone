@@ -82,8 +82,8 @@ export const useForgotPassword = () => {
 // Reset password mutation
 export const useResetPassword = () => {
   return useMutation({
-    mutationFn: ({ token, password }: { token: string; password: string }) =>
-      authApi.resetPassword(token, password),
+    mutationFn: ({ email, confirmationCode, newPassword }: { email: string; confirmationCode: string; newPassword: string }) =>
+      authApi.resetPassword(email, confirmationCode, newPassword),
   });
 };
 

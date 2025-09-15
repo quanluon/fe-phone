@@ -428,11 +428,6 @@ textarea {
   font-size: 0.875rem !important;
 }
 
-/* Ensure consistent form item spacing */
-.ant-form-item {
-  margin-bottom: 1.5rem !important;
-}
-
 .ant-form-item:last-child {
   margin-bottom: 0 !important;
 }

@@ -9,7 +9,7 @@ import { Form, Input } from 'antd';
 import { getErrorMessage } from '@/lib/utils';
 
 interface ForgotPasswordFormProps {
-  onSuccess: () => void;
+  onSuccess: (email: string) => void;
   onSwitchToLogin: () => void;
 }
 
@@ -34,7 +34,7 @@ export function ForgotPasswordForm({ onSuccess }: ForgotPasswordFormProps) {
           title: t('forgotPassword.successTitle'),
           message: t('forgotPassword.successMessage'),
         });
-        onSuccess();
+        onSuccess(values.email);
       },
       onError: (error: unknown) => {
         const errorMessage = getErrorMessage(error, t('forgotPassword.errorMessage'));

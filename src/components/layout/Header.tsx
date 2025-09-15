@@ -110,10 +110,10 @@ export const Header: React.FC = () => {
                 </div>
               ) : (
                 <>
-                  <Link href="/auth/register" className="hover:text-blue-200 transition-colors text-xs sm:text-sm">
+                  <Link href="/auth?mode=register" className="hover:text-blue-200 transition-colors text-xs sm:text-sm">
                     {t('header.createAccount')}
                   </Link>
-                  <Link href="/auth" className="hover:text-blue-200 transition-colors text-xs sm:text-sm">
+                  <Link href="/auth?mode=login" className="hover:text-blue-200 transition-colors text-xs sm:text-sm">
                     {t('header.signIn')}
                   </Link>
                 </>
@@ -163,7 +163,7 @@ export const Header: React.FC = () => {
               </button>
 
               {/* User Icon */}
-              <Link href={isAuthenticated ? "/profile" : "/auth"} className="p-1.5 sm:p-2 text-gray-600 hover:text-blue-600">
+              <Link href={isAuthenticated ? "/profile" : "/auth?mode=login"} className="p-1.5 sm:p-2 text-gray-600 hover:text-blue-600">
                 <UserIcon className="h-5 w-5" />
               </Link>
 

@@ -77,7 +77,7 @@ apiClient.interceptors.response.use(
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
         if (typeof window !== 'undefined') {
-          window.location.href = '/auth';
+          window.location.href = '/auth?mode=login';
         }
       }
     }

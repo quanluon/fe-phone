@@ -31,10 +31,11 @@ export const authApi = {
   },
 
   // Reset password
-  resetPassword: (token: string, password: string) => {
+  resetPassword: (email: string, confirmationCode: string, newPassword: string) => {
     return api.post<{ data: { message: string } }>('/auth/reset-password', {
-      token,
-      password,
+      email,
+      confirmationCode,
+      newPassword,
     });
   },
 

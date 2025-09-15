@@ -21,14 +21,14 @@ export function ResetPasswordForm({ token, onSuccess, onSwitchToLogin }: ResetPa
   const [form] = Form.useForm();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (values: { password: string; confirmPassword: string }) => {
+  const handleSubmit = (values: { email: string; confirmationCode: string; password: string; confirmPassword: string }) => {
     // Prevent multiple submissions
     if (isSubmitting || isPending) {
       return;
     }
 
     setIsSubmitting(true);
-    resetPassword({ token, password: values.password }, {
+    resetPassword({ email: values.email, confirmationCode: values.confirmationCode, newPassword: values.password }, {
       onSuccess: () => {
         addToast({
           type: 'success',
@@ -54,20 +54,53 @@ export function ResetPasswordForm({ token, onSuccess, onSwitchToLogin }: ResetPa
   };
 
   return (
-    <Form
-      form={form}
-      onFinish={handleSubmit}
-      layout="vertical"
-      className="space-y-6"
-    >
-      <Form.Item
-        name="password"
-        label={t('resetPassword.newPassword')}
-        rules={[
-          { required: true, message: t('validation.passwordRequired') },
-          { min: 6, message: t('validation.passwordMinLength') },
-        ]}
+      <Form
+        form={form}
+        onFinish={handleSubmit}
+        layout="vertical"
+        className="space-y-6"
       >
+        <Form.Item
+          name="email"
+          label={t('auth.login.email')}
+          rules={[
+            { required: true, message: t('validation.emailRequired') },
+            { type: 'email', message: t('validation.emailInvalid') },
+          ]}
+        >
+          <Input
+            type="email"
+            placeholder={t('auth.login.emailPlaceholder')}
+            autoComplete="email"
+            size="large"
+          />
+        </Form.Item>
+
+        <Form.Item
+          name="confirmationCode"
+          label={t('resetPassword.confirmationCode')}
+          rules={[
+            { required: true, message: t('resetPassword.confirmationCodeRequired') },
+            { len: 6, message: t('resetPassword.confirmationCodeLength') },
+          ]}
+        >
+          <Input
+            placeholder={t('resetPassword.confirmationCodePlaceholder')}
+            autoComplete="one-time-code"
+            size="large"
+            maxLength={6}
+            className="text-center text-lg tracking-widest"
+          />
+        </Form.Item>
+
+        <Form.Item
+          name="password"
+          label={t('resetPassword.newPassword')}
+          rules={[
+            { required: true, message: t('validation.passwordRequired') },
+            { min: 6, message: t('validation.passwordMinLength') },
+          ]}
+        >
         <Input.Password
           placeholder={t('resetPassword.newPasswordPlaceholder')}
           autoComplete="new-password"
