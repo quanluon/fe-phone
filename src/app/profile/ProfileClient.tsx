@@ -1,69 +1,78 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
-import { useProfile, useUpdateProfile, useChangePassword } from '@/hooks/useAuth';
-import { useAuthStore } from '@/stores/auth';
-import { useToastStore } from '@/stores/toast';
-import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
-import { Card } from '@/components/ui/Card';
-import { 
-  UserIcon, 
-  EnvelopeIcon, 
-  PhoneIcon, 
+import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
+import {
+  useProfile,
+  useUpdateProfile,
+  useChangePassword,
+} from "@/hooks/useAuth";
+import { useAuthStore } from "@/stores/auth";
+import { useToastStore } from "@/stores/toast";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Card } from "@/components/ui/Card";
+import {
+  UserIcon,
+  EnvelopeIcon,
+  PhoneIcon,
   CalendarIcon,
   PencilIcon,
   KeyIcon,
   CheckIcon,
-  XMarkIcon
-} from '@heroicons/react/24/outline';
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 
 export function ProfileClient() {
   const t = useTranslations();
   const router = useRouter();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, logout } = useAuthStore();
   const { addToast } = useToastStore();
-  
+
   const { data: user, isLoading: profileLoading } = useProfile();
+
+  console.log('user',user);
+  
   const updateProfileMutation = useUpdateProfile();
   const changePasswordMutation = useChangePassword();
-  
+
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    phone: '',
+    firstName: "",
+    lastName: "",
+    phone: "",
   });
   const [passwordData, setPasswordData] = useState({
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: '',
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
   });
+
+  // Initialize form data when user data loads
+  useEffect(() => {
+    if (user && !isEditingProfile && formData.firstName === "") {
+      setFormData({
+        firstName: user?.firstName || "",
+        lastName: user?.lastName || "",
+        phone: user?.phone || "",
+      });
+    }
+  }, [user, isEditingProfile, formData.firstName]);
 
   // Redirect if not authenticated
   if (!isAuthenticated) {
-    router.push('/auth');
+    logout();
     return null;
-  }
-
-  // Initialize form data when user data loads
-  if (user && !isEditingProfile && formData.firstName === '') {
-    setFormData({
-      firstName: user.data?.firstName || '',
-      lastName: user.data?.lastName || '',
-      phone: user.data?.phone || '',
-    });
   }
 
   const handleProfileEdit = () => {
     setIsEditingProfile(true);
     setFormData({
-      firstName: user?.data?.firstName || '',
-      lastName: user?.data?.lastName || '',
-      phone: user?.data?.phone || '',
+      firstName: user?.firstName || "",
+      lastName: user?.lastName || "",
+      phone: user?.phone || "",
     });
   };
 
@@ -72,15 +81,15 @@ export function ProfileClient() {
       await updateProfileMutation.mutateAsync(formData);
       setIsEditingProfile(false);
       addToast({
-        type: 'success',
-        title: t('profile.updateSuccess'),
-        message: t('profile.updateSuccessMessage'),
+        type: "success",
+        title: t("profile.updateSuccess"),
+        message: t("profile.updateSuccessMessage"),
       });
     } catch (error) {
       addToast({
-        type: 'error',
-        title: t('profile.updateError'),
-        message: t('profile.updateErrorMessage'),
+        type: "error",
+        title: t("profile.updateError"),
+        message: t("profile.updateErrorMessage"),
       });
     }
   };
@@ -88,18 +97,18 @@ export function ProfileClient() {
   const handleProfileCancel = () => {
     setIsEditingProfile(false);
     setFormData({
-      firstName: user?.data?.firstName || '',
-      lastName: user?.data?.lastName || '',
-      phone: user?.data?.phone || '',
+      firstName: user?.firstName || "",
+      lastName: user?.lastName || "",
+      phone: user?.phone || "",
     });
   };
 
   const handlePasswordChange = async () => {
     if (passwordData.newPassword !== passwordData.confirmPassword) {
       addToast({
-        type: 'error',
-        title: t('auth.validation.passwordsDoNotMatch'),
-        message: t('auth.validation.passwordsDoNotMatch'),
+        type: "error",
+        title: t("auth.validation.passwordsDoNotMatch"),
+        message: t("auth.validation.passwordsDoNotMatch"),
       });
       return;
     }
@@ -111,20 +120,21 @@ export function ProfileClient() {
       });
       setIsChangingPassword(false);
       setPasswordData({
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: '',
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
       });
       addToast({
-        type: 'success',
-        title: t('profile.passwordChangeSuccess'),
-        message: t('profile.passwordChangeSuccessMessage'),
+        type: "success",
+        title: t("profile.passwordChangeSuccess"),
+        message: t("profile.passwordChangeSuccessMessage"),
       });
     } catch (error) {
+      console.error("Password change error:", error);
       addToast({
-        type: 'error',
-        title: t('profile.passwordChangeError'),
-        message: t('profile.passwordChangeErrorMessage'),
+        type: "error",
+        title: t("profile.passwordChangeError"),
+        message: t("profile.passwordChangeErrorMessage"),
       });
     }
   };
@@ -132,9 +142,9 @@ export function ProfileClient() {
   const handlePasswordCancel = () => {
     setIsChangingPassword(false);
     setPasswordData({
-      currentPassword: '',
-      newPassword: '',
-      confirmPassword: '',
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
     });
   };
 
@@ -160,14 +170,10 @@ export function ProfileClient() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-2xl font-bold text-gray-900 mb-4">
-              {t('profile.notFound')}
+              {t("profile.notFound")}
             </h1>
-            <p className="text-gray-600 mb-8">
-              {t('profile.notFoundMessage')}
-            </p>
-            <Button onClick={() => router.push('/')}>
-              {t('common.back')}
-            </Button>
+            <p className="text-gray-600 mb-8">{t("profile.notFoundMessage")}</p>
+            <Button onClick={() => router.push("/")}>{t("common.back")}</Button>
           </div>
         </div>
       </div>
@@ -180,11 +186,9 @@ export function ProfileClient() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">
-            {t('profile.title')}
+            {t("profile.title")}
           </h1>
-          <p className="mt-2 text-gray-600">
-            {t('profile.subtitle')}
-          </p>
+          <p className="mt-2 text-gray-600">{t("profile.subtitle")}</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -193,7 +197,7 @@ export function ProfileClient() {
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-semibold text-gray-900 flex items-center">
                 <UserIcon className="h-5 w-5 mr-2" />
-                {t('profile.personalInfo')}
+                {t("profile.personalInfo")}
               </h2>
               {!isEditingProfile && (
                 <Button
@@ -203,7 +207,7 @@ export function ProfileClient() {
                   className="flex items-center"
                 >
                   <PencilIcon className="h-4 w-4 mr-1" />
-                  {t('common.edit')}
+                  {t("common.edit")}
                 </Button>
               )}
             </div>
@@ -212,32 +216,38 @@ export function ProfileClient() {
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    {t('auth.register.firstName')}
+                    {t("auth.register.firstName")}
                   </label>
                   <Input
                     value={formData.firstName}
-                    onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                    placeholder={t('auth.register.firstNamePlaceholder')}
+                    onChange={(e) =>
+                      setFormData({ ...formData, firstName: e.target.value })
+                    }
+                    placeholder={t("auth.register.firstNamePlaceholder")}
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    {t('auth.register.lastName')}
+                    {t("auth.register.lastName")}
                   </label>
                   <Input
                     value={formData.lastName}
-                    onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                    placeholder={t('auth.register.lastNamePlaceholder')}
+                    onChange={(e) =>
+                      setFormData({ ...formData, lastName: e.target.value })
+                    }
+                    placeholder={t("auth.register.lastNamePlaceholder")}
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    {t('auth.register.phone')}
+                    {t("auth.register.phone")}
                   </label>
                   <Input
                     value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    placeholder={t('auth.register.phonePlaceholder')}
+                    onChange={(e) =>
+                      setFormData({ ...formData, phone: e.target.value })
+                    }
+                    placeholder={t("auth.register.phonePlaceholder")}
                   />
                 </div>
                 <div className="flex space-x-3 pt-4">
@@ -247,7 +257,9 @@ export function ProfileClient() {
                     className="flex items-center"
                   >
                     <CheckIcon className="h-4 w-4 mr-1" />
-                    {updateProfileMutation.isPending ? t('common.loading') : t('common.save')}
+                    {updateProfileMutation.isPending
+                      ? t("common.loading")
+                      : t("common.save")}
                   </Button>
                   <Button
                     variant="outline"
@@ -255,7 +267,7 @@ export function ProfileClient() {
                     className="flex items-center"
                   >
                     <XMarkIcon className="h-4 w-4 mr-1" />
-                    {t('common.cancel')}
+                    {t("common.cancel")}
                   </Button>
                 </div>
               </div>
@@ -264,37 +276,57 @@ export function ProfileClient() {
                 <div className="flex items-center">
                   <EnvelopeIcon className="h-5 w-5 text-gray-400 mr-3" />
                   <div>
-                    <p className="text-sm text-gray-500">{t('auth.login.email')}</p>
-                    <p className="font-medium text-gray-900">{user.data?.email}</p>
+                    <p className="text-sm text-gray-500">
+                      {t("auth.login.email")}
+                    </p>
+                    <p className="font-medium text-gray-900">
+                      {user?.email}
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center">
                   <UserIcon className="h-5 w-5 text-gray-400 mr-3" />
                   <div>
-                    <p className="text-sm text-gray-500">{t('auth.register.firstName')}</p>
-                    <p className="font-medium text-gray-900">{user.data?.firstName || t('profile.notProvided')}</p>
+                    <p className="text-sm text-gray-500">
+                      {t("auth.register.firstName")}
+                    </p>
+                    <p className="font-medium text-gray-900">
+                      {user?.firstName || t("profile.notProvided")}
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center">
                   <UserIcon className="h-5 w-5 text-gray-400 mr-3" />
                   <div>
-                    <p className="text-sm text-gray-500">{t('auth.register.lastName')}</p>
-                    <p className="font-medium text-gray-900">{user.data?.lastName || t('profile.notProvided')}</p>
+                    <p className="text-sm text-gray-500">
+                      {t("auth.register.lastName")}
+                    </p>
+                    <p className="font-medium text-gray-900">
+                      {user?.lastName || t("profile.notProvided")}
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center">
                   <PhoneIcon className="h-5 w-5 text-gray-400 mr-3" />
                   <div>
-                    <p className="text-sm text-gray-500">{t('auth.register.phone')}</p>
-                    <p className="font-medium text-gray-900">{user.data?.phone || t('profile.notProvided')}</p>
+                    <p className="text-sm text-gray-500">
+                      {t("auth.register.phone")}
+                    </p>
+                    <p className="font-medium text-gray-900">
+                      {user?.phone || t("profile.notProvided")}
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center">
                   <CalendarIcon className="h-5 w-5 text-gray-400 mr-3" />
                   <div>
-                    <p className="text-sm text-gray-500">{t('profile.memberSince')}</p>
+                    <p className="text-sm text-gray-500">
+                      {t("profile.memberSince")}
+                    </p>
                     <p className="font-medium text-gray-900">
-                      {user.data?.createdAt ? new Date(user.data.createdAt).toLocaleDateString() : t('profile.notProvided')}
+                      {user?.createdAt
+                        ? new Date(user?.createdAt).toLocaleDateString()
+                        : t("profile.notProvided")}
                     </p>
                   </div>
                 </div>
@@ -307,7 +339,7 @@ export function ProfileClient() {
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-semibold text-gray-900 flex items-center">
                 <KeyIcon className="h-5 w-5 mr-2" />
-                {t('profile.security')}
+                {t("profile.security")}
               </h2>
               {!isChangingPassword && (
                 <Button
@@ -317,7 +349,7 @@ export function ProfileClient() {
                   className="flex items-center"
                 >
                   <KeyIcon className="h-4 w-4 mr-1" />
-                  {t('profile.changePassword')}
+                  {t("profile.changePassword")}
                 </Button>
               )}
             </div>
@@ -326,35 +358,52 @@ export function ProfileClient() {
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    {t('profile.currentPassword')}
+                    {t("profile.currentPassword")}
                   </label>
                   <Input
                     type="password"
                     value={passwordData.currentPassword}
-                    onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
-                    placeholder={t('profile.currentPasswordPlaceholder')}
+                    onChange={(e) =>
+                      setPasswordData({
+                        ...passwordData,
+                        currentPassword: e.target.value,
+                      })
+                    }
+                    placeholder={t("profile.currentPasswordPlaceholder")}
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    {t('auth.resetPassword.newPassword')}
+                    {t("auth.resetPassword.newPassword")}
                   </label>
                   <Input
                     type="password"
                     value={passwordData.newPassword}
-                    onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
-                    placeholder={t('auth.resetPassword.newPasswordPlaceholder')}
+                    onChange={(e) =>
+                      setPasswordData({
+                        ...passwordData,
+                        newPassword: e.target.value,
+                      })
+                    }
+                    placeholder={t("auth.resetPassword.newPasswordPlaceholder")}
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    {t('auth.resetPassword.confirmPassword')}
+                    {t("auth.resetPassword.confirmPassword")}
                   </label>
                   <Input
                     type="password"
                     value={passwordData.confirmPassword}
-                    onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
-                    placeholder={t('auth.resetPassword.confirmPasswordPlaceholder')}
+                    onChange={(e) =>
+                      setPasswordData({
+                        ...passwordData,
+                        confirmPassword: e.target.value,
+                      })
+                    }
+                    placeholder={t(
+                      "auth.resetPassword.confirmPasswordPlaceholder"
+                    )}
                   />
                 </div>
                 <div className="flex space-x-3 pt-4">
@@ -364,7 +413,9 @@ export function ProfileClient() {
                     className="flex items-center"
                   >
                     <CheckIcon className="h-4 w-4 mr-1" />
-                    {changePasswordMutation.isPending ? t('common.loading') : t('common.save')}
+                    {changePasswordMutation.isPending
+                      ? t("common.loading")
+                      : t("common.save")}
                   </Button>
                   <Button
                     variant="outline"
@@ -372,7 +423,7 @@ export function ProfileClient() {
                     className="flex items-center"
                   >
                     <XMarkIcon className="h-4 w-4 mr-1" />
-                    {t('common.cancel')}
+                    {t("common.cancel")}
                   </Button>
                 </div>
               </div>
@@ -380,18 +431,18 @@ export function ProfileClient() {
               <div className="space-y-4">
                 <div className="p-4 bg-blue-50 rounded-lg">
                   <h3 className="font-medium text-blue-900 mb-2">
-                    {t('profile.passwordSecurity')}
+                    {t("profile.passwordSecurity")}
                   </h3>
                   <p className="text-sm text-blue-700">
-                    {t('profile.passwordSecurityDescription')}
+                    {t("profile.passwordSecurityDescription")}
                   </p>
                 </div>
                 <div className="p-4 bg-green-50 rounded-lg">
                   <h3 className="font-medium text-green-900 mb-2">
-                    {t('profile.accountStatus')}
+                    {t("profile.accountStatus")}
                   </h3>
                   <p className="text-sm text-green-700">
-                    {t('profile.accountActive')}
+                    {t("profile.accountActive")}
                   </p>
                 </div>
               </div>

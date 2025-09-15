@@ -326,6 +326,14 @@
     },
     "common": {
       "back": "Quay lại"
+    },
+    "social": {
+      "continueWith": "Tiếp tục với",
+      "facebook": "Facebook",
+      "google": "Google",
+      "orContinueWith": "Hoặc tiếp tục với",
+      "loginSuccess": "Đăng nhập thành công bằng tài khoản mạng xã hội",
+      "loginError": "Đăng nhập mạng xã hội thất bại. Vui lòng thử lại."
     }
   },
   "profile": {

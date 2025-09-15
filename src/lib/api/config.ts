@@ -1,9 +1,11 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { ApiResponse } from '@/types';
 import { useUIStore } from '@/stores/ui';
+import { storage } from '@/lib/utils';
 
 // API Configuration
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+
 
 // Create axios instance
 const apiClient: AxiosInstance = axios.create({
@@ -18,14 +20,10 @@ const apiClient: AxiosInstance = axios.create({
 apiClient.interceptors.request.use(
   (config) => {
     if (typeof window !== 'undefined') {
-      // Add auth token if available, but exclude public endpoints
-      const token = localStorage.getItem('accessToken');
-      const isPublicEndpoint = config.url?.includes('/auth/register') || 
-                              config.url?.includes('/auth/login') || 
-                              config.url?.includes('/auth/forgot-password') || 
-                              config.url?.includes('/auth/reset-password');
+      // Add auth token if available
+      const token = storage.get<string>('accessToken');
       
-      if (token && !isPublicEndpoint) {
+      if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
 
@@ -58,15 +56,15 @@ apiClient.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const refreshToken = localStorage.getItem('refreshToken');
+        const refreshToken = storage.get<string>('refreshToken');
         if (refreshToken) {
           const response = await axios.post(`${API_BASE_URL}/auth/refresh`, {
             refreshToken,
           });
 
           const { accessToken, refreshToken: newRefreshToken } = response.data.data;
-          localStorage.setItem('accessToken', accessToken);
-          localStorage.setItem('refreshToken', newRefreshToken);
+          storage.set('accessToken', accessToken);
+          storage.set('refreshToken', newRefreshToken);
 
           // Retry original request
           originalRequest.headers.Authorization = `Bearer ${accessToken}`;
@@ -74,8 +72,8 @@ apiClient.interceptors.response.use(
         }
       } catch {
         // Refresh failed, redirect to login
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
+        storage.remove('accessToken');
+        storage.remove('refreshToken');
         if (typeof window !== 'undefined') {
           window.location.href = '/auth?mode=login';
         }

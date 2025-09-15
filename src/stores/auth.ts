@@ -14,6 +14,7 @@ interface AuthState {
 interface AuthActions {
   login: (credentials: LoginRequest) => Promise<void>;
   register: (data: RegisterRequest) => Promise<void>;
+  socialLogin: (user: AuthUser, tokens: { accessToken: string; refreshToken: string; idToken: string; expiresIn: number }) => Promise<void>;
   logout: () => Promise<void>;
   refreshToken: () => Promise<void>;
   getProfile: () => Promise<void>;
@@ -38,7 +39,7 @@ export const useAuthStore = create<AuthStore>()(
         set({ isLoading: true, error: null });
         try {
           const response = await authApi.login(credentials);
-          const { user, tokens } = (response.data as unknown as { data: { user: AuthUser; tokens: { accessToken: string; refreshToken: string; idToken: string; expiresIn: number } } }).data;
+          const { user, tokens } = response.data.data;
           const { accessToken, refreshToken } = tokens;
 
           // Store tokens
@@ -66,7 +67,7 @@ export const useAuthStore = create<AuthStore>()(
         set({ isLoading: true, error: null });
         try {
           const response = await authApi.register(data);
-          const { user, tokens } = (response.data as unknown as { data: { user: AuthUser; tokens: { accessToken: string; refreshToken: string; idToken: string; expiresIn: number } } }).data;
+          const { user, tokens } = response.data.data;
           const { accessToken, refreshToken } = tokens;
 
           // Store tokens
@@ -85,6 +86,32 @@ export const useAuthStore = create<AuthStore>()(
             isAuthenticated: false,
             isLoading: false,
             error: getErrorMessage(error) || 'Registration failed',
+          });
+          throw error;
+        }
+      },
+
+      socialLogin: async (user: AuthUser, tokens: { accessToken: string; refreshToken: string; idToken: string; expiresIn: number }) => {
+        set({ isLoading: true, error: null });
+        try {
+          const { accessToken, refreshToken } = tokens;
+
+          // Store tokens
+          storage.set('accessToken', accessToken);
+          storage.set('refreshToken', refreshToken);
+
+          set({
+            user,
+            isAuthenticated: true,
+            isLoading: false,
+            error: null,
+          });
+        } catch (error: unknown) {
+          set({
+            user: null,
+            isAuthenticated: false,
+            isLoading: false,
+            error: getErrorMessage(error) || 'Social login failed',
           });
           throw error;
         }

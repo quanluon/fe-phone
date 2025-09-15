@@ -95,3 +95,21 @@ export const useChangePassword = () => {
   });
 };
 
+// Social login mutation
+export const useSocialLogin = () => {
+  const { socialLogin } = useAuthStore();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ provider, accessToken, idToken }: { provider: 'facebook' | 'google'; accessToken: string; idToken?: string }) =>
+      authApi.socialLogin(provider, accessToken, idToken),
+    onSuccess: (response) => {
+      // Store tokens and user info
+      const { user, tokens } = response.data.data;
+      socialLogin(user, tokens);
+      // Invalidate and refetch profile
+      queryClient.invalidateQueries({ queryKey: queryKeys.auth.profile() });
+    },
+  });
+};
+

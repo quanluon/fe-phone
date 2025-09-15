@@ -118,6 +118,8 @@ export function LoginForm({ onSuccess, onSwitchToForgotPassword }: LoginFormProp
           {(isPending || isSubmitting) ? t('login.signingIn') : t('login.signIn')}
         </Button>
       </Form.Item>
+
+      {/* <SocialLogin onSuccess={onSuccess} className="mt-6" /> */}
     </Form>
   );
 }

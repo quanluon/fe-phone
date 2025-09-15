@@ -9,6 +9,7 @@ import { RegisterRequest } from '@/types';
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
 import { Form, Input, Row, Col } from 'antd';
 import { getErrorMessage } from '@/lib/utils';
+import { SocialLogin } from './SocialLogin';
 
 interface RegisterFormProps {
   onSuccess: () => void;
@@ -169,6 +170,8 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
           {(isPending || isSubmitting) ? t('register.creatingAccount') : t('register.createAccount')}
         </Button>
       </Form.Item>
+
+      <SocialLogin onSuccess={onSuccess} className="mt-6" />
     </Form>
   );
 }

@@ -326,6 +326,14 @@
     },
     "common": {
       "back": "Back"
+    },
+    "social": {
+      "continueWith": "Continue with",
+      "facebook": "Facebook",
+      "google": "Google",
+      "orContinueWith": "Or continue with",
+      "loginSuccess": "Successfully signed in with social account",
+      "loginError": "Social login failed. Please try again."
     }
   },
   "profile": {

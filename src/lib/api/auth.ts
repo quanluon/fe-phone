@@ -5,12 +5,12 @@ import { LoginRequest, RegisterRequest, User, AuthUser } from '@/types';
 export const authApi = {
   // Login
   login: (data: LoginRequest) => {
-    return api.post<{ data: { user: AuthUser; tokens: { accessToken: string; refreshToken: string; idToken: string; expiresIn: number } } }>('/auth/login', data);
+    return api.post<{ user: AuthUser; tokens: { accessToken: string; refreshToken: string; idToken: string; expiresIn: number } }>('/auth/login', data);
   },
 
   // Register
   register: (data: RegisterRequest) => {
-    return api.post<{ data: { user: AuthUser; tokens: { accessToken: string; refreshToken: string; idToken: string; expiresIn: number } } }>('/auth/register', data);
+    return api.post<{ user: AuthUser; tokens: { accessToken: string; refreshToken: string; idToken: string; expiresIn: number } }>('/auth/register', data);
   },
 
   // Logout
@@ -41,19 +41,28 @@ export const authApi = {
 
   // Get current user profile
   getProfile: () => {
-    return api.get<{ data: AuthUser }>('/auth/profile');
+    return api.get<AuthUser>('/auth/profile');
   },
 
   // Update profile
   updateProfile: (data: Partial<User>) => {
-    return api.put<{ data: AuthUser }>('/auth/profile', data);
+    return api.put<AuthUser>('/auth/profile', data);
   },
 
   // Change password
   changePassword: (currentPassword: string, newPassword: string) => {
-    return api.post<{ data: { message: string } }>('/auth/change-password', {
+    return api.put<{ data: { message: string } }>('/auth/change-password', {
       currentPassword,
       newPassword,
+    });
+  },
+
+  // Social login
+  socialLogin: (provider: 'facebook' | 'google', accessToken: string, idToken?: string) => {
+    return api.post<{ user: AuthUser; tokens: { accessToken: string; refreshToken: string; idToken: string; expiresIn: number } }>('/auth/social-login', {
+      provider,
+      accessToken,
+      idToken,
     });
   },
 };
