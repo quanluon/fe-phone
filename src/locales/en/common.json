@@ -23,7 +23,8 @@
     "searchPlaceholder": "Search products...",
     "profile": "Profile",
     "orders": "Orders",
-    "signOut": "Sign Out"
+    "signOut": "Sign Out",
+    "languageSelector": "Select language"
   },
   "home": {
     "hero": {

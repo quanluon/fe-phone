@@ -1,31 +1,38 @@
 'use client';
 
-import React from 'react';
-import { useRouter, usePathname } from 'next/navigation';
-import { useLocale } from 'next-intl';
-import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import { LANGUAGE_OPTIONS } from '@/lib/constants';
+import { useUIStore } from '@/stores/ui';
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import React, { useCallback } from 'react';
 
 export const LanguageSwitcher: React.FC = () => {
+  const { language, setLanguage } = useUIStore();
   const router = useRouter();
-  const pathname = usePathname();
-  const locale = useLocale();
+  const t = useTranslations('header');
 
-  const handleLanguageChange = (newLocale: string) => {
-    // Remove the current locale from the pathname
-    const pathWithoutLocale = pathname.replace(`/${locale}`, '') || '/';
+  const handleLanguageChange = useCallback((newLocale: string) => {
+    const newLanguage = newLocale as 'vi' | 'en';
     
-    // Navigate to the new locale
-    router.push(`/${newLocale}${pathWithoutLocale}`);
-  };
-
+    // Update the UI store
+    setLanguage(newLanguage);
+    
+    // Update URL with locale parameter to trigger middleware
+    const currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.set('locale', newLanguage);
+    
+    // Navigate to the new URL
+    router.push(currentUrl.pathname + currentUrl.search);
+    router.refresh()
+  }, [setLanguage, router]);
 
   return (
     <div className="relative">
       <select
-        value={locale}
+        value={language}
         onChange={(e) => handleLanguageChange(e.target.value)}
-        className="appearance-none bg-transparent border-none text-white focus:outline-none cursor-pointer pr-6"
+        className="appearance-none bg-transparent border-none text-white focus:outline-none cursor-pointer pr-6 text-xs sm:text-sm hover:text-blue-200 transition-colors"
+        aria-label={t('languageSelector')}
       >
         {LANGUAGE_OPTIONS.map((option) => (
           <option key={option.value} value={option.value} className="bg-blue-700 text-white">
@@ -33,7 +40,6 @@ export const LanguageSwitcher: React.FC = () => {
           </option>
         ))}
       </select>
-      <ChevronDownIcon className="absolute right-0 top-1/2 transform -translate-y-1/2 h-3 w-3 text-white pointer-events-none" />
     </div>
   );
 };

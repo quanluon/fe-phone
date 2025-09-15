@@ -134,7 +134,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             >
               <ShoppingCartIcon className="h-4 w-4 mr-1" />
               {availableStock === 0 
-                ? (cartQuantity > 0 ? t('product.inCart') : t('product.outOfStock'))
+                ? (cartQuantity > 0 ? t('inCart') : t('outOfStock'))
                 : t('addToCart')
               }
             </Button>
@@ -212,7 +212,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             </span>
           ) : (
             <span className="text-red-600">
-              {cartQuantity > 0 ? t('product.allInCart') : t('product.outOfStock')}
+              {cartQuantity > 0 ? t('allInCart') : t('outOfStock')}
             </span>
           )}
         </div>

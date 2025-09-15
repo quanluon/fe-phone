@@ -29,6 +29,7 @@ export function ProductDetailClient() {
   const params = useParams();
   const router = useRouter();
   const t = useTranslations('product.detail');
+  const tProduct = useTranslations('product');
   
   // Get product identifier from URL params
   const identifier = params.slug as string;
@@ -266,13 +267,13 @@ export function ProductDetailClient() {
             <div className="flex items-center gap-3">
               <span className="text-sm text-gray-500">{productData.brand.name}</span>
               {productData.isNew && (
-                <Badge variant="success" size="sm">New</Badge>
+                <Badge variant="success" size="sm">{tProduct('new')}</Badge>
               )}
               {productData.isFeatured && (
-                <Badge variant="warning" size="sm">Featured</Badge>
+                <Badge variant="warning" size="sm">{tProduct('featured')}</Badge>
               )}
               {discount > 0 && (
-                <Badge variant="danger" size="sm">{discount}% Off</Badge>
+                <Badge variant="danger" size="sm">{discount}% {tProduct('off')}</Badge>
               )}
             </div>
 
@@ -387,7 +388,7 @@ export function ProductDetailClient() {
                     </span>
                   ) : (
                     <span className="text-red-600">
-                      {cartQuantity > 0 ? t('product.allItemsInCart') : t('product.outOfStock')}
+                      {cartQuantity > 0 ? tProduct('allItemsInCart') : tProduct('outOfStock')}
                     </span>
                   )}
                 </div>
@@ -404,7 +405,7 @@ export function ProductDetailClient() {
               >
                 <ShoppingCartIcon className="h-5 w-5 mr-2" />
                 {availableStock === 0 
-                  ? (cartQuantity > 0 ? t('product.allItemsInCart') : t('product.outOfStock'))
+                  ? (cartQuantity > 0 ? tProduct('allItemsInCart') : tProduct('outOfStock'))
                   : isAddingToCart 
                     ? t('adding') 
                     : t('addToCart')

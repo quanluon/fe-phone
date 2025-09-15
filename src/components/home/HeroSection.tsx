@@ -83,14 +83,14 @@ export const HeroSection: React.FC = () => {
               </button>
 
               <div className="flex flex-col lg:flex-row items-center min-h-[400px] lg:min-h-[500px]">
-                <div className="flex-1 p-6 sm:p-8 lg:p-10 xl:p-12 text-center lg:text-left">
-                  <div className="flex items-center gap-2 mb-3 sm:mb-4">
+                <div className="p-12 text-center lg:text-left">
+                  <div className="flex items-end gap-2 mb-3 sm:mb-4">
                     <div
-                      className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold ${currentSlideData.textColor}`}
+                      className={`text-7xl font-bold ${currentSlideData.textColor}`}
                     >
                       {currentSlideData.discount}
                     </div>
-                    <div className="text-sm sm:text-base lg:text-lg font-semibold text-gray-800">
+                    <div className="text-lg font-semibold text-red-600">
                       {currentSlideData.discountText}
                     </div>
                   </div>
@@ -98,7 +98,7 @@ export const HeroSection: React.FC = () => {
                     {currentSlideData.title}
                   </h1>
                   {/* Hide description on mobile, show on larger screens */}
-                  <p className="hidden sm:block text-sm sm:text-base lg:text-lg text-gray-600 mb-4 sm:mb-6 lg:mb-8">
+                  <p className="hidden sm:block text-lg text-gray-600 mb-4 sm:mb-6 lg:mb-8">
                     {currentSlideData.description}
                   </p>
                   {/* Hide button on mobile (will show below image) */}
@@ -113,7 +113,7 @@ export const HeroSection: React.FC = () => {
                     </Link>
                   </div>
                 </div>
-                <div className="flex-1 relative h-80 sm:h-72 md:h-80 lg:h-80 xl:h-96 w-full p-4">
+                <div className="relative h-80 sm:h-72 md:h-80 lg:h-80 xl:h-96 w-full p-4">
                   <Image
                     src={currentSlideData.image}
                     alt={currentSlideData.imageAlt}

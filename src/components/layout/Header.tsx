@@ -1,25 +1,25 @@
 'use client';
 
-import React, { useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
-import { 
-  ShoppingCartIcon, 
-  UserIcon, 
-  HeartIcon, 
-  MagnifyingGlassIcon,
-  Bars3Icon,
-  ChevronDownIcon
-} from '@heroicons/react/24/outline';
-import { Input } from '@/components/ui/Input';
 import { CartSidebar } from '@/components/cart/CartSidebar';
 import { DynamicNavigation } from '@/components/layout/DynamicNavigation';
+import { Input } from '@/components/ui/Input';
+import { CONTACT_INFO } from '@/lib/constants';
+import { useAuthStore } from '@/stores/auth';
 import { useCartStore } from '@/stores/cart';
 import { useWishlistStore } from '@/stores/wishlist';
-import { useAuthStore } from '@/stores/auth';
-import { useUIStore } from '@/stores/ui';
-import { COUNTRY_OPTIONS, CONTACT_INFO } from '@/lib/constants';
+import {
+  Bars3Icon,
+  ChevronDownIcon,
+  HeartIcon,
+  MagnifyingGlassIcon,
+  ShoppingCartIcon,
+  UserIcon
+} from '@heroicons/react/24/outline';
+import { useTranslations } from 'next-intl';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
+import { LanguageSwitcher } from '../common/LanguageSwitcher';
 
 export const Header: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -32,17 +32,12 @@ export const Header: React.FC = () => {
   const { totalItems } = useCartStore();
   const { items: wishlistItems } = useWishlistStore();
   const { isAuthenticated, user } = useAuthStore();
-  const { country, setCountry } = useUIStore();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       router.push(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
     }
-  };
-
-  const handleCountryChange = (newCountry: string) => {
-    setCountry(newCountry as 'VN' | 'US');
   };
 
   return (
@@ -53,17 +48,7 @@ export const Header: React.FC = () => {
           <div className="flex items-center justify-between text-sm">
             {/* Left side - Country & Currency */}
             <div className="flex items-center space-x-2 sm:space-x-4">
-              <select
-                value={country}
-                onChange={(e) => handleCountryChange(e.target.value)}
-                className="bg-transparent border-none text-white focus:outline-none cursor-pointer text-xs sm:text-sm"
-              >
-                {COUNTRY_OPTIONS.map((option) => (
-                  <option key={option.value} value={option.value} className="bg-blue-700">
-                    {option.label}
-                  </option>
-                ))}
-              </select>
+              <LanguageSwitcher />
               {/* <div className="hidden xs:block">
                 <CurrencySwitcher />
               </div> */}
