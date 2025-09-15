@@ -32,8 +32,6 @@ export function ProfileClient() {
 
   const { data: user, isLoading: profileLoading } = useProfile();
 
-  console.log('user',user);
-  
   const updateProfileMutation = useUpdateProfile();
   const changePasswordMutation = useChangePassword();
 
