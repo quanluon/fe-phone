@@ -1,7 +1,6 @@
 import { CartItem, CartValidationResult, Product, ProductVariant } from '@/types';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { useToastStore } from './toast';
 
 interface CartState {
   items: CartItem[];
@@ -93,10 +92,6 @@ export const useCartStore = create<CartStore>()(
 
       removeItem: (productId: string, variantId: string) => {
         set((state) => {
-          const itemToRemove = state.items.find(
-            (item) => item.productId === productId && item.variantId === variantId
-          );
-
           const newItems = state.items.filter(
             (item) => !(item.productId === productId && item.variantId === variantId)
           );
@@ -107,15 +102,6 @@ export const useCartStore = create<CartStore>()(
             (sum, item) => sum + item.variant.price * item.quantity,
             0
           );
-
-          // Show info toast
-          if (itemToRemove) {
-            useToastStore.getState().addToast({
-              type: 'info',
-              title: 'Removed from cart',
-              message: `${itemToRemove.product.name} (${itemToRemove.variant.color}) has been removed from your cart.`,
-            });
-          }
 
           return {
             items: newItems,

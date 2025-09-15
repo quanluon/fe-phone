@@ -9,9 +9,10 @@ import { Product, ProductVariant } from '@/types';
 import { Card, Badge, NextImage } from '@/components/ui';
 import { Button } from '@/components/ui/Button';
 import { formatCurrency, calculateDiscount, getImageUrl } from '@/lib/utils';
-import { useCartWithTranslations } from '@/hooks/useCartWithTranslations';
+import { useCart } from '@/hooks/useCart';
 import { useWishlistStore } from '@/stores/wishlist';
 import { useUIStore } from '@/stores/ui';
+import { useRouter } from 'next/navigation';
 
 interface ProductCardProps {
   product: Product;
@@ -32,10 +33,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(product.variants[0]);
   const [isHovered, setIsHovered] = useState(false);
   
-  const { addItem: addToCart, getItemQuantity } = useCartWithTranslations();
+  const { addItem: addToCart, getItemQuantity } = useCart();
   const { isInWishlist, toggleItem: toggleWishlist } = useWishlistStore();
   const { currency } = useUIStore();
-
+  const router = useRouter();
   const isInWishlistState = isInWishlist(product._id);
   const discount = selectedVariant.originalPrice 
     ? calculateDiscount(selectedVariant.price, selectedVariant.originalPrice)
@@ -69,6 +70,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const handleViewProduct = () => {
     if (onViewProduct) {
       onViewProduct(product);
+    }else {
+      router.push(`/products/${product._id}-${product.slug}`);
     }
   };
 
@@ -205,7 +208,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               {availableStock} {t('inStock')}
               {cartQuantity > 0 && (
                 <span className="text-blue-600 ml-1">
-                  ({cartQuantity} {t('product.inCartCount')})
+                  ({cartQuantity} {t('inCartCount')})
                 </span>
               )}
             </span>

@@ -17,7 +17,7 @@ import { HeartIcon as HeartSolidIcon, StarIcon as StarSolidIcon } from '@heroico
 import { Button } from '@/components/ui/Button';
 import { Badge, NextImage } from '@/components/ui';
 import { ImagePreviewModal } from '@/components/ui/ImagePreviewModal';
-import { useCartWithTranslations } from '@/hooks/useCartWithTranslations';
+import { useCart } from '@/hooks/useCart';
 import { useWishlistStore } from '@/stores/wishlist';
 import { useUIStore } from '@/stores/ui';
 import { useProduct } from '@/hooks/useProducts';
@@ -49,7 +49,7 @@ export function ProductDetailClient() {
   const [activeTab, setActiveTab] = useState<'description' | 'specifications'>('description');
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   
-  const { addItem: addToCart, getItemQuantity } = useCartWithTranslations();
+  const { addItem: addToCart, getItemQuantity } = useCart();
   const { isInWishlist, toggleItem: toggleWishlist } = useWishlistStore();
   const { currency } = useUIStore();
 
@@ -379,7 +379,7 @@ export function ProductDetailClient() {
                       {availableStock} {t('available')}
                       {cartQuantity > 0 && (
                         <span className="text-blue-600 ml-1">
-                          ({cartQuantity} {t('product.inCartCount')})
+                          ({cartQuantity} {tProduct('inCartCount')})
                         </span>
                       )}
                     </span>

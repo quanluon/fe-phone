@@ -199,7 +199,9 @@
       "outOfStock": "{productName} ({color}) is currently out of stock",
       "quantityMustBeGreaterThanZero": "Quantity must be greater than 0",
       "addedToCart": "{productName} ({color}) has been added to your cart",
-      "removedFromCart": "{productName} ({color}) has been removed from your cart"
+      "removedFromCart": "{productName} ({color}) has been removed from your cart",
+      "addSuccess": "Product has been added to your cart",
+      "removeSuccess": "Product has been removed from your cart"
     }
   },
   "wishlist": {

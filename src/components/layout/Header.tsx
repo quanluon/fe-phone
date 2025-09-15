@@ -3,9 +3,9 @@
 import { CartSidebar } from '@/components/cart/CartSidebar';
 import { DynamicNavigation } from '@/components/layout/DynamicNavigation';
 import { Input } from '@/components/ui/Input';
+import { useCart } from '@/hooks/useCart';
 import { CONTACT_INFO } from '@/lib/constants';
 import { useAuthStore } from '@/stores/auth';
-import { useCartStore } from '@/stores/cart';
 import { useWishlistStore } from '@/stores/wishlist';
 import {
   Bars3Icon,
@@ -29,7 +29,7 @@ export const Header: React.FC = () => {
   
   const t = useTranslations();
   const router = useRouter();
-  const { totalItems } = useCartStore();
+  const { totalItems } = useCart();
   const { items: wishlistItems } = useWishlistStore();
   const { isAuthenticated, user } = useAuthStore();
 

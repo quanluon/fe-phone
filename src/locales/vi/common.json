@@ -199,7 +199,9 @@
       "outOfStock": "{productName} ({color}) hiện đang hết hàng",
       "quantityMustBeGreaterThanZero": "Số lượng phải lớn hơn 0",
       "addedToCart": "{productName} ({color}) đã được thêm vào giỏ hàng",
-      "removedFromCart": "{productName} ({color}) đã được xóa khỏi giỏ hàng"
+      "removedFromCart": "{productName} ({color}) đã được xóa khỏi giỏ hàng",
+      "addSuccess": "Thêm vào giỏ hàng thành công",
+      "removeSuccess": "Xóa khỏi giỏ hàng thành công"
     }
   },
   "wishlist": {
@@ -387,5 +389,3 @@
     "buttonBack": "Quay Lại"
   }
 }
-
-

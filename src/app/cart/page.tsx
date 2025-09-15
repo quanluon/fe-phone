@@ -1,24 +1,23 @@
 'use client';
 
-import React from 'react';
-import Link from 'next/link';
-import { useTranslations } from 'next-intl';
-import { 
-  TrashIcon, 
-  PlusIcon, 
-  MinusIcon,
-  ShoppingBagIcon,
-  ArrowLeftIcon
-} from '@heroicons/react/24/outline';
-import { Button } from '@/components/ui/Button';
 import { Card, NextImage } from '@/components/ui';
-import { useCartStore } from '@/stores/cart';
-import { useUIStore } from '@/stores/ui';
+import { Button } from '@/components/ui/Button';
+import { useCart } from '@/hooks/useCart';
 import { formatCurrency, getImageUrl } from '@/lib/utils';
+import { useUIStore } from '@/stores/ui';
+import {
+  ArrowLeftIcon,
+  MinusIcon,
+  PlusIcon,
+  ShoppingBagIcon,
+  TrashIcon
+} from '@heroicons/react/24/outline';
+import { useTranslations } from 'next-intl';
+import Link from 'next/link';
 
 export default function CartPage() {
   const t = useTranslations('cart');
-  const { items, totalItems, totalPrice, updateQuantity, removeItem, clearCart } = useCartStore();
+  const { items, totalItems, totalPrice, updateQuantity, removeItem, clearCart } = useCart();
   const { currency } = useUIStore();
 
   const handleQuantityChange = (productId: string, variantId: string, newQuantity: number) => {

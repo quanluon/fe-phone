@@ -1,20 +1,20 @@
 'use client';
 
-import React from 'react';
-import Link from 'next/link';
-import { useTranslations } from 'next-intl';
-import { 
-  XMarkIcon, 
-  TrashIcon, 
-  PlusIcon, 
-  MinusIcon,
-  ShoppingBagIcon
-} from '@heroicons/react/24/outline';
-import { Button } from '@/components/ui/Button';
 import { NextImage } from '@/components/ui';
-import { useCartStore } from '@/stores/cart';
-import { useUIStore } from '@/stores/ui';
+import { Button } from '@/components/ui/Button';
+import { useCart } from '@/hooks/useCart';
 import { formatCurrency, getImageUrl } from '@/lib/utils';
+import { useUIStore } from '@/stores/ui';
+import {
+  MinusIcon,
+  PlusIcon,
+  ShoppingBagIcon,
+  TrashIcon,
+  XMarkIcon
+} from '@heroicons/react/24/outline';
+import { useTranslations } from 'next-intl';
+import Link from 'next/link';
+import React from 'react';
 
 interface CartSidebarProps {
   isOpen: boolean;
@@ -23,7 +23,7 @@ interface CartSidebarProps {
 
 export const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
   const t = useTranslations('cart');
-  const { items, totalItems, totalPrice, updateQuantity, removeItem } = useCartStore();
+  const { items, totalItems, totalPrice, updateQuantity, removeItem } = useCart();
   const { currency } = useUIStore();
 
   const handleQuantityChange = (productId: string, variantId: string, newQuantity: number) => {
