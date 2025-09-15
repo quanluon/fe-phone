@@ -163,7 +163,7 @@ export const useAuthStore = create<AuthStore>()(
         try {
           const response = await authApi.getProfile();
           set({
-            user: response.data.data.data,
+            user: response.data.data,
             isAuthenticated: true,
             isLoading: false,
             error: null,
@@ -183,7 +183,7 @@ export const useAuthStore = create<AuthStore>()(
         try {
           const response = await authApi.updateProfile(data);
           set({
-            user: response.data.data.data,  
+            user: response.data.data,  
             isLoading: false,
             error: null,
           });
