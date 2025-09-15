@@ -146,7 +146,7 @@
     "allTypes": "Tất cả loại",
     "noProductsFound": "Không tìm thấy sản phẩm",
     "loadMore": "Tải thêm sản phẩm",
-    "productsFound": "sản phẩm được tìm thấy",
+    "productsFound": "Sản phẩm được tìm thấy",
     "discoverProducts": "Khám phá những sản phẩm tuyệt vời của chúng tôi",
     "loadingProducts": "Đang tải sản phẩm...",
     "errorLoadingProducts": "Lỗi khi tải sản phẩm",
@@ -176,14 +176,13 @@
     "empty": "Giỏ hàng trống",
     "subtotal": "Tạm tính",
     "total": "Tổng cộng",
-    "checkout": "Thanh Toán",
     "continueShopping": "Tiếp Tục Mua Sắm",
     "removeItem": "Xóa sản phẩm",
     "updateQuantity": "Cập nhật số lượng",
     "viewCart": "Xem Giỏ Hàng",
     "emptyDescription": "Có vẻ như bạn chưa thêm sản phẩm nào vào giỏ hàng.",
-    "item": "sản phẩm",
-    "items": "sản phẩm",
+    "item": "Sản phẩm",
+    "items": "Sản phẩm",
     "quantity": "Số Lượng",
     "orderSummary": "Tóm Tắt Đơn Hàng",
     "shipping": "Vận Chuyển",
@@ -202,13 +201,36 @@
       "removedFromCart": "{productName} ({color}) đã được xóa khỏi giỏ hàng",
       "addSuccess": "Thêm vào giỏ hàng thành công",
       "removeSuccess": "Xóa khỏi giỏ hàng thành công"
+    },
+    "checkout": {
+      "title": "Thanh Toán",
+      "notSupported": {
+        "title": "Thanh Toán Không Khả Dụng",
+        "message": "Thanh toán trực tuyến hiện tại chưa được hỗ trợ. Vui lòng liên hệ trực tiếp với chúng tôi để hoàn tất đơn hàng.",
+        "contactUs": "Chúng tôi sẵn sàng hỗ trợ bạn đặt hàng!",
+        "close": "Đóng",
+        "callNow": "Gọi Ngay"
+      },
+      "contact": {
+        "phone": "Điện Thoại",
+        "email": "Email",
+        "address": "Địa Chỉ",
+        "hours": "Giờ Làm Việc"
+      }
     }
   },
   "wishlist": {
     "title": "Danh Sách Yêu Thích",
     "empty": "Danh sách yêu thích trống",
+    "emptyDescription": "Bạn chưa thêm sản phẩm nào vào danh sách yêu thích. Hãy khám phá các sản phẩm của chúng tôi và thêm những món đồ bạn yêu thích!",
     "addToCart": "Thêm Vào Giỏ",
-    "remove": "Xóa"
+    "remove": "Xóa",
+    "clearAll": "Xóa Tất Cả",
+    "continueShopping": "Tiếp Tục Mua Sắm",
+    "startShopping": "Bắt Đầu Mua Sắm",
+    "itemCount": "{count} sản phẩm",
+    "viewDetails": "Xem Chi Tiết",
+    "youMightAlsoLike": "Bạn có thể thích"
   },
   "auth": {
     "login": "Đăng Nhập",

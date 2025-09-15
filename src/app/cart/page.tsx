@@ -2,6 +2,7 @@
 
 import { Card, NextImage } from '@/components/ui';
 import { Button } from '@/components/ui/Button';
+import { CheckoutNotSupportedModal } from '@/components/ui/CheckoutNotSupportedModal';
 import { useCart } from '@/hooks/useCart';
 import { formatCurrency, getImageUrl } from '@/lib/utils';
 import { useUIStore } from '@/stores/ui';
@@ -14,11 +15,13 @@ import {
 } from '@heroicons/react/24/outline';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
+import { useState } from 'react';
 
 export default function CartPage() {
   const t = useTranslations('cart');
   const { items, totalItems, totalPrice, updateQuantity, removeItem, clearCart } = useCart();
   const { currency } = useUIStore();
+  const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
 
   const handleQuantityChange = (productId: string, variantId: string, newQuantity: number) => {
     if (newQuantity <= 0) {
@@ -213,12 +216,9 @@ export default function CartPage() {
                 <Button
                   size="lg"
                   className="w-full bg-blue-600 hover:bg-blue-700"
-                  onClick={() => {
-                    // TODO: Implement checkout flow
-                    alert('Checkout functionality will be implemented soon!');
-                  }}
+                  onClick={() => setIsCheckoutModalOpen(true)}
                 >
-                  {t('checkout')}
+                  {t('checkout.title')}
                 </Button>
                 
                 <Link href="/products">
@@ -261,6 +261,12 @@ export default function CartPage() {
           </div>
         </div>
       </div>
+
+      {/* Checkout Modal */}
+      <CheckoutNotSupportedModal
+        isOpen={isCheckoutModalOpen}
+        onClose={() => setIsCheckoutModalOpen(false)}
+      />
     </div>
   );
 }

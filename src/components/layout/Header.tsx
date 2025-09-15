@@ -124,8 +124,8 @@ export const Header: React.FC = () => {
           <div className="flex items-center justify-between h-14 sm:h-16">
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-1 sm:space-x-2">
-              <ShoppingCartIcon className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600" />
-              <span className="text-lg sm:text-xl font-bold text-gray-900">{CONTACT_INFO.name}</span>
+              <ShoppingCartIcon className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600 hidden sm:inline" />
+              <span className="text-lg sm:text-sm md:text-sm font-bold text-gray-900">{CONTACT_INFO.name}</span>
             </Link>
 
             {/* Desktop Navigation */}

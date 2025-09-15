@@ -263,18 +263,17 @@ export const PROMOTIONAL_MESSAGES = {
 };
 
 // Social media links
-export const SOCIAL_LINKS = {
-  facebook: 'https://facebook.com',
-  twitter: 'https://twitter.com',
-  instagram: 'https://instagram.com',
-  youtube: 'https://youtube.com',
-  linkedin: 'https://linkedin.com',
-};
+export const SOCIAL_LINKS ={}
+//  {
+//   facebook: 'https://facebook.com',
+//   instagram: 'https://instagram.com',
+//   youtube: 'https://youtube.com',
+// };
 
 // Contact information
 export const CONTACT_INFO = {
-  name: 'Cozy Commerce',
-  title: 'Cozy Commerce - Apple Products & Accessories',
+  name: 'Nguyễn Công Mobile',
+  title: 'Nguyễn Công Mobile - Apple Products & Accessories',
   email: 'support@cozycommerce.com',
   phone: '+1 (555) 123-4567',
   address: '123 Commerce Street, Business City, BC 12345',

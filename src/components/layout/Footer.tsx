@@ -39,7 +39,7 @@ export const Footer: React.FC = () => {
   return (
     <footer className="bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 sm:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           {/* Company Info */}
           <div className="sm:col-span-2 lg:col-span-2">
             <Link href="/" className="flex items-center space-x-2 mb-4">
@@ -63,7 +63,7 @@ export const Footer: React.FC = () => {
               {Object.entries(SOCIAL_LINKS).map(([platform, url]) => (
                 <a
                   key={platform}
-                  href={url}
+                  href={url as string}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-8 h-8 sm:w-10 sm:h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors"
@@ -78,7 +78,7 @@ export const Footer: React.FC = () => {
           </div>
 
           {/* Company Links */}
-          <div>
+          {/* <div>
             <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">{t('company')}</h3>
             <ul className="space-y-1 sm:space-y-2">
               {footerLinks.company.map((link) => (
@@ -92,7 +92,7 @@ export const Footer: React.FC = () => {
                 </li>
               ))}
             </ul>
-          </div>
+          </div> */}
 
           {/* Support Links */}
           <div>

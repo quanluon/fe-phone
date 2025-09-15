@@ -176,7 +176,6 @@
     "empty": "Your cart is empty",
     "subtotal": "Subtotal",
     "total": "Total",
-    "checkout": "Checkout",
     "continueShopping": "Continue Shopping",
     "removeItem": "Remove item",
     "updateQuantity": "Update quantity",
@@ -202,13 +201,36 @@
       "removedFromCart": "{productName} ({color}) has been removed from your cart",
       "addSuccess": "Product has been added to your cart",
       "removeSuccess": "Product has been removed from your cart"
+    },
+    "checkout": {
+      "title": "Checkout",
+      "notSupported": {
+        "title": "Checkout Not Available",
+        "message": "Online checkout is currently not supported. Please contact us directly to complete your purchase.",
+        "contactUs": "We're here to help you with your order!",
+        "close": "Close",
+        "callNow": "Call Now"
+      },
+      "contact": {
+        "phone": "Phone",
+        "email": "Email",
+        "address": "Address",
+        "hours": "Business Hours"
+      }
     }
   },
   "wishlist": {
     "title": "Wishlist",
     "empty": "Your wishlist is empty",
+    "emptyDescription": "You haven't added any items to your wishlist yet. Start exploring our products and add items you love!",
     "addToCart": "Add to Cart",
-    "remove": "Remove"
+    "remove": "Remove",
+    "clearAll": "Clear All",
+    "continueShopping": "Continue Shopping",
+    "startShopping": "Start Shopping",
+    "itemCount": "{count} {count, plural, one {item} other {items}}",
+    "viewDetails": "View Details",
+    "youMightAlsoLike": "You might also like"
   },
   "auth": {
     "login": "Login",

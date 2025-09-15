@@ -163,7 +163,7 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => 
               <div className="space-y-2">
                 <Link href="/cart" onClick={onClose}>
                   <Button size="sm" className="w-full bg-blue-600 hover:bg-blue-700">
-                    {t('checkout')}
+                    {t('checkout.title')}
                   </Button>
                 </Link>
                 
