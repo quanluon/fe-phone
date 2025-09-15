@@ -186,7 +186,7 @@ export const API_ENDPOINTS = {
   categories: '/api/categories',
   brands: '/api/brands',
   auth: {
-    login: '/auth/login',
+    login: '/auth',
     register: '/auth/register',
     logout: '/auth/logout',
     refresh: '/auth/refresh',

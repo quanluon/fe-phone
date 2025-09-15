@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { ApiResponse } from '@/types';
+import { useUIStore } from '@/stores/ui';
 
 // API Configuration
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
@@ -16,12 +17,26 @@ const apiClient: AxiosInstance = axios.create({
 // Request interceptor
 apiClient.interceptors.request.use(
   (config) => {
-    // Add auth token if available
     if (typeof window !== 'undefined') {
+      // Add auth token if available, but exclude public endpoints
       const token = localStorage.getItem('accessToken');
-      if (token) {
+      const isPublicEndpoint = config.url?.includes('/auth/register') || 
+                              config.url?.includes('/auth/login') || 
+                              config.url?.includes('/auth/forgot-password') || 
+                              config.url?.includes('/auth/reset-password');
+      
+      if (token && !isPublicEndpoint) {
         config.headers.Authorization = `Bearer ${token}`;
       }
+
+      // Add Accept-Language header if available
+      const storeLang = useUIStore.getState().language;
+      const browserLang = typeof navigator !== 'undefined' 
+        ? (navigator.language || (navigator.languages && navigator.languages[0]))
+        : undefined;
+      const acceptLanguage = storeLang || browserLang || 'en';
+
+      config.headers['Accept-Language'] = acceptLanguage;
     }
     return config;
   },
@@ -62,7 +77,7 @@ apiClient.interceptors.response.use(
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
         if (typeof window !== 'undefined') {
-          window.location.href = '/auth/login';
+          window.location.href = '/auth';
         }
       }
     }

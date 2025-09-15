@@ -4,6 +4,7 @@ import { CartSidebar } from '@/components/cart/CartSidebar';
 import { DynamicNavigation } from '@/components/layout/DynamicNavigation';
 import { Input } from '@/components/ui/Input';
 import { useCart } from '@/hooks/useCart';
+import { useLogout } from '@/hooks/useAuth';
 import { CONTACT_INFO } from '@/lib/constants';
 import { useAuthStore } from '@/stores/auth';
 import { useWishlistStore } from '@/stores/wishlist';
@@ -32,11 +33,22 @@ export const Header: React.FC = () => {
   const { totalItems } = useCart();
   const { items: wishlistItems } = useWishlistStore();
   const { isAuthenticated, user } = useAuthStore();
+  const logoutMutation = useLogout();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       router.push(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logoutMutation.mutateAsync();
+      setShowUserMenu(false);
+      router.push('/');
+    } catch (error) {
+      console.error('Logout failed:', error);
     }
   };
 
@@ -87,13 +99,11 @@ export const Header: React.FC = () => {
                         {t('header.orders')}
                       </Link>
                       <button
-                        onClick={() => {
-                          // Handle logout
-                          setShowUserMenu(false);
-                        }}
-                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={handleLogout}
+                        disabled={logoutMutation.isPending}
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        {t('header.signOut')}
+                        {logoutMutation.isPending ? t('common.loading') : t('header.signOut')}
                       </button>
                     </div>
                   )}
@@ -103,7 +113,7 @@ export const Header: React.FC = () => {
                   <Link href="/auth/register" className="hover:text-blue-200 transition-colors text-xs sm:text-sm">
                     {t('header.createAccount')}
                   </Link>
-                  <Link href="/auth/login" className="hover:text-blue-200 transition-colors text-xs sm:text-sm">
+                  <Link href="/auth" className="hover:text-blue-200 transition-colors text-xs sm:text-sm">
                     {t('header.signIn')}
                   </Link>
                 </>
@@ -153,7 +163,7 @@ export const Header: React.FC = () => {
               </button>
 
               {/* User Icon */}
-              <Link href={isAuthenticated ? "/profile" : "/auth/login"} className="p-1.5 sm:p-2 text-gray-600 hover:text-blue-600">
+              <Link href={isAuthenticated ? "/profile" : "/auth"} className="p-1.5 sm:p-2 text-gray-600 hover:text-blue-600">
                 <UserIcon className="h-5 w-5" />
               </Link>
 

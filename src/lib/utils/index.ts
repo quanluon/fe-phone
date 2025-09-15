@@ -242,7 +242,7 @@ export function uniqueBy<T>(array: T[], key: keyof T): T[] {
 }
 
 // Error helpers
-export function getErrorMessage(error: unknown): string {
+export function getErrorMessage(error: unknown,defaultMessage: string = 'An unexpected error occurred'): string {
   if (error && typeof error === 'object' && 'response' in error) {
     const errorWithResponse = error as { response?: { data?: { message?: string } } };
     if (errorWithResponse.response?.data?.message) {
@@ -255,5 +255,6 @@ export function getErrorMessage(error: unknown): string {
       return errorWithMessage.message;
     }
   }
-  return 'An unexpected error occurred';
+  return defaultMessage;
 }
+
