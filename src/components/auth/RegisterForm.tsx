@@ -1,15 +1,14 @@
 'use client';
 
-import { useState } from 'react';
-import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/Button';
 import { useRegister } from '@/hooks/useAuth';
+import { getErrorMessage } from '@/lib/utils';
 import { useToastStore } from '@/stores/toast';
 import { RegisterRequest } from '@/types';
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
-import { Form, Input, Row, Col } from 'antd';
-import { getErrorMessage } from '@/lib/utils';
-import { SocialLogin } from './SocialLogin';
+import { Col, Form, Input, Row } from 'antd';
+import { useTranslations } from 'next-intl';
+import { useState } from 'react';
 
 interface RegisterFormProps {
   onSuccess: () => void;
@@ -171,7 +170,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
         </Button>
       </Form.Item>
 
-      <SocialLogin onSuccess={onSuccess} className="mt-6" />
+      {/* <SocialLogin onSuccess={onSuccess} className="mt-6" /> */}
     </Form>
   );
 }
