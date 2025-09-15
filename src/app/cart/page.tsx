@@ -2,7 +2,6 @@
 
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { 
   TrashIcon, 
@@ -12,7 +11,7 @@ import {
   ArrowLeftIcon
 } from '@heroicons/react/24/outline';
 import { Button } from '@/components/ui/Button';
-import { Card } from '@/components/ui/Card';
+import { Card, NextImage } from '@/components/ui';
 import { useCartStore } from '@/stores/cart';
 import { useUIStore } from '@/stores/ui';
 import { formatCurrency, getImageUrl } from '@/lib/utils';
@@ -104,7 +103,7 @@ export default function CartPage() {
                   <div key={`${item.product._id}-${item.variant._id}`} className="flex gap-4 pb-6 border-b border-gray-200 last:border-b-0 last:pb-0">
                     {/* Product Image */}
                     <div className="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0">
-                      <Image
+                      <NextImage
                         src={getImageUrl(item.variant.images[0] || item.product.images[0])}
                         alt={item.product.name}
                         width={96}

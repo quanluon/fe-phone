@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { 
   XMarkIcon, 
@@ -12,6 +11,7 @@ import {
   ArrowsPointingOutIcon
 } from '@heroicons/react/24/outline';
 import { cn } from '@/lib/utils';
+import { NextImage } from './NextImage';
 
 interface ImagePreviewModalProps {
   isOpen: boolean;
@@ -239,7 +239,7 @@ export const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
               onMouseLeave={handleMouseUp}
               style={{ cursor: zoom > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default' }}
             >
-              <Image
+              <NextImage
                 src={images[currentIndex]}
                 alt={t('thumbnail', { index: currentIndex + 1 })}
                 width={800}
@@ -270,7 +270,7 @@ export const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
                       : "border-gray-600 hover:border-gray-400"
                   )}
                 >
-                  <Image
+                  <NextImage
                     src={image}
                     alt={t('thumbnail', { index: index + 1 })}
                     width={64}

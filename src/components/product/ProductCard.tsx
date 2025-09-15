@@ -1,13 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { HeartIcon, ShoppingCartIcon, EyeIcon } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartSolidIcon } from '@heroicons/react/24/solid';
 import { Product, ProductVariant } from '@/types';
-import { Card, Badge } from '@/components/ui';
+import { Card, Badge, NextImage } from '@/components/ui';
 import { Button } from '@/components/ui/Button';
 import { formatCurrency, calculateDiscount, getImageUrl } from '@/lib/utils';
 import { useCartWithTranslations } from '@/hooks/useCartWithTranslations';
@@ -83,7 +82,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       {/* Product Image */}
       <div className="relative aspect-square overflow-hidden bg-gray-100">
         <Link href={`/products/${product._id}-${product.slug}`}>
-          <Image
+          <NextImage
             src={getImageUrl(selectedVariant.images[0] || product.images[0])}
             alt={product.name}
             fill

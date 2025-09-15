@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { 
@@ -16,7 +15,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartSolidIcon, StarIcon as StarSolidIcon } from '@heroicons/react/24/solid';
 import { Button } from '@/components/ui/Button';
-import { Badge } from '@/components/ui/Badge';
+import { Badge, NextImage } from '@/components/ui';
 import { ImagePreviewModal } from '@/components/ui/ImagePreviewModal';
 import { useCartWithTranslations } from '@/hooks/useCartWithTranslations';
 import { useWishlistStore } from '@/stores/wishlist';
@@ -224,13 +223,12 @@ export function ProductDetailClient() {
               className="aspect-square bg-white rounded-lg overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
               onClick={() => handleImageClick(selectedImageIndex)}
             >
-              <Image
+              <NextImage
                 src={getImageUrl(allImages[selectedImageIndex])}
                 alt={productData.name}
                 width={600}
                 height={600}
                 className="w-full h-full object-cover"
-                priority
               />
             </div>
 
@@ -242,13 +240,12 @@ export function ProductDetailClient() {
                     key={index}
                     onClick={() => {
                       setSelectedImageIndex(index);
-                      handleImageClick(index);
                     }}
                     className={`aspect-square bg-white rounded-lg overflow-hidden border-2 transition-all hover:border-blue-300 ${
                       selectedImageIndex === index ? 'border-blue-500' : 'border-gray-200'
                     }`}
                   >
-                    <Image
+                    <NextImage
                       src={getImageUrl(image)}
                       alt={`${productData.name} ${index + 1}`}
                       width={150}
@@ -408,7 +405,7 @@ export function ProductDetailClient() {
                   ? (cartQuantity > 0 ? tProduct('allItemsInCart') : tProduct('outOfStock'))
                   : isAddingToCart 
                     ? t('adding') 
-                    : t('addToCart')
+                    : tProduct('addToCart')
                 }
               </Button>
               

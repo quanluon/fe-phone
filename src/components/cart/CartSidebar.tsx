@@ -2,7 +2,6 @@
 
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { 
   XMarkIcon, 
@@ -12,6 +11,7 @@ import {
   ShoppingBagIcon
 } from '@heroicons/react/24/outline';
 import { Button } from '@/components/ui/Button';
+import { NextImage } from '@/components/ui';
 import { useCartStore } from '@/stores/cart';
 import { useUIStore } from '@/stores/ui';
 import { formatCurrency, getImageUrl } from '@/lib/utils';
@@ -81,7 +81,7 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => 
                   <div key={`${item.product._id}-${item.variant._id}`} className="flex gap-3">
                     {/* Product Image */}
                     <div className="w-16 h-16 flex-shrink-0">
-                      <Image
+                      <NextImage
                         src={getImageUrl(item.variant.images[0] || item.product.images[0])}
                         alt={item.product.name}
                         width={64}

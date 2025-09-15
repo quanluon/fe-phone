@@ -150,10 +150,43 @@ export function buildUrl(baseUrl: string, params: Record<string, unknown>): stri
 
 // Image helpers
 export function getImageUrl(imagePath: string): string {
-  if (imagePath.startsWith('http')) {
-    return imagePath;
+  return imagePath;
+  
+  // if (imagePath.startsWith('http')) {
+  //   return imagePath;
+  // }
+  // return `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}${imagePath}`;
+}
+
+// Default placeholder image path
+export const DEFAULT_IMAGE = '/images/placeholder.svg';
+
+// Handle image error by setting src to default placeholder
+export function handleImageError(event: React.SyntheticEvent<HTMLImageElement, Event>): void {
+  const img = event.currentTarget;
+  
+  // Prevent infinite loops and repeated error handling
+  if (img.dataset.errorHandled === 'true') {
+    return;
   }
-  return `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}${imagePath}`;
+  
+  // Mark as error handled to prevent repeated processing
+  img.dataset.errorHandled = 'true';
+  
+  // Only set placeholder if it's not already the placeholder
+  if (img.src !== DEFAULT_IMAGE && !img.src.includes('placeholder.svg')) {
+    try {
+      img.src = DEFAULT_IMAGE;
+    } catch (error) {
+      // If even the placeholder fails, hide the image element
+      console.warn('Failed to load placeholder image:', error);
+      img.style.display = 'none';
+    }
+  }
+  
+  // Stop event propagation to prevent further error handling
+  event.stopPropagation();
+  event.preventDefault();
 }
 
 // Validation helpers

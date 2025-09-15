@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui";
+import { Card, NextImage } from "@/components/ui";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { HeroData } from "@/types";
 import heroData from "@/data/heroData.json";
@@ -114,7 +113,7 @@ export const HeroSection: React.FC = () => {
                   </div>
                 </div>
                 <div className="relative h-80 sm:h-72 md:h-80 lg:h-80 xl:h-96 w-full p-4">
-                  <Image
+                  <NextImage
                     src={currentSlideData.image}
                     alt={currentSlideData.imageAlt}
                     fill
@@ -197,7 +196,7 @@ export const HeroSection: React.FC = () => {
                       )}
                     </div>
                     <div className="w-20 h-20 sm:w-24 sm:h-24 relative flex-shrink-0 bg-gray-50 rounded-lg p-2">
-                      <Image
+                      <NextImage
                         src={promotion.image}
                         alt={promotion.imageAlt}
                         fill
