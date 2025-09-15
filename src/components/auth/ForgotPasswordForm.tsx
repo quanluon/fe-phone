@@ -15,7 +15,7 @@ interface ForgotPasswordFormProps {
 
 export function ForgotPasswordForm({ onSuccess }: ForgotPasswordFormProps) {
   const t = useTranslations('auth');
-  const { mutate: forgotPassword, isPending } = useForgotPassword();
+  const { mutateAsync: forgotPassword, isPending } = useForgotPassword();
   const { addToast } = useToastStore();
   const [form] = Form.useForm();
   const [isSubmitting, setIsSubmitting] = useState(false);

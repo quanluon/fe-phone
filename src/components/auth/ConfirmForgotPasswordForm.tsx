@@ -17,7 +17,7 @@ interface ConfirmForgotPasswordFormProps {
 
 export function ConfirmForgotPasswordForm({ email, onSuccess, onBack }: ConfirmForgotPasswordFormProps) {
   const t = useTranslations('auth');
-  const { mutate: resetPassword, isPending } = useResetPassword();
+  const { mutateAsync: resetPassword, isPending } = useResetPassword();
   const { addToast } = useToastStore();
   const [form] = Form.useForm();
   const [isSubmitting, setIsSubmitting] = useState(false);

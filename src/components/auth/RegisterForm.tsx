@@ -6,7 +6,7 @@ import { getErrorMessage } from '@/lib/utils';
 import { useToastStore } from '@/stores/toast';
 import { RegisterRequest } from '@/types';
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
-import { Col, Form, Input, Row } from 'antd';
+import { Col, Form, Input, Row, Select } from 'antd';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
@@ -17,25 +17,41 @@ interface RegisterFormProps {
 
 export function RegisterForm({ onSuccess }: RegisterFormProps) {
   const t = useTranslations('auth');
-  const { mutate: register, isPending } = useRegister();
+  const { mutateAsync: register, isPending } = useRegister();
   const { addToast } = useToastStore();
   const [form] = Form.useForm();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (values: RegisterRequest) => {
+  // Phone prefix options - currently supporting +84 (Vietnam)
+  const phonePrefixOptions = [
+    { value: '+84', label: '+84' },
+  ];
+
+  const handleSubmit = (values: RegisterRequest & { phonePrefix?: string }) => {
     // Prevent multiple submissions
     if (isSubmitting || isPending) {
       return;
     }
 
     setIsSubmitting(true);
-    register(values, {
+    
+    // Combine phone prefix with phone number if phone is provided
+    const submitValues = { ...values };
+    if (values.phone) {
+      submitValues.phone = `${values.phonePrefix || '+84'}${Number(values.phone)}`;
+    }
+    
+    // Remove phonePrefix from the values as it's not part of RegisterRequest
+    delete submitValues.phonePrefix;
+    
+    register(submitValues, {
       onSuccess: () => {
         addToast({
           type: 'success',
           title: t('register.successTitle'),
           message: t('register.successMessage'),
         });
+        // Don't reset isSubmitting on success to prevent re-submission
         onSuccess();
       },
       onError: (error: unknown) => {
@@ -45,8 +61,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
           title: t('register.errorTitle'),
           message: errorMessage,
         });
-      },
-      onSettled: () => {
+        // Only reset isSubmitting on error to allow retry
         setIsSubmitting(false);
       },
     });
@@ -108,17 +123,39 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
         />
       </Form.Item>
 
-      <Form.Item
-        name="phone"
-        label={`${t('register.phone')} (${t('register.optional')})`}
-      >
-        <Input
-          type="tel"
-          placeholder={t('register.phonePlaceholder')}
-          autoComplete="tel"
-          size="large"
-        />
-      </Form.Item>
+      <Row gutter={16}>
+        <Col span={8}>
+          <Form.Item
+            name="phonePrefix"
+            label={t('register.phonePrefix')}
+          >
+            <Select
+              placeholder={t('register.phonePrefixPlaceholder')}
+              size="large"
+              options={phonePrefixOptions}
+              defaultValue="+84"
+            />
+          </Form.Item>
+        </Col>
+        <Col span={16}>
+          <Form.Item
+            name="phone"
+            label={`${t('register.phone')} (${t('register.optional')})`}
+            rules={[
+              {
+                pattern: /^[0-9]{9,10}$/,
+                message: t('validation.phoneInvalid'),
+              },
+            ]}
+          >
+            <Input
+              type="number"
+              placeholder={t('register.phonePlaceholder')}
+              size="large"
+            />
+          </Form.Item>
+        </Col>
+      </Row>
 
       <Form.Item
         name="password"

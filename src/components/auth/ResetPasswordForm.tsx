@@ -16,7 +16,7 @@ interface ResetPasswordFormProps {
 
 export function ResetPasswordForm({ token, onSuccess, onSwitchToLogin }: ResetPasswordFormProps) {
   const t = useTranslations('auth');
-  const { mutate: resetPassword, isPending } = useResetPassword();
+  const { mutateAsync: resetPassword, isPending } = useResetPassword();
   const { addToast } = useToastStore();
   const [form] = Form.useForm();
   const [isSubmitting, setIsSubmitting] = useState(false);

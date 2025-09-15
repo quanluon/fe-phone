@@ -262,6 +262,8 @@
       "emailPlaceholder": "Enter your email",
       "phone": "Phone number",
       "phonePlaceholder": "Enter your phone number",
+      "phonePrefix": "Country code",
+      "phonePrefixPlaceholder": "Select country",
       "optional": "Optional",
       "password": "Password",
       "passwordPlaceholder": "Create a password",
@@ -322,7 +324,8 @@
       "passwordsDoNotMatch": "Passwords do not match",
       "firstNameRequired": "First name is required",
       "lastNameRequired": "Last name is required",
-      "phoneInvalid": "Please enter a valid phone number"
+      "phoneInvalid": "Please enter a valid phone number",
+      "phonePrefixRequired": "Please select a country code"
     },
     "common": {
       "back": "Back"

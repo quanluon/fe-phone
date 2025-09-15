@@ -1,14 +1,14 @@
 'use client';
 
-import { useState } from 'react';
-import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/Button';
 import { useLogin } from '@/hooks/useAuth';
+import { getErrorMessage } from '@/lib/utils';
 import { useToastStore } from '@/stores/toast';
 import { LoginRequest } from '@/types';
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
-import { Form, Input, Checkbox } from 'antd';
-import { getErrorMessage } from '@/lib/utils';
+import { Checkbox, Form, Input } from 'antd';
+import { useTranslations } from 'next-intl';
+import { useState } from 'react';
 
 interface LoginFormProps {
   onSuccess: () => void;
@@ -18,7 +18,7 @@ interface LoginFormProps {
 
 export function LoginForm({ onSuccess, onSwitchToForgotPassword }: LoginFormProps) {
   const t = useTranslations('auth');
-  const { mutate: login, isPending } = useLogin();
+  const { isPending ,mutateAsync: login} = useLogin();
   const { addToast } = useToastStore();
   const [form] = Form.useForm();
   const [isSubmitting, setIsSubmitting] = useState(false);
