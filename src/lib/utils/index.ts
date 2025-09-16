@@ -108,6 +108,37 @@ export const storage = {
   },
 };
 
+// Zustand persist storage adapter for SSR compatibility
+export const createPersistStorage = () => {
+  return {
+    getItem: (name: string) => {
+      if (typeof window === 'undefined') return null;
+      try {
+        const item = localStorage.getItem(name);
+        return item ? JSON.parse(item) : null;
+      } catch {
+        return null;
+      }
+    },
+    setItem: (name: string, value: unknown): void => {
+      if (typeof window === 'undefined') return;
+      try {
+        localStorage.setItem(name, JSON.stringify(value));
+      } catch {
+        // Handle storage error silently
+      }
+    },
+    removeItem: (name: string): void => {
+      if (typeof window === 'undefined') return;
+      try {
+        localStorage.removeItem(name);
+      } catch {
+        // Handle storage error silently
+      }
+    },
+  };
+};
+
 // Session storage helpers
 export const sessionStorage = {
   get: <T>(key: string, defaultValue?: T): T | null => {
@@ -240,6 +271,96 @@ export function uniqueBy<T>(array: T[], key: keyof T): T[] {
     return true;
   });
 }
+
+// Cookie helpers for SSR
+export const cookies = {
+  get: (name: string): string | null => {
+    if (typeof window === 'undefined') {
+      // Server-side: cookies are handled by Next.js request/response
+      return null;
+    }
+    
+    // Client-side: parse document.cookie
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) {
+      return parts.pop()?.split(';').shift() || null;
+    }
+    return null;
+  },
+  
+  set: (name: string, value: string, options: {
+    expires?: Date;
+    maxAge?: number;
+    path?: string;
+    domain?: string;
+    secure?: boolean;
+    sameSite?: 'strict' | 'lax' | 'none';
+    httpOnly?: boolean;
+  } = {}): void => {
+    if (typeof window === 'undefined') return;
+    
+    let cookieString = `${name}=${value}`;
+    
+    if (options.expires) {
+      cookieString += `; expires=${options.expires.toUTCString()}`;
+    }
+    if (options.maxAge) {
+      cookieString += `; max-age=${options.maxAge}`;
+    }
+    if (options.path) {
+      cookieString += `; path=${options.path}`;
+    }
+    if (options.domain) {
+      cookieString += `; domain=${options.domain}`;
+    }
+    if (options.secure) {
+      cookieString += `; secure`;
+    }
+    if (options.sameSite) {
+      cookieString += `; samesite=${options.sameSite}`;
+    }
+    if (options.httpOnly) {
+      cookieString += `; httponly`;
+    }
+    
+    document.cookie = cookieString;
+  },
+  
+  remove: (name: string, options: { path?: string; domain?: string } = {}): void => {
+    cookies.set(name, '', {
+      ...options,
+      expires: new Date(0),
+    });
+  },
+};
+
+// SSR-compatible token access
+export const getAccessToken = (): string | null => {
+  if (typeof window === 'undefined') {
+    // Server-side: try to get from cookies
+    return cookies.get('accessToken');
+  }
+  
+  // Client-side: try localStorage first, then cookies
+  const localToken = storage.get<string>('accessToken');
+  if (localToken) return localToken;
+  
+  return cookies.get('accessToken');
+};
+
+export const getRefreshToken = (): string | null => {
+  if (typeof window === 'undefined') {
+    // Server-side: try to get from cookies
+    return cookies.get('refreshToken');
+  }
+  
+  // Client-side: try localStorage first, then cookies
+  const localToken = storage.get<string>('refreshToken');
+  if (localToken) return localToken;
+  
+  return cookies.get('refreshToken');
+};
 
 // Error helpers
 export function getErrorMessage(error: unknown,defaultMessage: string = 'An unexpected error occurred'): string {

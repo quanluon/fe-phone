@@ -1,7 +1,8 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { ApiResponse } from '@/types';
 import { useUIStore } from '@/stores/ui';
-import { storage } from '@/lib/utils';
+import { storage, getAccessToken, getRefreshToken } from '@/lib/utils';
+import { getAccessTokenFromCookies } from '@/lib/utils/ssr';
 
 // API Configuration
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
@@ -19,15 +20,19 @@ const apiClient: AxiosInstance = axios.create({
 // Request interceptor
 apiClient.interceptors.request.use(
   (config) => {
-    if (typeof window !== 'undefined') {
-      // Add auth token if available
-      const token = storage.get<string>('accessToken');
-      
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
+    // Add auth token if available (works in both SSR and client-side)
+    let token = getAccessToken();
+    
+    // If no token found and we're in SSR, try to get from cookies
+    // Note: This is a synchronous interceptor, so we can't use async cookie functions here
+    // Tokens should be passed explicitly when creating SSR API clients
+    
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
 
-      // Add Accept-Language header if available
+    // Add Accept-Language header if available
+    if (typeof window !== 'undefined') {
       const storeLang = useUIStore.getState().language;
       const browserLang = typeof navigator !== 'undefined' 
         ? (navigator.language || (navigator.languages && navigator.languages[0]))
@@ -35,7 +40,11 @@ apiClient.interceptors.request.use(
       const acceptLanguage = storeLang || browserLang || 'en';
 
       config.headers['Accept-Language'] = acceptLanguage;
+    } else {
+      // Server-side default
+      config.headers['Accept-Language'] = 'en';
     }
+    
     return config;
   },
   (error) => {
@@ -56,7 +65,18 @@ apiClient.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const refreshToken = storage.get<string>('refreshToken');
+        // Try to get refresh token from various sources
+        let refreshToken = getRefreshToken();
+        if (!refreshToken && typeof window === 'undefined') {
+          // In SSR, try to get from cookies
+          try {
+            const { getRefreshTokenFromCookies } = await import('@/lib/utils/ssr');
+            refreshToken = await getRefreshTokenFromCookies();
+          } catch {
+            // If cookies() fails, continue without refresh token
+          }
+        }
+        
         if (refreshToken) {
           const response = await axios.post(`${API_BASE_URL}/auth/refresh`, {
             refreshToken,

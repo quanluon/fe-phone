@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Product } from '@/types';
+import { createPersistStorage } from '@/lib/utils';
 
 interface WishlistState {
   items: Product[];
@@ -63,6 +64,7 @@ export const useWishlistStore = create<WishlistStore>()(
     }),
     {
       name: 'wishlist-storage',
+      storage: createPersistStorage(),
     }
   )
 );

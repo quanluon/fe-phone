@@ -1,6 +1,7 @@
 import { CartItem, CartValidationResult, Product, ProductVariant } from '@/types';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { createPersistStorage } from '@/lib/utils';
 
 interface CartState {
   items: CartItem[];
@@ -229,6 +230,7 @@ export const useCartStore = create<CartStore>()(
     }),
     {
       name: 'cart-storage',
+      storage: createPersistStorage(),
     }
   )
 );

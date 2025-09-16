@@ -506,6 +506,21 @@
     "lastYear": "Năm ngoái",
     "nextYear": "Năm sau"
   },
+  "fileUpload": {
+    "dragAndDrop": "Kéo thả tệp vào đây",
+    "clickToUpload": "Nhấp để tải lên",
+    "or": "hoặc",
+    "maxFiles": "Tối đa {count} tệp được phép",
+    "maxFileSize": "Kích thước tệp tối đa là {size}MB",
+    "uploading": "Đang tải lên...",
+    "uploaded": "Đã tải lên",
+    "uploadFailed": "Tải lên thất bại",
+    "removeFile": "Xóa tệp",
+    "currentFiles": "Tệp Hiện Tại",
+    "uploadedFiles": "Tệp Đã Tải Lên",
+    "fileTypes": "PNG, JPG, GIF tối đa 10MB mỗi tệp",
+    "noImage": "Không Có Hình Ảnh"
+  },
   "errors": {
     "failedToLoadCategories": "Không thể tải danh mục"
   },

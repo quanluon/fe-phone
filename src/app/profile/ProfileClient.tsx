@@ -8,11 +8,12 @@ import {
   useUpdateProfile,
   useChangePassword,
 } from "@/hooks/useAuth";
-import { useAuthStore } from "@/stores/auth";
 import { useToastStore } from "@/stores/toast";
+import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Card } from "@/components/ui/Card";
+import { FileUpload } from "@/components/ui/FileUpload";
 import {
   UserIcon,
   EnvelopeIcon,
@@ -27,8 +28,10 @@ import {
 export function ProfileClient() {
   const t = useTranslations();
   const router = useRouter();
-  const { isAuthenticated, logout } = useAuthStore();
   const { addToast } = useToastStore();
+  
+  // Use auth guard to handle authentication safely
+  const { isAuthenticated, isLoading } = useAuthGuard();
 
   const { data: user, isLoading: profileLoading } = useProfile();
 
@@ -42,6 +45,7 @@ export function ProfileClient() {
     lastName: "",
     phone: "",
   });
+  const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
   const [passwordData, setPasswordData] = useState({
     currentPassword: "",
     newPassword: "",
@@ -59,9 +63,25 @@ export function ProfileClient() {
     }
   }, [user, isEditingProfile, formData.firstName]);
 
-  // Redirect if not authenticated
+  // Show loading while checking authentication
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="animate-pulse">
+            <div className="h-8 bg-gray-200 rounded w-1/4 mb-8"></div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="h-96 bg-gray-200 rounded-lg"></div>
+              <div className="h-96 bg-gray-200 rounded-lg"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show nothing if not authenticated (will redirect via useAuthGuard)
   if (!isAuthenticated) {
-    logout();
     return null;
   }
 
@@ -83,7 +103,7 @@ export function ProfileClient() {
         title: t("profile.updateSuccess"),
         message: t("profile.updateSuccessMessage"),
       });
-    } catch (error) {
+    } catch {
       addToast({
         type: "error",
         title: t("profile.updateError"),
@@ -99,6 +119,14 @@ export function ProfileClient() {
       lastName: user?.lastName || "",
       phone: user?.phone || "",
     });
+  };
+
+  const handleFilesUploaded = (fileKeys: string[]) => {
+    setUploadedFiles(prev => [...prev, ...fileKeys]);
+  };
+
+  const handleFilesRemoved = (fileKeys: string[]) => {
+    setUploadedFiles(prev => prev.filter(key => !fileKeys.includes(key)));
   };
 
   const handlePasswordChange = async () => {
@@ -246,6 +274,19 @@ export function ProfileClient() {
                       setFormData({ ...formData, phone: e.target.value })
                     }
                     placeholder={t("auth.register.phonePlaceholder")}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Profile Images
+                  </label>
+                  <FileUpload
+                    onFilesUploaded={handleFilesUploaded}
+                    onFilesRemoved={handleFilesRemoved}
+                    uploadedFiles={uploadedFiles}
+                    maxFiles={3}
+                    accept="image/*"
+                    folder="profile"
                   />
                 </div>
                 <div className="flex space-x-3 pt-4">

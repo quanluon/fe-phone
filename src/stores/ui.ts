@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Theme, Language, Currency, Country } from '@/types';
+import { createPersistStorage } from '@/lib/utils';
 
 interface UIState {
   theme: Theme;
@@ -76,6 +77,7 @@ export const useUIStore = create<UIStore>()(
     }),
     {
       name: 'ui-storage',
+      storage: createPersistStorage(),
       partialize: (state) => ({
         theme: state.theme,
         language: state.language,

@@ -2,13 +2,14 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { AuthUser, LoginRequest, RegisterRequest } from '@/types';
 import { authApi } from '@/lib/api/auth';
-import { storage, getErrorMessage } from '@/lib/utils';
+import { storage, getErrorMessage, createPersistStorage, cookies } from '@/lib/utils';
 
 interface AuthState {
   user: AuthUser | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
+  _hasHydrated: boolean;
 }
 
 interface AuthActions {
@@ -25,6 +26,54 @@ interface AuthActions {
 
 type AuthStore = AuthState & AuthActions;
 
+// Helper function to store tokens in both localStorage and cookies
+const storeTokens = (accessToken: string, refreshToken: string) => {
+  // Store in localStorage for client-side access
+  storage.set('accessToken', accessToken);
+  storage.set('refreshToken', refreshToken);
+  
+  // Store in cookies for SSR access with proper configuration
+  if (typeof window !== 'undefined') {
+    const expires = new Date();
+    expires.setDate(expires.getDate() + 7); // 7 days
+    
+    // Set cookies with proper configuration for SSR
+    document.cookie = `accessToken=${accessToken}; expires=${expires.toUTCString()}; path=/; SameSite=Lax${process.env.NODE_ENV === 'production' ? '; Secure' : ''}`;
+    document.cookie = `refreshToken=${refreshToken}; expires=${expires.toUTCString()}; path=/; SameSite=Lax${process.env.NODE_ENV === 'production' ? '; Secure' : ''}`;
+    
+    // Also use the cookies helper as backup
+    cookies.set('accessToken', accessToken, {
+      expires,
+      path: '/',
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
+    });
+    
+    cookies.set('refreshToken', refreshToken, {
+      expires,
+      path: '/',
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
+    });
+  }
+};
+
+// Helper function to clear tokens from both localStorage and cookies
+const clearTokens = () => {
+  storage.remove('accessToken');
+  storage.remove('refreshToken');
+  
+  if (typeof window !== 'undefined') {
+    // Clear cookies using document.cookie
+    document.cookie = 'accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    document.cookie = 'refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    
+    // Also use the cookies helper as backup
+    cookies.remove('accessToken');
+    cookies.remove('refreshToken');
+  }
+};
+
 export const useAuthStore = create<AuthStore>()(
   persist(
     (set) => ({
@@ -33,6 +82,7 @@ export const useAuthStore = create<AuthStore>()(
       isAuthenticated: false,
       isLoading: false,
       error: null,
+      _hasHydrated: false,
 
       // Actions
       login: async (credentials: LoginRequest) => {
@@ -43,8 +93,7 @@ export const useAuthStore = create<AuthStore>()(
           const { accessToken, refreshToken } = tokens;
 
           // Store tokens
-          storage.set('accessToken', accessToken);
-          storage.set('refreshToken', refreshToken);
+          storeTokens(accessToken, refreshToken);
 
           set({
             user,
@@ -71,8 +120,7 @@ export const useAuthStore = create<AuthStore>()(
           const { accessToken, refreshToken } = tokens;
 
           // Store tokens
-          storage.set('accessToken', accessToken);
-          storage.set('refreshToken', refreshToken);
+          storeTokens(accessToken, refreshToken);
 
           set({
             user,
@@ -97,8 +145,7 @@ export const useAuthStore = create<AuthStore>()(
           const { accessToken, refreshToken } = tokens;
 
           // Store tokens
-          storage.set('accessToken', accessToken);
-          storage.set('refreshToken', refreshToken);
+          storeTokens(accessToken, refreshToken);
 
           set({
             user,
@@ -125,8 +172,7 @@ export const useAuthStore = create<AuthStore>()(
           // Continue with logout even if API call fails
         } finally {
           // Clear tokens and user data
-          storage.remove('accessToken');
-          storage.remove('refreshToken');
+          clearTokens();
           
           set({
             user: null,
@@ -148,12 +194,10 @@ export const useAuthStore = create<AuthStore>()(
           const response = await authApi.refreshToken(refreshToken);
           const { accessToken, refreshToken: newRefreshToken } = response.data.data?.data;
 
-          storage.set('accessToken', accessToken);
-          storage.set('refreshToken', newRefreshToken);
+          storeTokens(accessToken, newRefreshToken);
         } catch {
           // Refresh failed, logout user
-          storage.remove('accessToken');
-          storage.remove('refreshToken');
+          clearTokens();
           set({ isAuthenticated: false, user: null });
         }
       },
@@ -206,10 +250,19 @@ export const useAuthStore = create<AuthStore>()(
     }),
     {
       name: 'auth-storage',
+      storage: createPersistStorage(),
       partialize: (state) => ({
         user: state.user,
         isAuthenticated: state.isAuthenticated,
       }),
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          // Ensure loading and error states are reset after rehydration
+          state.isLoading = false;
+          state.error = null;
+          state._hasHydrated = true;
+        }
+      },
     }
   )
 );

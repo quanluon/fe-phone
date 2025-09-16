@@ -57,6 +57,7 @@ function ProductsContent() {
   // Debounced values
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
   const debouncedPriceRange = useDebounce(priceRange, 800);
+  const [isSearchPending, setIsSearchPending] = useState(false);
 
   // Build query object
   const query: ProductQuery = useMemo(() => {
@@ -80,6 +81,11 @@ function ProductsContent() {
   const { data: categories } = useCategories();
   const { data: brands } = useBrands();
 
+  // Track search pending state
+  useEffect(() => {
+    setIsSearchPending(searchQuery !== debouncedSearchQuery);
+  }, [searchQuery, debouncedSearchQuery]);
+
   // Update URL when debounced values change
   useEffect(() => {
     const params = new URLSearchParams();
@@ -93,8 +99,11 @@ function ProductsContent() {
     if (debouncedPriceRange.max) params.set('maxPrice', debouncedPriceRange.max);
 
     const newUrl = `/products?${params.toString()}`;
-    if (window.location.pathname + window.location.search !== newUrl) {
-      router.replace(newUrl);
+    const currentUrl = window.location.pathname + window.location.search;
+    
+    // Only update URL if it's actually different
+    if (currentUrl !== newUrl) {
+      router.replace(newUrl, { scroll: false });
     }
   }, [debouncedSearchQuery, selectedCategory, selectedBrand, selectedType, sortBy, debouncedPriceRange, router]);
 
@@ -159,13 +168,21 @@ function ProductsContent() {
                   {t('search')}
                 </label>
                 <form onSubmit={handleSearch}>
-                  <Input
-                    type="text"
-                    placeholder={t('search') + '...'}
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    leftIcon={<MagnifyingGlassIcon className="h-4 w-4" />}
-                  />
+                  <div className="relative">
+                    <Input
+                      type="text"
+                      placeholder={t('search') + '...'}
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      leftIcon={<MagnifyingGlassIcon className={`h-4 w-4 ${isSearchPending ? 'text-blue-400' : 'text-gray-400'}`} />}
+                      className={isSearchPending ? 'border-blue-300' : ''}
+                    />
+                    {isSearchPending && (
+                      <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                      </div>
+                    )}
+                  </div>
                 </form>
               </div>
 

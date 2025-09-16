@@ -506,6 +506,21 @@
     "lastYear": "Last Year",
     "nextYear": "Next Year"
   },
+  "fileUpload": {
+    "dragAndDrop": "Drag and drop files here",
+    "clickToUpload": "Click to upload",
+    "or": "or",
+    "maxFiles": "Maximum {count} files allowed",
+    "maxFileSize": "Maximum file size is {size}MB",
+    "uploading": "Uploading...",
+    "uploaded": "Uploaded",
+    "uploadFailed": "Upload failed",
+    "removeFile": "Remove file",
+    "currentFiles": "Current Files",
+    "uploadedFiles": "Uploaded Files",
+    "fileTypes": "PNG, JPG, GIF up to 10MB each",
+    "noImage": "No Image"
+  },
   "errors": {
     "failedToLoadCategories": "Failed to load categories"
   },
