@@ -1,8 +1,7 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { ApiResponse } from '@/types';
+import { getAccessToken, getRefreshToken, storage } from '@/lib/utils';
 import { useUIStore } from '@/stores/ui';
-import { storage, getAccessToken, getRefreshToken } from '@/lib/utils';
-import { getAccessTokenFromCookies } from '@/lib/utils/ssr';
+import { ApiResponse } from '@/types';
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 // API Configuration
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
@@ -21,7 +20,7 @@ const apiClient: AxiosInstance = axios.create({
 apiClient.interceptors.request.use(
   (config) => {
     // Add auth token if available (works in both SSR and client-side)
-    let token = getAccessToken();
+    const token = getAccessToken();
     
     // If no token found and we're in SSR, try to get from cookies
     // Note: This is a synchronous interceptor, so we can't use async cookie functions here

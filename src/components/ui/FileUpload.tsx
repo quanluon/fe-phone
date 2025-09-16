@@ -35,7 +35,6 @@ export function FileUpload({
   disabled = false,
   className = ""
 }: FileUploadProps) {
-  const t = useTranslations('common');
   const tFile = useTranslations('fileUpload');
   const [files, setFiles] = useState<UploadedFile[]>([]);
   const [dragActive, setDragActive] = useState(false);
