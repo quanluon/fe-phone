@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo, Suspense } from 'react';
+import React, { useState, useMemo, Suspense, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { 
@@ -15,6 +15,7 @@ import { Badge } from '@/components/ui/Badge';
 import { useProducts } from '@/hooks/useProducts';
 import { useCategories } from '@/hooks/useCategories';
 import { useBrands } from '@/hooks/useBrands';
+import { useDebounce } from '@/hooks/useDebounce';
 import { Product, ProductQuery, ProductType } from '@/types';
 import { PRODUCT_TYPE_LABELS, SORT_OPTIONS } from '@/lib/constants';
 
@@ -53,6 +54,10 @@ function ProductsContent() {
     max: searchParams.get('maxPrice') || ''
   });
 
+  // Debounced values
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
+  const debouncedPriceRange = useDebounce(priceRange, 800);
+
   // Build query object
   const query: ProductQuery = useMemo(() => {
     const params: ProductQuery = {
@@ -61,41 +66,45 @@ function ProductsContent() {
       sortBy: sortBy as ProductQuery['sortBy'],
     };
 
-    if (searchQuery) params.search = searchQuery;
+    if (debouncedSearchQuery) params.search = debouncedSearchQuery;
     if (selectedCategory) params.category = selectedCategory;
     if (selectedBrand) params.brand = selectedBrand;
     if (selectedType) params.productType = selectedType as ProductType;
-    if (priceRange.min) params.minPrice = Number(priceRange.min);
-    if (priceRange.max) params.maxPrice = Number(priceRange.max);
+    if (debouncedPriceRange.min) params.minPrice = Number(debouncedPriceRange.min);
+    if (debouncedPriceRange.max) params.maxPrice = Number(debouncedPriceRange.max);
 
     return params;
-  }, [searchQuery, selectedCategory, selectedBrand, selectedType, sortBy, priceRange]);
+  }, [debouncedSearchQuery, selectedCategory, selectedBrand, selectedType, sortBy, debouncedPriceRange]);
 
   const { data: products, isLoading, error } = useProducts(query);
   const { data: categories } = useCategories();
   const { data: brands } = useBrands();
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    updateURL();
-  };
-
-  const handleFilterChange = () => {
-    updateURL();
-  };
-
-  const updateURL = () => {
+  // Update URL when debounced values change
+  useEffect(() => {
     const params = new URLSearchParams();
     
-    if (searchQuery) params.set('search', searchQuery);
+    if (debouncedSearchQuery) params.set('search', debouncedSearchQuery);
     if (selectedCategory) params.set('category', selectedCategory);
     if (selectedBrand) params.set('brand', selectedBrand);
     if (selectedType) params.set('productType', selectedType);
     if (sortBy) params.set('sortBy', sortBy);
-    if (priceRange.min) params.set('minPrice', priceRange.min);
-    if (priceRange.max) params.set('maxPrice', priceRange.max);
+    if (debouncedPriceRange.min) params.set('minPrice', debouncedPriceRange.min);
+    if (debouncedPriceRange.max) params.set('maxPrice', debouncedPriceRange.max);
 
-    router.push(`/products?${params.toString()}`);
+    const newUrl = `/products?${params.toString()}`;
+    if (window.location.pathname + window.location.search !== newUrl) {
+      router.replace(newUrl);
+    }
+  }, [debouncedSearchQuery, selectedCategory, selectedBrand, selectedType, sortBy, debouncedPriceRange, router]);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Search is handled by debounced effect
+  };
+
+  const handleFilterChange = () => {
+    // Filter changes are handled by debounced effect
   };
 
   const clearFilters = () => {
@@ -237,14 +246,12 @@ function ProductsContent() {
                     placeholder={t('minPrice')}
                     value={priceRange.min}
                     onChange={(e) => setPriceRange(prev => ({ ...prev, min: e.target.value }))}
-                    onBlur={handleFilterChange}
                   />
                   <Input
                     type="number"
                     placeholder={t('maxPrice')}
                     value={priceRange.max}
                     onChange={(e) => setPriceRange(prev => ({ ...prev, max: e.target.value }))}
-                    onBlur={handleFilterChange}
                   />
                 </div>
               </div>

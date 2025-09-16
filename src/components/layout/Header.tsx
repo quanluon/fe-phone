@@ -18,9 +18,10 @@ import {
 } from '@heroicons/react/24/outline';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import React, { useState, useEffect } from 'react';
 import { LanguageSwitcher } from '../common/LanguageSwitcher';
+import { useDebounce } from '@/hooks/useDebounce';
 
 export const Header: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -30,16 +31,33 @@ export const Header: React.FC = () => {
   
   const t = useTranslations();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { totalItems } = useCart();
   const { items: wishlistItems } = useWishlistStore();
   const { isAuthenticated, user } = useAuthStore();
   const logoutMutation = useLogout();
 
+  // Initialize search query from URL parameters
+  useEffect(() => {
+    const urlSearchParam = searchParams.get('search');
+    if (urlSearchParam && urlSearchParam !== searchQuery) {
+      setSearchQuery(urlSearchParam);
+    }
+  }, [searchParams, searchQuery]);
+
+  // Debounced search query
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
+
+  // Navigate to products page when debounced search query changes
+  useEffect(() => {
+    if (debouncedSearchQuery.trim()) {
+      router.push(`/products?search=${encodeURIComponent(debouncedSearchQuery.trim())}`);
+    }
+  }, [debouncedSearchQuery, router]);
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (searchQuery.trim()) {
-      router.push(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
-    }
+    // Search is handled by debounced effect
   };
 
   const handleLogout = async () => {
