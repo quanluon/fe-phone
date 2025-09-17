@@ -195,8 +195,8 @@ export default function CreateOrderPage() {
         ...prev,
         shippingAddress: {
           ...prev.shippingAddress,
-          fullName: prev.customer.name,
-          phone: prev.customer.phone,
+          fullName: prev.shippingAddress?.fullName || prev.customer.name,
+          phone: prev.customer?.phone ||  prev.customer.phone,
         },
       }));
     } else if (step === 2 && validateStep2()) {
