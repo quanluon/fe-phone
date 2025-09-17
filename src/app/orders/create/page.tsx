@@ -195,7 +195,7 @@ export default function CreateOrderPage() {
         ...prev,
         shippingAddress: {
           ...prev.shippingAddress,
-          fullName: prev.customer.phone,
+          fullName: prev.customer.name,
           phone: prev.customer.phone,
         },
       }));
