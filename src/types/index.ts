@@ -306,7 +306,7 @@ export interface ChangePasswordRequest {
 // Order Types
 export interface OrderItem {
   product: Product;
-  variant?: ProductVariant;
+  variant?: Partial<ProductVariant>
   quantity: number;
   price: number;
   originalPrice?: number;
