@@ -1,7 +1,7 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ordersApi } from '@/lib/api/orders';
 import { queryKeys } from '@/lib/api/queryClient';
-import { CreateOrderRequest, Order, OrderFilters } from '@/types';
+import { CreateOrderRequest, OrderFilters } from '@/types';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 // Get user's orders
 export const useUserOrders = (filters?: OrderFilters & { page?: number; limit?: number }) => {

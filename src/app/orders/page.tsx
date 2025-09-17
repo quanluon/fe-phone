@@ -161,7 +161,7 @@ export default function OrdersPage() {
                     {order.items.slice(0, 3).map((item, index: number) => (
                       <NextImage
                         key={index}
-                        src={item.variant?.images[0] || item.product.images[0]}
+                        src={item.variant?.images?.[0] || item.product.images[0] || ""}
                         alt={item.product.name}
                         className="w-12 h-12 object-cover rounded"
                       />

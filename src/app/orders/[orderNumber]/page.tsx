@@ -136,7 +136,7 @@ export default function OrderDetailPage() {
                     className="flex items-center space-x-4 p-4 border rounded-lg"
                   >
                     <NextImage
-                      src={item.variant?.images[0] || item.product.images[0]}
+                      src={item.variant?.images?.[0] || item.product.images?.[0] || ''}
                       alt={item.product.name}
                       className="w-20 h-20 object-cover rounded"
                     />
