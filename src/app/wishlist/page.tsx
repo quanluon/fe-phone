@@ -159,7 +159,7 @@ export default function WishlistPage() {
                     {t('addToCart')}
                   </Button>
                   
-                  <Link href={`/products/${product.slug}`}>
+                  <Link href={`/products/${product._id}-${product.slug}`}>
                     <Button variant="outline" className="w-full">
                       {t('viewDetails')}
                     </Button>
