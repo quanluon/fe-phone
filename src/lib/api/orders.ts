@@ -9,7 +9,7 @@ import { api } from "./config";
 export const ordersApi = {
   // Create a new order
   createOrder: async (orderData: CreateOrderRequest) => {
-    return api.post<Order>("orders", orderData);
+    return api.post<Order>("/api/orders", orderData);
   },
 
   // Get user's orders
@@ -27,16 +27,16 @@ export const ordersApi = {
     if (filters?.page) params.append("page", filters.page.toString());
     if (filters?.limit) params.append("limit", filters.limit.toString());
 
-    return api.get<Order[]>(`orders?${params.toString()}`);
+    return api.get<Order[]>(`/api/orders?${params.toString()}`);
   },
 
   // Get order by ID
   getOrderById: async (id: string) => {
-    return api.get<Order>(`orders/${id}`);
+    return api.get<Order>(`/api/orders/${id}`);
   },
 
   // Get order by order number
   getOrderByNumber: async (orderNumber: string) => {
-    return api.get<Order>(`orders/number/${orderNumber}`);
+    return api.get<Order>(`/api/orders/number/${orderNumber}`);
   },
 };

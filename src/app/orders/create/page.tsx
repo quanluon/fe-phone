@@ -72,7 +72,6 @@ export default function CreateOrderPage() {
   const [step, setStep] = useState(1);
 
   // Auto-fill user data if logged in
-  console.log('userProfile',userProfile);
   useEffect(() => {
     if (isAuthenticated && userProfile) {
         
