@@ -1,8 +1,8 @@
+import { useSocialLogin } from '@/hooks/useAuth';
+import { useToastStore } from '@/stores/toast';
+import { useTranslations } from 'next-intl';
 import React, { useState } from 'react';
 import { SocialLoginButton } from './SocialLoginButton';
-import { useSocialLogin } from '@/hooks/useAuth';
-import { useTranslations } from 'next-intl';
-import { useToastStore } from '@/stores/toast';
 
 interface SocialLoginProps {
   onSuccess?: () => void;

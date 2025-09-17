@@ -41,7 +41,7 @@ export const CategorySection: React.FC = () => {
     );
   }
 
-  if (!categories?.data.length) {
+  if (!categories?.length) {
     return null;
   }
 
@@ -61,7 +61,7 @@ export const CategorySection: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 gap-3 sm:gap-4">
-          {categories.data.map((category) => {
+          {categories.map((category) => {
             const IconComponent = CATEGORY_ICONS[category.name as keyof typeof CATEGORY_ICONS];
             
             return (

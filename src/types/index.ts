@@ -288,6 +288,94 @@ export interface ChangePasswordRequest {
   confirmPassword: string;
 }
 
+// Order Types
+export interface OrderItem {
+  product: Product;
+  variant?: ProductVariant;
+  quantity: number;
+  price: number;
+  originalPrice?: number;
+}
+
+export interface Order {
+  _id: string;
+  orderNumber: string;
+  customer: {
+    name?: string;
+    email?: string;
+    phone: string;
+    userId?: string;
+  };
+  items: OrderItem[];
+  status: OrderStatus;
+  paymentStatus: PaymentStatus;
+  shippingAddress?: {
+    fullName: string;
+    phone: string;
+    address: string;
+    city: string;
+    district: string;
+    ward: string;
+    postalCode?: string;
+  };
+  notes?: string;
+  totalAmount: number;
+  originalTotalAmount?: number;
+  discountAmount?: number;
+  shippingFee?: number;
+  paymentMethod?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export enum OrderStatus {
+  PENDING = 'pending',
+  CONFIRMED = 'confirmed',
+  PROCESSING = 'processing',
+  SHIPPED = 'shipped',
+  DELIVERED = 'delivered',
+  CANCELLED = 'cancelled',
+}
+
+export enum PaymentStatus {
+  PENDING = 'pending',
+  PAID = 'paid',
+  FAILED = 'failed',
+  REFUNDED = 'refunded',
+}
+
+export interface CreateOrderRequest {
+  customer: {
+    name?: string;
+    email?: string;
+    phone: string;
+  };
+  items: Array<{
+    productId: string;
+    variantId?: string;
+    quantity: number;
+  }>;
+  shippingAddress?: {
+    fullName: string;
+    phone: string;
+    address: string;
+    city: string;
+    district: string;
+    ward: string;
+    postalCode?: string;
+  };
+  notes?: string;
+  paymentMethod?: string;
+}
+
+export interface OrderFilters {
+  status?: OrderStatus;
+  paymentStatus?: PaymentStatus;
+  search?: string;
+  dateFrom?: string;
+  dateTo?: string;
+}
+
 // Hero Types
 export * from './hero';
 

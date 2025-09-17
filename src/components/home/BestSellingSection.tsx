@@ -44,7 +44,7 @@ export const BestSellingSection: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
-          {products?.data?.slice(0, 4).map((product) => (
+          {products?.slice(0, 4).map((product) => (
             <ProductCard key={product._id} product={product} />
           ))}
         </div>

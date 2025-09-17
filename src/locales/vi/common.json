@@ -108,6 +108,21 @@
     "allInCart": "Tất cả trong giỏ",
     "allItemsInCart": "Tất cả sản phẩm trong giỏ",
     "inCartCount": "trong giỏ",
+    "attributeCategories": {
+      "display": "Màn Hình",
+      "performance": "Hiệu Năng",
+      "camera": "Camera",
+      "storage": "Lưu Trữ",
+      "battery": "Pin",
+      "connectivity": "Kết Nối",
+      "design": "Thiết Kế",
+      "audio": "Âm Thanh",
+      "sensors": "Cảm Biến",
+      "software": "Phần Mềm",
+      "accessories": "Phụ Kiện",
+      "warranty": "Bảo Hành",
+      "other": "Khác"
+    },
     "detail": {
       "productNotFound": "Không Tìm Thấy Sản Phẩm",
       "productNotFoundDescription": "Sản phẩm bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.",

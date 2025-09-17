@@ -15,24 +15,24 @@ export const authApi = {
 
   // Logout
   logout: () => {
-    return api.post<{ data: { message: string } }>('/auth/logout');
+    return api.post<{ message: string }>('/auth/logout');
   },
 
   // Refresh token
   refreshToken: (refreshToken: string) => {
-    return api.post<{ data: { accessToken: string; refreshToken: string } }>('/auth/refresh', {
+    return api.post<{ accessToken: string; refreshToken: string }>('/auth/refresh', {
       refreshToken,
     });
   },
 
   // Forgot password
   forgotPassword: (email: string) => {
-    return api.post<{ data: { message: string } }>('/auth/forgot-password', { email });
+    return api.post<{ message: string }>('/auth/forgot-password', { email });
   },
 
   // Reset password
   resetPassword: (email: string, confirmationCode: string, newPassword: string) => {
-    return api.post<{ data: { message: string } }>('/auth/reset-password', {
+    return api.post<{ message: string }>('/auth/reset-password', {
       email,
       confirmationCode,
       newPassword,
@@ -51,7 +51,7 @@ export const authApi = {
 
   // Change password
   changePassword: (currentPassword: string, newPassword: string) => {
-    return api.put<{ data: { message: string } }>('/auth/change-password', {
+    return api.put<{ message: string }>('/auth/change-password', {
       currentPassword,
       newPassword,
     });

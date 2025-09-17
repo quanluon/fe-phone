@@ -7,7 +7,7 @@ export const useCategories = () => {
   return useQuery({
     queryKey: queryKeys.categories.list(),
     queryFn: () => categoryApi.getCategories(),
-    select: (data) => data.data.data,
+    select: (data) => data.data,
   });
 };
 
@@ -16,7 +16,7 @@ export const useCategory = (id: string) => {
   return useQuery({
     queryKey: queryKeys.categories.detail(id),
     queryFn: () => categoryApi.getCategory(id),
-    select: (data) => data.data.data,
+    select: (data) => data.data,
     enabled: !!id,
   });
 };
@@ -26,7 +26,7 @@ export const useCategoryBySlug = (slug: string) => {
   return useQuery({
     queryKey: queryKeys.categories.bySlug(slug),
     queryFn: () => categoryApi.getCategoryBySlug(slug),
-    select: (data) => data.data.data,
+    select: (data) => data.data,
     enabled: !!slug,
   });
 };

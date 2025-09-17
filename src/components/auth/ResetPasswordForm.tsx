@@ -1,12 +1,12 @@
 'use client';
 
-import { useState } from 'react';
-import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/Button';
 import { useResetPassword } from '@/hooks/useAuth';
 import { useToastStore } from '@/stores/toast';
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
 import { Form, Input } from 'antd';
+import { useTranslations } from 'next-intl';
+import { useState } from 'react';
 
 interface ResetPasswordFormProps {
   token: string;

@@ -108,6 +108,21 @@
     "allInCart": "All in cart",
     "allItemsInCart": "All items in cart",
     "inCartCount": "in cart",
+    "attributeCategories": {
+      "display": "Display",
+      "performance": "Performance",
+      "camera": "Camera",
+      "storage": "Storage",
+      "battery": "Battery",
+      "connectivity": "Connectivity",
+      "design": "Design",
+      "audio": "Audio",
+      "sensors": "Sensors",
+      "software": "Software",
+      "accessories": "Accessories",
+      "warranty": "Warranty",
+      "other": "Other"
+    },
     "detail": {
       "productNotFound": "Product Not Found",
       "productNotFoundDescription": "The product you're looking for doesn't exist or has been removed.",

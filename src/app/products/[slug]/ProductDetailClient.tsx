@@ -22,6 +22,7 @@ import { useWishlistStore } from '@/stores/wishlist';
 import { useUIStore } from '@/stores/ui';
 import { useProduct } from '@/hooks/useProducts';
 import { formatCurrency, calculateDiscount, getImageUrl } from '@/lib/utils';
+import { getAttributeCategoryKey } from '@/lib/utils/attributeCategories';
 import { ProductVariant, Product, ProductAttribute } from '@/types';
 
 export function ProductDetailClient() {
@@ -29,6 +30,7 @@ export function ProductDetailClient() {
   const router = useRouter();
   const t = useTranslations('product.detail');
   const tProduct = useTranslations('product');
+  const tAttributeCategories = useTranslations('product.attributeCategories');
   
   // Get product identifier from URL params
   const identifier = params.slug as string;
@@ -40,7 +42,7 @@ export function ProductDetailClient() {
   const { data: product, isLoading: productLoading, error: productError } = useProduct(productId);
   
   // Type assertion to fix TypeScript issues
-  const productData = product as unknown as Product;
+  const productData = product as Product;
   
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -115,13 +117,23 @@ export function ProductDetailClient() {
   // Helper function to group attributes by category
   const groupAttributesByCategory = (attributes: ProductAttribute[]) => {
     return attributes.reduce((groups, attribute) => {
-      const category = attribute.category || 'Other';
-      if (!groups[category]) {
-        groups[category] = [];
+      const categoryKey = getAttributeCategoryKey(attribute.category || 'other');
+      if (!groups[categoryKey]) {
+        groups[categoryKey] = [];
       }
-      groups[category].push(attribute);
+      groups[categoryKey].push(attribute);
       return groups;
     }, {} as Record<string, ProductAttribute[]>);
+  };
+
+  // Helper function to get translated category name
+  const getTranslatedCategoryName = (categoryKey: string) => {
+    try {
+      return tAttributeCategories(categoryKey as keyof typeof tAttributeCategories);
+    } catch {
+      // Fallback to original category name if translation not found
+      return categoryKey;
+    }
   };
 
   // Loading state
@@ -495,7 +507,9 @@ export function ProductDetailClient() {
                 <div className="space-y-6">
                   {Object.entries(groupAttributesByCategory(productData.attributes)).map(([category, attributes]) => (
                     <div key={category}>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-4">{category}</h3>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                        {getTranslatedCategoryName(category)}
+                      </h3>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {attributes.map((attribute, index) => (
                           <div key={index} className="flex justify-between py-2 border-b border-gray-100">

@@ -17,7 +17,7 @@ export function middleware(request: NextRequest) {
     const accessToken = request.cookies.get('accessToken')?.value;
     
     // Debug logging
-    console.log('🔍 Middleware Debug:', {
+    console.debug('🔍 Middleware Debug:', {
       pathname,
       hasAccessToken: !!accessToken,
       accessTokenLength: accessToken?.length || 0,
@@ -28,11 +28,11 @@ export function middleware(request: NextRequest) {
     if (!accessToken || accessToken.trim() === '') {
       // Redirect to login if no token
       const loginUrl = new URL('/auth?mode=login', request.url);
-      console.log('❌ Redirecting to login - no access token or empty token');
+      console.debug('❌ Redirecting to login - no access token or empty token');
       return NextResponse.redirect(loginUrl);
     }
     
-    console.log('✅ Access token found, proceeding');
+    console.debug('✅ Access token found, proceeding');
   }
   
   // Get the locale from query parameter

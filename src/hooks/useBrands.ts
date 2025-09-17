@@ -7,7 +7,7 @@ export const useBrands = () => {
   return useQuery({
     queryKey: queryKeys.brands.list(),
     queryFn: () => brandApi.getBrands(),
-    select: (data) => data.data.data,
+    select: (data) => data.data,
   });
 };
 
@@ -16,7 +16,7 @@ export const useBrand = (id: string) => {
   return useQuery({
     queryKey: queryKeys.brands.detail(id),
     queryFn: () => brandApi.getBrand(id),
-    select: (data) => data.data.data,
+    select: (data) => data.data,
     enabled: !!id,
   });
 };
@@ -26,7 +26,7 @@ export const useBrandBySlug = (slug: string) => {
   return useQuery({
     queryKey: queryKeys.brands.bySlug(slug),
     queryFn: () => brandApi.getBrandBySlug(slug),
-    select: (data) => data.data.data,
+    select: (data) => data.data,
     enabled: !!slug,
   });
 };

@@ -89,7 +89,7 @@ export const useAuthStore = create<AuthStore>()(
         set({ isLoading: true, error: null });
         try {
           const response = await authApi.login(credentials);
-          const { user, tokens } = response.data.data;
+          const { user, tokens } = response.data;
           const { accessToken, refreshToken } = tokens;
 
           // Store tokens
@@ -116,7 +116,7 @@ export const useAuthStore = create<AuthStore>()(
         set({ isLoading: true, error: null });
         try {
           const response = await authApi.register(data);
-          const { user, tokens } = response.data.data;
+          const { user, tokens } = response.data;
           const { accessToken, refreshToken } = tokens;
 
           // Store tokens
@@ -192,7 +192,7 @@ export const useAuthStore = create<AuthStore>()(
 
         try {
           const response = await authApi.refreshToken(refreshToken);
-          const { accessToken, refreshToken: newRefreshToken } = response.data.data?.data;
+          const { accessToken, refreshToken: newRefreshToken } = response.data;
 
           storeTokens(accessToken, newRefreshToken);
         } catch {
@@ -207,7 +207,7 @@ export const useAuthStore = create<AuthStore>()(
         try {
           const response = await authApi.getProfile();
           set({
-            user: response.data.data,
+            user: response.data,
             isAuthenticated: true,
             isLoading: false,
             error: null,
@@ -227,7 +227,7 @@ export const useAuthStore = create<AuthStore>()(
         try {
           const response = await authApi.updateProfile(data);
           set({
-            user: response.data.data,  
+            user: response.data,  
             isLoading: false,
             error: null,
           });

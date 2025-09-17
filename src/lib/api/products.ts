@@ -1,5 +1,5 @@
+import { Brand, Category, Product, ProductFilters, ProductQuery } from '@/types';
 import { api } from './config';
-import { Product, ProductQuery, ProductFilters, Category, Brand } from '@/types';
 
 // Product API endpoints
 export const productApi = {
@@ -13,36 +13,36 @@ export const productApi = {
       }
     });
 
-    return api.get<{ data: Product[]; pagination: { page: number; limit: number; total: number; pages: number } }>(`/api/products?${params.toString()}`);
+    return api.get<Product[]>(`/api/products?${params.toString()}`);
   },
 
   // Get single product by ID
-  getProduct: (id: string) => {
-    return api.get<{ data: Product }>(`/api/products/${id}`);
+  getProduct: async (id: string) => {
+    return api.get<Product>(`/api/products/${id}`);
   },
 
   // Get product by slug
-  getProductBySlug: (slug: string) => {
-    return api.get<{ data: Product }>(`/api/products/slug/${slug}`);
+  getProductBySlug: async (slug: string) => {
+    return api.get<Product>(`/api/products/slug/${slug}`);
   },
 
   // Get featured products
-  getFeaturedProducts: (limit: number = 8) => {
-    return api.get<{ data: Product[] }>(`/api/products?isFeatured=true&limit=${limit}`);
+  getFeaturedProducts: async (limit: number = 8) => {
+    return api.get<Product[]>(`/api/products?isFeatured=true&limit=${limit}`);
   },
 
   // Get new products
-  getNewProducts: (limit: number = 8) => {
-    return api.get<{ data: Product[] }>(`/api/products?isNew=true&limit=${limit}`);
+  getNewProducts: async (limit: number = 8) => {
+    return api.get<Product[]>(`/api/products?isNew=true&limit=${limit}`);
   },
 
   // Get best selling products (mock implementation)
-  getBestSellingProducts: (limit: number = 8) => {
-    return api.get<{ data: Product[] }>(`/api/products?sortBy=created_at_desc&limit=${limit}`);
+  getBestSellingProducts: async (limit: number = 8) => {
+    return api.get<Product[]>(`/api/products?sortBy=created_at_desc&limit=${limit}`);
   },
 
   // Search products
-  searchProducts: (query: string, filters: ProductFilters = {}) => {
+  searchProducts: async (query: string, filters: ProductFilters = {}) => {
     const params = new URLSearchParams();
     params.append('search', query);
     
@@ -52,11 +52,11 @@ export const productApi = {
       }
     });
 
-    return api.get<{ data: Product[]; pagination: { page: number; limit: number; total: number; pages: number } }>(`/api/products?${params.toString()}`);
+    return api.get<Product[]>(`/api/products?${params.toString()}`);
   },
 
   // Get products by category
-  getProductsByCategory: (categoryId: string, query: ProductQuery = {}) => {
+  getProductsByCategory: async (categoryId: string, query: ProductQuery = {}) => {
     const params = new URLSearchParams();
     params.append('category', categoryId);
     
@@ -66,11 +66,11 @@ export const productApi = {
       }
     });
 
-    return api.get<{ data: Product[]; pagination: { page: number; limit: number; total: number; pages: number } }>(`/api/products?${params.toString()}`);
+    return api.get<Product[]>(`/api/products?${params.toString()}`);
   },
 
   // Get products by brand
-  getProductsByBrand: (brandId: string, query: ProductQuery = {}) => {
+  getProductsByBrand: async (brandId: string, query: ProductQuery = {}) => {
     const params = new URLSearchParams();
     params.append('brand', brandId);
     
@@ -80,7 +80,7 @@ export const productApi = {
       }
     });
 
-    return api.get<{ data: Product[]; pagination: { page: number; limit: number; total: number; pages: number } }>(`/api/products?${params.toString()}`);
+    return api.get<Product[]>(`/api/products?${params.toString()}`);
   },
 };
 
@@ -88,17 +88,17 @@ export const productApi = {
 export const categoryApi = {
   // Get all categories
   getCategories: () => {
-    return api.get<{ data: Category[] }>('/api/categories');
+    return api.get<Category[]>(`/api/categories`);
   },
 
   // Get single category
-  getCategory: (id: string) => {
-    return api.get<{ data: Category }>(`/api/categories/${id}`);
+  getCategory: async (id: string) => {
+    return api.get<Category>(`/api/categories/${id}`);
   },
 
   // Get category by slug
   getCategoryBySlug: (slug: string) => {
-    return api.get<{ data: Category }>(`/api/categories/slug/${slug}`);
+    return api.get<Category>(`/api/categories/slug/${slug}`);
   },
 };
 
@@ -106,17 +106,17 @@ export const categoryApi = {
 export const brandApi = {
   // Get all brands
   getBrands: () => {
-    return api.get<{ data: Brand[] }>('/api/brands');
+    return api.get<Brand[]>('/api/brands');
   },
 
   // Get single brand
   getBrand: (id: string) => {
-    return api.get<{ data: Brand }>(`/api/brands/${id}`);
+    return api.get<Brand >(`/api/brands/${id}`);
   },
 
   // Get brand by slug
   getBrandBySlug: (slug: string) => {
-    return api.get<{ data: Brand }>(`/api/brands/slug/${slug}`);
+    return api.get<Brand >(`/api/brands/slug/${slug}`);
   },
 };
 

@@ -3,8 +3,9 @@
 import { CartSidebar } from '@/components/cart/CartSidebar';
 import { DynamicNavigation } from '@/components/layout/DynamicNavigation';
 import { Input } from '@/components/ui/Input';
-import { useCart } from '@/hooks/useCart';
 import { useLogout } from '@/hooks/useAuth';
+import { useCart } from '@/hooks/useCart';
+import { useDebounce } from '@/hooks/useDebounce';
 import { CONTACT_INFO } from '@/lib/constants';
 import { useAuthStore } from '@/stores/auth';
 import { useWishlistStore } from '@/stores/wishlist';
@@ -18,10 +19,9 @@ import {
 } from '@heroicons/react/24/outline';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
-import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 import { LanguageSwitcher } from '../common/LanguageSwitcher';
-import { useDebounce } from '@/hooks/useDebounce';
 
 export const Header: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -31,19 +31,10 @@ export const Header: React.FC = () => {
   
   const t = useTranslations();
   const router = useRouter();
-  const searchParams = useSearchParams();
   const { totalItems } = useCart();
   const { items: wishlistItems } = useWishlistStore();
   const { isAuthenticated, user } = useAuthStore();
   const logoutMutation = useLogout();
-
-  // Initialize search query from URL parameters
-  useEffect(() => {
-    const urlSearchParam = searchParams.get('search');
-    if (urlSearchParam && urlSearchParam !== searchQuery) {
-      setSearchQuery(urlSearchParam);
-    }
-  }, [searchParams, searchQuery]);
 
   // Debounced search query
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
@@ -66,7 +57,7 @@ export const Header: React.FC = () => {
       setShowUserMenu(false);
       router.push('/');
     } catch (error) {
-      console.error('Logout failed:', error);
+      console.debug('Logout failed:', error);
     }
   };
 

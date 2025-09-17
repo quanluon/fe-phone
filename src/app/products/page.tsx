@@ -200,7 +200,7 @@ function ProductsContent() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="">{t('allCategories')}</option>
-                  {categories?.data?.map((category) => (
+                  {categories?.map((category) => (
                     <option key={category._id} value={category._id}>
                       {category.name}
                     </option>
@@ -222,7 +222,7 @@ function ProductsContent() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="">{t('allBrands')}</option>
-                  {brands?.data?.map((brand) => (
+                  {brands?.map((brand) => (
                     <option key={brand._id} value={brand._id}>
                       {brand.name}
                     </option>
@@ -358,14 +358,14 @@ function ProductsContent() {
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {products.data.map((product: Product) => (
+                {products?.data?.map((product: Product) => (
                   <ProductCard key={product._id} product={product} />
                 ))}
               </div>
             )}
 
             {/* Load More Button */}
-            {products?.data?.length && products.pagination.total > products.data.length && (
+            {products?.data?.length && products?.pagination?.total && products?.pagination?.total > products.data.length && (
               <div className="text-center mt-8">
                 <Button size="lg" variant="outline">
                   {t('loadMore')}

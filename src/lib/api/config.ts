@@ -105,20 +105,20 @@ apiClient.interceptors.response.use(
 
 // Generic API methods
 export const api = {
-  get: <T = unknown>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<ApiResponse<T>>> =>
-    apiClient.get(url, config),
+  get: <T = unknown>(url: string, config?: AxiosRequestConfig): Promise<ApiResponse<T>> =>
+    apiClient.get<ApiResponse<T>>(url, config).then(res=>res.data),
 
-  post: <T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<AxiosResponse<ApiResponse<T>>> =>
-    apiClient.post(url, data, config),
+  post: <T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<ApiResponse<T>> =>
+    apiClient.post<ApiResponse<T>>(url, data, config).then(res=>res.data),
 
-  put: <T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<AxiosResponse<ApiResponse<T>>> =>
-    apiClient.put(url, data, config),
+  put: <T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<ApiResponse<T>> =>
+    apiClient.put<ApiResponse<T>>(url, data, config).then(res=>res.data),
 
-  patch: <T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<AxiosResponse<ApiResponse<T>>> =>
-    apiClient.patch(url, data, config),
+  patch: <T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<ApiResponse<T>> =>
+    apiClient.patch<ApiResponse<T>>(url, data, config).then(res=>res.data),
 
-  delete: <T = unknown>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<ApiResponse<T>>> =>
-    apiClient.delete(url, config),
+  delete: <T = unknown>(url: string, config?: AxiosRequestConfig): Promise<ApiResponse<T>> =>
+    apiClient.delete<ApiResponse<T>>(url, config).then(res=>res.data),
 };
 
 export default apiClient;

@@ -41,7 +41,7 @@ export const fileApi = {
       fileType,
       folder
     });
-    return response.data.data;
+    return response.data;
   },
 
   // Get presigned URLs for multiple files
@@ -57,7 +57,7 @@ export const fileApi = {
       files,
       folder
     });
-    return response.data.data;
+    return response.data;
   },
 
   // Move file from upload folder to permanent folder
@@ -69,7 +69,7 @@ export const fileApi = {
       fileKey,
       folder
     });
-    return response.data.data;
+    return response.data;
   },
 
   // Move multiple files from upload folder to permanent folder
@@ -81,7 +81,7 @@ export const fileApi = {
       fileKeys,
       folder
     });
-    return response.data.data;
+    return response.data;
   },
 
   // Delete file from S3
@@ -100,6 +100,6 @@ export const fileApi = {
       fileKey: string;
       publicUrl: string;
     }>(`/files/info/${fileKey}`);
-    return response.data.data;
+    return response.data;
   }
 };

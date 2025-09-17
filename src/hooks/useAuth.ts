@@ -11,7 +11,7 @@ export const useProfile = () => {
   return useQuery({
     queryKey: queryKeys.auth.profile(),
     queryFn: () => authApi.getProfile(),
-    select: (data) => data.data.data,
+    select: (data) => data.data,
     enabled: isAuthenticated,
   });
 };
@@ -105,7 +105,7 @@ export const useSocialLogin = () => {
       authApi.socialLogin(provider, accessToken, idToken),
     onSuccess: (response) => {
       // Store tokens and user info
-      const { user, tokens } = response.data.data;
+      const { user, tokens } = response.data;
       socialLogin(user, tokens);
       // Invalidate and refetch profile
       queryClient.invalidateQueries({ queryKey: queryKeys.auth.profile() });
