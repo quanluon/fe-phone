@@ -1,12 +1,23 @@
 import React from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { ShoppingCartIcon } from '@heroicons/react/24/outline';
 import { SOCIAL_LINKS, CONTACT_INFO } from '@/lib/constants';
+import { useCategories } from '@/hooks/useCategories';
 
 export const Footer: React.FC = () => {
   const t = useTranslations('footer');
   const currentYear = new Date().getFullYear();
+  const { data: categories = [] } = useCategories();
+  const router = useRouter();
+
+  const handleCategoryClick = (categoryId: string) => {
+    // Navigate to the category page and refresh
+    router.push(`/products?category=${categoryId}`);
+    window.location.reload();
+  };
+
 
   const footerLinks = {
     company: [
@@ -26,14 +37,7 @@ export const Footer: React.FC = () => {
       { label: t('termsOfService'), href: '/terms' },
       { label: t('cookiePolicy'), href: '/cookies' },
       { label: t('accessibility'), href: '/accessibility' },
-    ],
-    categories: [
-      { label: t('smartphones'), href: '/products?productType=iphone' },
-      { label: t('tablets'), href: '/products?productType=ipad' },
-      { label: t('laptops'), href: '/products?productType=macbook' },
-      { label: t('watches'), href: '/products?productType=watch' },
-      { label: t('accessories'), href: '/products?productType=accessories' },
-    ],
+    ]
   };
 
   return (
@@ -77,23 +81,6 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Company Links */}
-          {/* <div>
-            <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">{t('company')}</h3>
-            <ul className="space-y-1 sm:space-y-2">
-              {footerLinks.company.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="text-sm sm:text-base text-gray-300 hover:text-white transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div> */}
-
           {/* Support Links */}
           <div>
             <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">{t('support')}</h3>
@@ -115,14 +102,14 @@ export const Footer: React.FC = () => {
           <div>
             <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">{t('categories')}</h3>
             <ul className="space-y-1 sm:space-y-2">
-              {footerLinks.categories.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="text-sm sm:text-base text-gray-300 hover:text-white transition-colors"
+              {categories.map((category) => (
+                <li key={category.slug}>
+                  <button
+                    onClick={() => handleCategoryClick(category._id)}
+                    className="text-sm sm:text-base text-gray-300 hover:text-white transition-colors text-left"
                   >
-                    {link.label}
-                  </Link>
+                    {category.name}
+                  </button>
                 </li>
               ))}
             </ul>
