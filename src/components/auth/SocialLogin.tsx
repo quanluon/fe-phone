@@ -3,6 +3,7 @@ import { useToastStore } from '@/stores/toast';
 import { useTranslations } from 'next-intl';
 import React, { useState } from 'react';
 import { SocialLoginButton } from './SocialLoginButton';
+import { ApiErrorResponse } from '@/types';
 
 interface SocialLoginProps {
   onSuccess?: () => void;
@@ -53,7 +54,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
       onSuccess?.();
     } catch (error: unknown) {
       console.error(`${provider} login error:`, error);
-      const errorMessage = (error as { response?: { data?: { message?: string } } })?.response?.data?.message || t('loginError');
+      const errorMessage = (error as ApiErrorResponse)?.response?.data?.message || t('loginError');
       addToast({
         type: 'error',
         message: errorMessage,

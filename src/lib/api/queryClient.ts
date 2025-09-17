@@ -85,5 +85,15 @@ export const queryKeys = {
     profile: () => [...queryKeys.auth.all, 'profile'] as const,
     register: () => [...queryKeys.auth.all, 'register'] as const,
   },
+
+  // Orders
+  orders: {
+    all: ['orders'] as const,
+    lists: () => [...queryKeys.orders.all, 'list'] as const,
+    userOrders: (filters?: unknown) => [...queryKeys.orders.lists(), 'user', filters] as const,
+    details: () => [...queryKeys.orders.all, 'detail'] as const,
+    order: (id: string) => [...queryKeys.orders.details(), id] as const,
+    orderByNumber: (orderNumber: string) => [...queryKeys.orders.details(), 'number', orderNumber] as const,
+  },
 };
 

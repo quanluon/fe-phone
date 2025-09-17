@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/Button';
 import { useResetPassword } from '@/hooks/useAuth';
 import { useToastStore } from '@/stores/toast';
+import { ApiErrorResponse } from '@/types';
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
 import { Form, Input } from 'antd';
 import { useTranslations } from 'next-intl';
@@ -39,7 +40,7 @@ export function ResetPasswordForm({ token, onSuccess, onSwitchToLogin }: ResetPa
       },
       onError: (error: unknown) => {
         const errorMessage = error && typeof error === 'object' && 'response' in error 
-          ? (error as { response?: { data?: { message?: string } } }).response?.data?.message 
+          ? (error as ApiErrorResponse).response?.data?.message 
           : t('resetPassword.errorMessage');
         addToast({
           type: 'error',

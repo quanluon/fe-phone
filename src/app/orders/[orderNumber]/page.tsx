@@ -1,30 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { ordersApi } from "@/lib/api/orders";
-import { Order, OrderStatus, PaymentStatus } from "@/types";
+import { NextImage } from "@/components/ui";
+import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import { Badge } from "@/components/ui/Badge";
+import { useOrderByNumber } from "@/hooks/useOrders";
 import { useToastStore } from "@/stores/toast";
-import { NextImage } from "@/components/ui";
-
-const statusLabels: Record<OrderStatus, string> = {
-  [OrderStatus.PENDING]: "Chờ xác nhận",
-  [OrderStatus.CONFIRMED]: "Đã xác nhận",
-  [OrderStatus.PROCESSING]: "Đang xử lý",
-  [OrderStatus.SHIPPED]: "Đã gửi hàng",
-  [OrderStatus.DELIVERED]: "Đã giao hàng",
-  [OrderStatus.CANCELLED]: "Đã hủy",
-};
-
-const paymentStatusLabels: Record<PaymentStatus, string> = {
-  [PaymentStatus.PENDING]: "Chờ thanh toán",
-  [PaymentStatus.PAID]: "Đã thanh toán",
-  [PaymentStatus.FAILED]: "Thanh toán thất bại",
-  [PaymentStatus.REFUNDED]: "Đã hoàn tiền",
-};
+import { OrderStatus, PaymentStatus } from "@/types";
+import { useTranslations } from "next-intl";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const statusColors: Record<OrderStatus, string> = {
   [OrderStatus.PENDING]: "bg-yellow-100 text-yellow-800",
@@ -45,34 +30,27 @@ const paymentStatusColors: Record<PaymentStatus, string> = {
 export default function OrderDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const [order, setOrder] = useState<Order | null>(null);
-  const [loading, setLoading] = useState(true);
-  const {addToast} = useToastStore()
+  const t = useTranslations('orders.detail');
+  const { addToast } = useToastStore();
 
   const orderNumber = params.orderNumber as string;
 
-  useEffect(() => {
-    const fetchOrder = async () => {
-      try {
-        const { data } = await ordersApi.getOrderByNumber(orderNumber);
-        setOrder(data);
-      } catch (error) {
-        console.error("Failed to fetch order:", error);
-        addToast({
-          title: "Không thể tải thông tin đơn hàng",
-          message: "Vui lòng thử lại sau",
-          type: "error",
-        });
-        router.push("/orders");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const { 
+    data: order, 
+    isLoading: loading, 
+    error 
+  } = useOrderByNumber(orderNumber);
 
-    if (orderNumber) {
-      fetchOrder();
+  useEffect(() => {
+    if (error) {
+      addToast({
+        title: t('errorLoading'),
+        message: t('errorMessage'),
+        type: "error",
+      });
+      router.push("/orders");
     }
-  }, [orderNumber, router, addToast]);
+  }, [error, addToast, router, t]);
 
   if (loading) {
     return (
@@ -96,13 +74,13 @@ export default function OrderDetailPage() {
         <div className="max-w-4xl mx-auto px-4">
           <Card className="p-8 text-center">
             <h1 className="text-2xl font-bold text-gray-900 mb-4">
-              Không tìm thấy đơn hàng
+              {t('notFound')}
             </h1>
             <p className="text-gray-600 mb-6">
-              Đơn hàng không tồn tại hoặc bạn không có quyền xem.
+              {t('notFoundMessage')}
             </p>
             <Button onClick={() => router.push("/orders")}>
-              Quay lại danh sách đơn hàng
+              {t('backToOrders')}
             </Button>
           </Card>
         </div>
@@ -119,10 +97,10 @@ export default function OrderDetailPage() {
             onClick={() => router.back()}
             className="mb-4"
           >
-            ← Quay lại
+            {t('back')}
           </Button>
           <h1 className="text-3xl font-bold text-gray-900">
-            Đơn hàng #{order.orderNumber}
+            {t('orderNumber', { orderNumber: order.orderNumber })}
           </h1>
         </div>
 
@@ -132,25 +110,25 @@ export default function OrderDetailPage() {
             {/* Order Status */}
             <Card className="p-6">
               <h2 className="text-xl font-semibold mb-4">
-                Trạng thái đơn hàng
+                {t('orderStatus')}
               </h2>
               <div className="flex items-center space-x-4">
                 <Badge className={statusColors[order.status]}>
-                  {statusLabels[order.status]}
+                  {t(`status.${order.status}`)}
                 </Badge>
                 <Badge className={paymentStatusColors[order.paymentStatus]}>
-                  {paymentStatusLabels[order.paymentStatus]}
+                  {t(`paymentStatus.${order.paymentStatus}`)}
                 </Badge>
               </div>
               <p className="text-sm text-gray-600 mt-2">
-                Đặt hàng lúc:{" "}
+                {t('orderDate')}:{" "}
                 {new Date(order.createdAt).toLocaleString("vi-VN")}
               </p>
             </Card>
 
             {/* Order Items */}
             <Card className="p-6">
-              <h2 className="text-xl font-semibold mb-4">Sản phẩm đã đặt</h2>
+              <h2 className="text-xl font-semibold mb-4">{t('orderItems')}</h2>
               <div className="space-y-4">
                 {order.items.map((item, index) => (
                   <div
@@ -201,7 +179,7 @@ export default function OrderDetailPage() {
             {order.shippingAddress && (
               <Card className="p-6">
                 <h2 className="text-xl font-semibold mb-4">
-                  Địa chỉ giao hàng
+                  {t('shippingAddress')}
                 </h2>
                 <div className="text-gray-700">
                   <p className="font-medium">
@@ -224,7 +202,7 @@ export default function OrderDetailPage() {
             {/* Notes */}
             {order.notes && (
               <Card className="p-6">
-                <h2 className="text-xl font-semibold mb-4">Ghi chú</h2>
+                <h2 className="text-xl font-semibold mb-4">{t('notes')}</h2>
                 <p className="text-gray-700">{order.notes}</p>
               </Card>
             )}
@@ -233,10 +211,10 @@ export default function OrderDetailPage() {
           {/* Order Summary */}
           <div className="space-y-6">
             <Card className="p-6">
-              <h2 className="text-xl font-semibold mb-4">Tóm tắt đơn hàng</h2>
+              <h2 className="text-xl font-semibold mb-4">{t('orderSummary')}</h2>
               <div className="space-y-3">
                 <div className="flex justify-between">
-                  <span>Tạm tính:</span>
+                  <span>{t('subtotal')}:</span>
                   <span>
                     {new Intl.NumberFormat("vi-VN", {
                       style: "currency",
@@ -247,7 +225,7 @@ export default function OrderDetailPage() {
 
                 {order.discountAmount && order.discountAmount > 0 && (
                   <div className="flex justify-between text-green-600">
-                    <span>Giảm giá:</span>
+                    <span>{t('discount')}:</span>
                     <span>
                       -
                       {new Intl.NumberFormat("vi-VN", {
@@ -260,7 +238,7 @@ export default function OrderDetailPage() {
 
                 {order.shippingFee && order.shippingFee > 0 && (
                   <div className="flex justify-between">
-                    <span>Phí vận chuyển:</span>
+                    <span>{t('shippingFee')}:</span>
                     <span>
                       {new Intl.NumberFormat("vi-VN", {
                         style: "currency",
@@ -272,7 +250,7 @@ export default function OrderDetailPage() {
 
                 <div className="border-t pt-3">
                   <div className="flex justify-between text-lg font-semibold">
-                    <span>Tổng cộng:</span>
+                    <span>{t('total')}:</span>
                     <span>
                       {new Intl.NumberFormat("vi-VN", {
                         style: "currency",
@@ -287,7 +265,7 @@ export default function OrderDetailPage() {
             {/* Customer Info */}
             <Card className="p-6">
               <h2 className="text-xl font-semibold mb-4">
-                Thông tin khách hàng
+                {t('customerInfo')}
               </h2>
               <div className="space-y-2 text-gray-700">
                 {order.customer.name && (
@@ -310,7 +288,7 @@ export default function OrderDetailPage() {
             {order.paymentMethod && (
               <Card className="p-6">
                 <h2 className="text-xl font-semibold mb-4">
-                  Phương thức thanh toán
+                  {t('paymentMethod')}
                 </h2>
                 <p className="text-gray-700 capitalize">
                   {order.paymentMethod.replace("_", " ")}

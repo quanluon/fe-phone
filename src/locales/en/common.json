@@ -533,8 +533,10 @@
     "removeFile": "Remove file",
     "currentFiles": "Current Files",
     "uploadedFiles": "Uploaded Files",
+    "uploadedFile": "Uploaded File",
     "fileTypes": "PNG, JPG, GIF up to 10MB each",
-    "noImage": "No Image"
+    "noImage": "No Image",
+    "file": "file"
   },
   "errors": {
     "failedToLoadCategories": "Failed to load categories"
@@ -543,6 +545,140 @@
     "previousSlide": "Previous slide",
     "nextSlide": "Next slide",
     "goToSlide": "Go to slide {index}"
+  },
+  "orders": {
+    "title": "My Orders",
+    "subtitle": "Track your order status",
+    "empty": "No orders yet",
+    "emptyDescription": "You haven't placed any orders yet. Start shopping!",
+    "startShopping": "Start Shopping",
+    "orderNumber": "Order #{orderNumber}",
+    "orderDate": "Order Date",
+    "orderStatus": "Order Status",
+    "paymentStatus": "Payment Status",
+    "totalAmount": "Total Amount",
+    "customer": "Customer",
+    "viewDetails": "View Details",
+    "loadMore": "Load More",
+    "loading": "Loading...",
+    "errorLoading": "Failed to load orders",
+    "errorMessage": "Please try again later",
+    "status": {
+      "pending": "Pending Confirmation",
+      "confirmed": "Confirmed",
+      "processing": "Processing",
+      "shipped": "Shipped",
+      "delivered": "Delivered",
+      "cancelled": "Cancelled"
+    },
+    "paymentStatus": {
+      "pending": "Pending Payment",
+      "paid": "Paid",
+      "failed": "Payment Failed",
+      "refunded": "Refunded"
+    },
+    "detail": {
+      "title": "Order Details",
+      "back": "← Back",
+      "orderStatus": "Order Status",
+      "orderDate": "Order Date",
+      "orderItems": "Ordered Items",
+      "shippingAddress": "Shipping Address",
+      "notes": "Notes",
+      "orderSummary": "Order Summary",
+      "customerInfo": "Customer Information",
+      "paymentMethod": "Payment Method",
+      "subtotal": "Subtotal",
+      "discount": "Discount",
+      "shippingFee": "Shipping Fee",
+      "total": "Total",
+      "notFound": "Order Not Found",
+      "notFoundMessage": "The order doesn't exist or you don't have permission to view it.",
+      "backToOrders": "Back to Orders",
+      "errorLoading": "Failed to load order details",
+      "errorMessage": "Please try again later"
+    },
+    "create": {
+      "title": "Place Order",
+      "subtitle": "Complete your information to place an order",
+      "step1": "Customer Information",
+      "step2": "Shipping Address",
+      "step3": "Payment & Notes",
+      "customerInfo": {
+        "title": "Customer Information",
+        "name": "Full Name",
+        "namePlaceholder": "Enter your full name",
+        "email": "Email",
+        "emailPlaceholder": "Enter your email",
+        "phone": "Phone Number",
+        "phonePlaceholder": "Enter your phone number",
+        "fromAccount": "Information from your account"
+      },
+      "shippingAddress": {
+        "title": "Shipping Address",
+        "fullName": "Recipient's Full Name",
+        "fullNamePlaceholder": "Enter recipient's full name",
+        "phone": "Recipient's Phone Number",
+        "phonePlaceholder": "Enter recipient's phone number",
+        "address": "Detailed Address",
+        "addressPlaceholder": "House number, street name",
+        "city": "City",
+        "cityPlaceholder": "City",
+        "district": "District",
+        "districtPlaceholder": "District",
+        "ward": "Ward",
+        "wardPlaceholder": "Ward",
+        "postalCode": "Postal Code",
+        "postalCodePlaceholder": "Postal code (optional)"
+      },
+      "payment": {
+        "title": "Payment Method & Notes",
+        "paymentMethod": "Payment Method",
+        "notes": "Order Notes",
+        "notesPlaceholder": "Additional notes for your order (optional)",
+        "methods": {
+          "cash": "Cash on Delivery (COD)",
+          "bank_transfer": "Bank Transfer",
+          "momo": "MoMo Wallet",
+          "zalopay": "ZaloPay Wallet"
+        }
+      },
+      "orderSummary": {
+        "title": "Your Order",
+        "total": "Total"
+      },
+      "progress": {
+        "title": "Order Progress",
+        "step1": "Customer Information",
+        "step2": "Shipping Address",
+        "step3": "Payment & Confirmation"
+      },
+      "navigation": {
+        "back": "Back",
+        "continue": "Continue",
+        "placeOrder": "Place Order",
+        "processing": "Processing..."
+      },
+      "validation": {
+        "nameRequired": "Please enter your full name",
+        "emailRequired": "Please enter your email",
+        "phoneRequired": "Please enter your phone number",
+        "fullNameRequired": "Please enter recipient's full name",
+        "phoneRequired": "Please enter recipient's phone number",
+        "addressRequired": "Please enter address",
+        "cityRequired": "Please enter city",
+        "districtRequired": "Please enter district",
+        "wardRequired": "Please enter ward"
+      },
+      "success": {
+        "title": "Order Placed Successfully!",
+        "message": "Order #{orderNumber} has been created"
+      },
+      "error": {
+        "title": "Order Error",
+        "message": "An error occurred, please try again"
+      }
+    }
   },
   "notFound": {
     "title": "Page Not Found",

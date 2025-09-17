@@ -1,35 +1,36 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
+import { SingleFileUpload } from "@/components/ui";
+import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
+import { Input } from "@/components/ui/Input";
+import { NextImage } from "@/components/ui/NextImage";
 import {
+  useChangePassword,
   useProfile,
   useUpdateProfile,
-  useChangePassword,
 } from "@/hooks/useAuth";
-import { useToastStore } from "@/stores/toast";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
-import { Card } from "@/components/ui/Card";
-import { FileUpload } from "@/components/ui/FileUpload";
+import { useToastStore } from "@/stores/toast";
 import {
-  UserIcon,
-  EnvelopeIcon,
-  PhoneIcon,
   CalendarIcon,
-  PencilIcon,
-  KeyIcon,
   CheckIcon,
+  EnvelopeIcon,
+  KeyIcon,
+  PencilIcon,
+  PhoneIcon,
+  UserIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
+import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export function ProfileClient() {
   const t = useTranslations();
   const router = useRouter();
   const { addToast } = useToastStore();
-  
+
   // Use auth guard to handle authentication safely
   const { isAuthenticated, isLoading } = useAuthGuard();
 
@@ -44,8 +45,8 @@ export function ProfileClient() {
     firstName: "",
     lastName: "",
     phone: "",
+    profileImage: "",
   });
-  const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
   const [passwordData, setPasswordData] = useState({
     currentPassword: "",
     newPassword: "",
@@ -59,6 +60,7 @@ export function ProfileClient() {
         firstName: user?.firstName || "",
         lastName: user?.lastName || "",
         phone: user?.phone || "",
+        profileImage: user?.profileImage || "",
       });
     }
   }, [user, isEditingProfile, formData.firstName]);
@@ -91,6 +93,7 @@ export function ProfileClient() {
       firstName: user?.firstName || "",
       lastName: user?.lastName || "",
       phone: user?.phone || "",
+      profileImage: user?.profileImage || "",
     });
   };
 
@@ -118,15 +121,22 @@ export function ProfileClient() {
       firstName: user?.firstName || "",
       lastName: user?.lastName || "",
       phone: user?.phone || "",
+      profileImage: user?.profileImage || "",
     });
   };
 
-  const handleFilesUploaded = (fileKeys: string[]) => {
-    setUploadedFiles(prev => [...prev, ...fileKeys]);
+  const handleFileUploaded = (fileUrl: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      profileImage: fileUrl,
+    }));
   };
 
-  const handleFilesRemoved = (fileKeys: string[]) => {
-    setUploadedFiles(prev => prev.filter(key => !fileKeys.includes(key)));
+  const handleFileRemoved = () => {
+    setFormData((prev) => ({
+      ...prev,
+      profileImage: user?.profileImage || "",
+    }));
   };
 
   const handlePasswordChange = async () => {
@@ -238,6 +248,13 @@ export function ProfileClient() {
               )}
             </div>
 
+            <NextImage
+                src={user?.profileImage || ""}
+                alt="Profile Image"
+                width={100}
+                height={100}
+              />
+
             {isEditingProfile ? (
               <div className="space-y-4">
                 <div>
@@ -278,15 +295,13 @@ export function ProfileClient() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Profile Images
+                    Profile Image
                   </label>
-                  <FileUpload
-                    onFilesUploaded={handleFilesUploaded}
-                    onFilesRemoved={handleFilesRemoved}
-                    uploadedFiles={uploadedFiles}
-                    maxFiles={3}
+                  <SingleFileUpload
+                    onFileUploaded={handleFileUploaded}
+                    onFileRemoved={handleFileRemoved}
+                    uploadedFile={formData?.profileImage}
                     accept="image/*"
-                    folder="profile"
                   />
                 </div>
                 <div className="flex space-x-3 pt-4">
@@ -318,9 +333,7 @@ export function ProfileClient() {
                     <p className="text-sm text-gray-500">
                       {t("auth.login.email")}
                     </p>
-                    <p className="font-medium text-gray-900">
-                      {user?.email}
-                    </p>
+                    <p className="font-medium text-gray-900">{user?.email}</p>
                   </div>
                 </div>
                 <div className="flex items-center">

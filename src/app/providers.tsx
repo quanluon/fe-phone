@@ -7,7 +7,6 @@ import { queryClient } from '@/lib/api/queryClient';
 import { Layout } from '@/components/layout/Layout';
 import { ToastContainer } from '@/components/ui/Toast';
 import { useToastStore } from '@/stores/toast';
-import { useTokenSync } from '@/hooks/useTokenSync';
 
 interface ProvidersProps {
   children: React.ReactNode;
@@ -16,9 +15,6 @@ interface ProvidersProps {
 export function Providers({ children }: ProvidersProps) {
   const { toasts, removeToast } = useToastStore();
   
-  // Sync tokens from localStorage to cookies on page load
-  useTokenSync();
-
   return (
     <QueryClientProvider client={queryClient}>
       <Layout>

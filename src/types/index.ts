@@ -1,4 +1,7 @@
+import { AxiosError } from "axios";
+
 // API Response Types
+export type ApiErrorResponse = AxiosError<{ message?: string }> 
 export interface ApiResponse<T = unknown> {
   success: boolean;
   data: T;
@@ -66,19 +69,19 @@ export interface Product {
 }
 
 export enum ProductType {
-  IPHONE = 'iphone',
-  IPAD = 'ipad',
-  IMAC = 'imac',
-  MACBOOK = 'macbook',
-  WATCH = 'watch',
-  AIRPODS = 'airpods',
-  ACCESSORIES = 'accessories',
+  IPHONE = "iphone",
+  IPAD = "ipad",
+  IMAC = "imac",
+  MACBOOK = "macbook",
+  WATCH = "watch",
+  AIRPODS = "airpods",
+  ACCESSORIES = "accessories",
 }
 
 export enum ProductStatus {
-  ACTIVE = 'active',
-  INACTIVE = 'inactive',
-  DRAFT = 'draft',
+  ACTIVE = "active",
+  INACTIVE = "inactive",
+  DRAFT = "draft",
 }
 
 // Category Types
@@ -122,7 +125,7 @@ export interface Cart {
 
 // Cart Validation Types
 export interface CartValidationError {
-  type: 'insufficient_stock' | 'out_of_stock' | 'invalid_quantity';
+  type: "insufficient_stock" | "out_of_stock" | "invalid_quantity";
   message: string;
   currentStock: number;
   requestedQuantity: number;
@@ -143,8 +146,8 @@ export interface User {
   firstName?: string;
   lastName?: string;
   phone?: string;
-  type: 'customer' | 'admin';
-  status: 'active' | 'inactive' | 'suspended';
+  type: "customer" | "admin";
+  status: "active" | "inactive" | "suspended";
   profileImage?: string;
   lastLoginAt?: string;
   createdAt: string;
@@ -160,12 +163,19 @@ export interface AuthUser {
   lastName?: string;
   phone?: string;
   fullName?: string;
-  type: 'customer' | 'admin';
-  status: 'active' | 'inactive' | 'suspended';
+  type: "customer" | "admin";
+  status: "active" | "inactive" | "suspended";
   profileImage?: string;
   lastLoginAt?: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface AuthToken {
+  accessToken: string;
+  refreshToken: string;
+  idToken: string;
+  expiresIn: number;
 }
 
 export interface LoginRequest {
@@ -198,7 +208,12 @@ export interface ProductFilters {
   storage?: string;
   size?: string;
   search?: string;
-  sortBy?: 'price_asc' | 'price_desc' | 'name_asc' | 'name_desc' | 'created_at_desc';
+  sortBy?:
+    | "price_asc"
+    | "price_desc"
+    | "name_asc"
+    | "name_desc"
+    | "created_at_desc";
   isFeatured?: boolean;
   isNew?: boolean;
 }
@@ -232,16 +247,16 @@ export interface NavItem {
 }
 
 // Theme Types
-export type Theme = 'light' | 'dark';
+export type Theme = "light" | "dark";
 
 // Language Types
-export type Language = 'en' | 'vi';
+export type Language = "en" | "vi";
 
 // Currency Types
-export type Currency = 'USD' | 'VND';
+export type Currency = "USD" | "VND";
 
 // Country Types
-export type Country = 'US' | 'VN';
+export type Country = "US" | "VN";
 
 // Auth Types
 export interface AuthUser {
@@ -251,7 +266,7 @@ export interface AuthUser {
   lastName?: string;
   phone?: string;
   avatar?: string;
-  role: 'user' | 'admin';
+  role: "user" | "admin";
   isEmailVerified: boolean;
   isPhoneVerified: boolean;
   createdAt: string;
@@ -329,19 +344,19 @@ export interface Order {
 }
 
 export enum OrderStatus {
-  PENDING = 'pending',
-  CONFIRMED = 'confirmed',
-  PROCESSING = 'processing',
-  SHIPPED = 'shipped',
-  DELIVERED = 'delivered',
-  CANCELLED = 'cancelled',
+  PENDING = "pending",
+  CONFIRMED = "confirmed",
+  PROCESSING = "processing",
+  SHIPPED = "shipped",
+  DELIVERED = "delivered",
+  CANCELLED = "cancelled",
 }
 
 export enum PaymentStatus {
-  PENDING = 'pending',
-  PAID = 'paid',
-  FAILED = 'failed',
-  REFUNDED = 'refunded',
+  PENDING = "pending",
+  PAID = "paid",
+  FAILED = "failed",
+  REFUNDED = "refunded",
 }
 
 export interface CreateOrderRequest {
@@ -377,5 +392,4 @@ export interface OrderFilters {
 }
 
 // Hero Types
-export * from './hero';
-
+export * from "./hero";

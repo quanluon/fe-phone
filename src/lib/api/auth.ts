@@ -1,16 +1,16 @@
+import { AuthToken, AuthUser, LoginRequest, RegisterRequest, User } from '@/types';
 import { api } from './config';
-import { LoginRequest, RegisterRequest, User, AuthUser } from '@/types';
 
 // Auth API endpoints
 export const authApi = {
   // Login
   login: (data: LoginRequest) => {
-    return api.post<{ user: AuthUser; tokens: { accessToken: string; refreshToken: string; idToken: string; expiresIn: number } }>('/auth/login', data);
+    return api.post<{ user: AuthUser; tokens: AuthToken }>('/auth/login', data);
   },
 
   // Register
   register: (data: RegisterRequest) => {
-    return api.post<{ user: AuthUser; tokens: { accessToken: string; refreshToken: string; idToken: string; expiresIn: number } }>('/auth/register', data);
+    return api.post<{ user: AuthUser; tokens: AuthToken }>('/auth/register', data);
   },
 
   // Logout
@@ -20,7 +20,7 @@ export const authApi = {
 
   // Refresh token
   refreshToken: (refreshToken: string) => {
-    return api.post<{ accessToken: string; refreshToken: string }>('/auth/refresh', {
+    return api.post<AuthToken>('/auth/refresh', {
       refreshToken,
     });
   },

@@ -533,8 +533,10 @@
     "removeFile": "Xóa tệp",
     "currentFiles": "Tệp Hiện Tại",
     "uploadedFiles": "Tệp Đã Tải Lên",
+    "uploadedFile": "Tệp Đã Tải Lên",
     "fileTypes": "PNG, JPG, GIF tối đa 10MB mỗi tệp",
-    "noImage": "Không Có Hình Ảnh"
+    "noImage": "Không Có Hình Ảnh",
+    "file": "tệp"
   },
   "errors": {
     "failedToLoadCategories": "Không thể tải danh mục"
@@ -543,6 +545,140 @@
     "previousSlide": "Slide trước",
     "nextSlide": "Slide tiếp theo",
     "goToSlide": "Chuyển đến slide {index}"
+  },
+  "orders": {
+    "title": "Đơn hàng của tôi",
+    "subtitle": "Theo dõi trạng thái đơn hàng của bạn",
+    "empty": "Chưa có đơn hàng nào",
+    "emptyDescription": "Bạn chưa có đơn hàng nào. Hãy bắt đầu mua sắm!",
+    "startShopping": "Bắt đầu mua sắm",
+    "orderNumber": "Đơn hàng #{orderNumber}",
+    "orderDate": "Ngày đặt hàng",
+    "orderStatus": "Trạng thái đơn hàng",
+    "paymentStatus": "Trạng thái thanh toán",
+    "totalAmount": "Tổng tiền",
+    "customer": "Khách hàng",
+    "viewDetails": "Xem chi tiết",
+    "loadMore": "Tải thêm",
+    "loading": "Đang tải...",
+    "errorLoading": "Không thể tải danh sách đơn hàng",
+    "errorMessage": "Vui lòng thử lại sau",
+    "status": {
+      "pending": "Chờ xác nhận",
+      "confirmed": "Đã xác nhận",
+      "processing": "Đang xử lý",
+      "shipped": "Đã gửi hàng",
+      "delivered": "Đã giao hàng",
+      "cancelled": "Đã hủy"
+    },
+    "paymentStatus": {
+      "pending": "Chờ thanh toán",
+      "paid": "Đã thanh toán",
+      "failed": "Thanh toán thất bại",
+      "refunded": "Đã hoàn tiền"
+    },
+    "detail": {
+      "title": "Chi tiết đơn hàng",
+      "back": "← Quay lại",
+      "orderStatus": "Trạng thái đơn hàng",
+      "orderDate": "Ngày đặt hàng",
+      "orderItems": "Sản phẩm đã đặt",
+      "shippingAddress": "Địa chỉ giao hàng",
+      "notes": "Ghi chú",
+      "orderSummary": "Tóm tắt đơn hàng",
+      "customerInfo": "Thông tin khách hàng",
+      "paymentMethod": "Phương thức thanh toán",
+      "subtotal": "Tạm tính",
+      "discount": "Giảm giá",
+      "shippingFee": "Phí vận chuyển",
+      "total": "Tổng cộng",
+      "notFound": "Không tìm thấy đơn hàng",
+      "notFoundMessage": "Đơn hàng không tồn tại hoặc bạn không có quyền xem.",
+      "backToOrders": "Quay lại danh sách đơn hàng",
+      "errorLoading": "Không thể tải thông tin đơn hàng",
+      "errorMessage": "Vui lòng thử lại sau"
+    },
+    "create": {
+      "title": "Đặt hàng",
+      "subtitle": "Hoàn tất thông tin để đặt hàng",
+      "step1": "Thông tin khách hàng",
+      "step2": "Địa chỉ giao hàng",
+      "step3": "Thanh toán & Ghi chú",
+      "customerInfo": {
+        "title": "Thông tin khách hàng",
+        "name": "Họ và tên",
+        "namePlaceholder": "Nhập họ và tên",
+        "email": "Email",
+        "emailPlaceholder": "Nhập email",
+        "phone": "Số điện thoại",
+        "phonePlaceholder": "Nhập số điện thoại",
+        "fromAccount": "Thông tin từ tài khoản của bạn"
+      },
+      "shippingAddress": {
+        "title": "Địa chỉ giao hàng",
+        "fullName": "Họ và tên người nhận",
+        "fullNamePlaceholder": "Nhập họ và tên người nhận",
+        "phone": "Số điện thoại người nhận",
+        "phonePlaceholder": "Nhập số điện thoại người nhận",
+        "address": "Địa chỉ chi tiết",
+        "addressPlaceholder": "Số nhà, tên đường",
+        "city": "Thành phố",
+        "cityPlaceholder": "Thành phố",
+        "district": "Quận/Huyện",
+        "districtPlaceholder": "Quận/Huyện",
+        "ward": "Phường/Xã",
+        "wardPlaceholder": "Phường/Xã",
+        "postalCode": "Mã bưu điện",
+        "postalCodePlaceholder": "Mã bưu điện (tùy chọn)"
+      },
+      "payment": {
+        "title": "Phương thức thanh toán & Ghi chú",
+        "paymentMethod": "Phương thức thanh toán",
+        "notes": "Ghi chú đơn hàng",
+        "notesPlaceholder": "Ghi chú thêm cho đơn hàng (tùy chọn)",
+        "methods": {
+          "cash": "Thanh toán khi nhận hàng (COD)",
+          "bank_transfer": "Chuyển khoản ngân hàng",
+          "momo": "Ví MoMo",
+          "zalopay": "Ví ZaloPay"
+        }
+      },
+      "orderSummary": {
+        "title": "Đơn hàng của bạn",
+        "total": "Tổng cộng"
+      },
+      "progress": {
+        "title": "Tiến trình đặt hàng",
+        "step1": "Thông tin khách hàng",
+        "step2": "Địa chỉ giao hàng",
+        "step3": "Thanh toán & Xác nhận"
+      },
+      "navigation": {
+        "back": "Quay lại",
+        "continue": "Tiếp tục",
+        "placeOrder": "Đặt hàng",
+        "processing": "Đang xử lý..."
+      },
+      "validation": {
+        "nameRequired": "Vui lòng nhập họ tên",
+        "emailRequired": "Vui lòng nhập email",
+        "phoneRequired": "Vui lòng nhập số điện thoại",
+        "fullNameRequired": "Vui lòng nhập họ tên người nhận",
+        "phoneRequired": "Vui lòng nhập số điện thoại người nhận",
+        "addressRequired": "Vui lòng nhập địa chỉ",
+        "cityRequired": "Vui lòng nhập thành phố",
+        "districtRequired": "Vui lòng nhập quận/huyện",
+        "wardRequired": "Vui lòng nhập phường/xã"
+      },
+      "success": {
+        "title": "Đặt hàng thành công!",
+        "message": "Đơn hàng #{orderNumber} đã được tạo"
+      },
+      "error": {
+        "title": "Lỗi đặt hàng",
+        "message": "Có lỗi xảy ra, vui lòng thử lại"
+      }
+    }
   },
   "notFound": {
     "title": "Không Tìm Thấy Trang",

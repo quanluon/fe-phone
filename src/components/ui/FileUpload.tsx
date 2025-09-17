@@ -15,6 +15,10 @@ interface FileUploadProps {
   folder?: string;
   disabled?: boolean;
   className?: string;
+  multiple?: boolean;
+  maxFileSize?: number; // in MB
+  showPreview?: boolean;
+  compact?: boolean;
 }
 
 interface UploadedFile {
@@ -34,7 +38,11 @@ export function FileUpload({
   accept = "image/*",
   folder = "uploads",
   disabled = false,
-  className = ""
+  className = "",
+  multiple = true,
+  maxFileSize = 10,
+  showPreview = true,
+  compact = false
 }: FileUploadProps) {
   const tFile = useTranslations('fileUpload');
   const [files, setFiles] = useState<UploadedFile[]>([]);
@@ -47,16 +55,27 @@ export function FileUpload({
     const fileArray = Array.from(selectedFiles);
     const newFiles: UploadedFile[] = [];
 
+    // For single file mode, only take the first file
+    const filesToProcess = multiple ? fileArray : fileArray.slice(0, 1);
+
     // Validate file count
-    if (files.length + fileArray.length > maxFiles) {
-      alert(tFile('maxFiles', { count: maxFiles }));
+    const currentFileCount = files.length;
+    const maxAllowed = multiple ? maxFiles : 1;
+    
+    if (currentFileCount + filesToProcess.length > maxAllowed) {
+      alert(tFile('maxFiles', { count: maxAllowed }));
       return;
     }
 
+    // For single file mode, clear existing files
+    if (!multiple && filesToProcess.length > 0) {
+      setFiles([]);
+    }
+
     // Validate file types and sizes
-    for (const file of fileArray) {
-      if (file.size > 10 * 1024 * 1024) { // 10MB limit
-        alert(`${file.name} - ${tFile('maxFileSize', { size: 10 })}`);
+    for (const file of filesToProcess) {
+      if (file.size > maxFileSize * 1024 * 1024) {
+        alert(`${file.name} - ${tFile('maxFileSize', { size: maxFileSize })}`);
         continue;
       }
 
@@ -69,11 +88,17 @@ export function FileUpload({
       });
     }
 
-    setFiles(prev => [...prev, ...newFiles]);
+    // Update files state
+    if (!multiple && newFiles.length > 0) {
+      setFiles(newFiles);
+    } else {
+      setFiles(prev => [...prev, ...newFiles]);
+    }
 
     // Upload files
+    const startIndex = multiple ? files.length : 0;
     for (let i = 0; i < newFiles.length; i++) {
-      const fileIndex = files.length + i;
+      const fileIndex = startIndex + i;
       await uploadFile(fileIndex, newFiles[i].file);
     }
   };
@@ -117,10 +142,11 @@ export function FileUpload({
       ));
 
       // Notify parent component
-      const uploadedKeys = files
-        .filter(f => f.uploaded && f.key)
+      const currentFiles = multiple ? files : [files[fileIndex]];
+      const uploadedKeys = currentFiles
+        .filter(f => f && f.uploaded && f.key)
         .map(f => f.key);
-      
+
       if (uploadedKeys.length > 0) {
         onFilesUploaded(uploadedKeys);
       }
@@ -148,7 +174,8 @@ export function FileUpload({
         console.error('Delete error:', error);
       }
     }
-
+    
+    // Remove file from state
     setFiles(prev => prev.filter((_, index) => index !== fileIndex));
   };
 
@@ -199,14 +226,14 @@ export function FileUpload({
         <input
           ref={fileInputRef}
           type="file"
-          multiple
+          multiple={multiple}
           accept={accept}
           onChange={handleFileInput}
           className="hidden"
           disabled={disabled}
         />
         
-        <CloudArrowUpIcon className="mx-auto h-12 w-12 text-gray-400" />
+        <CloudArrowUpIcon className={`mx-auto text-gray-400 ${compact ? 'h-8 w-8' : 'h-12 w-12'}`} />
         <div className="mt-2">
           <p className="text-sm text-gray-600">
             <span className="font-medium text-blue-600 hover:text-blue-500">
@@ -215,30 +242,34 @@ export function FileUpload({
             {tFile('or')} {tFile('dragAndDrop')}
           </p>
           <p className="text-xs text-gray-500">
-            {tFile('fileTypes')} ({tFile('maxFiles', { count: maxFiles })})
+            {tFile('fileTypes')} ({tFile('maxFiles', { count: multiple ? maxFiles : 1 })})
           </p>
         </div>
       </div>
 
       {/* File List */}
-      {files.length > 0 && (
+      {files.length > 0 && showPreview && (
         <div className="space-y-2">
-          <h4 className="text-sm font-medium text-gray-700">{tFile('uploadedFiles')}</h4>
+          <h4 className="text-sm font-medium text-gray-700">
+            {multiple ? tFile('uploadedFiles') : tFile('uploadedFile')}
+          </h4>
           {files.map((file, index) => (
             <div
               key={index}
-              className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+              className={`flex items-center justify-between bg-gray-50 rounded-lg ${
+                compact ? 'p-2' : 'p-3'
+              }`}
             >
               <div className="flex items-center space-x-3">
-                {file.file.type.startsWith('image/') && (
+                {file.file.type.startsWith('image/') && showPreview && (
                   <NextImage
                     src={file.uploaded ? file.publicUrl : URL.createObjectURL(file.file)}
                     alt={file.file.name}
-                    className="w-10 h-10 object-cover rounded"
+                    className={`object-cover rounded ${compact ? 'w-8 h-8' : 'w-10 h-10'}`}
                   />
                 )}
                 <div>
-                  <p className="text-sm font-medium text-gray-900">
+                  <p className={`font-medium text-gray-900 ${compact ? 'text-xs' : 'text-sm'}`}>
                     {file.file.name}
                   </p>
                   <p className="text-xs text-gray-500">
