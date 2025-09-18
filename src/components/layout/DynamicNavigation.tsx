@@ -19,9 +19,7 @@ export const DynamicNavigation: React.FC<DynamicNavigationProps> = ({ className 
 
   const handleCategoryClick = (categoryId: string) => {
     setIsOpen(false);
-    // Navigate to the category page and refresh
     router.push(`/products?category=${categoryId}`);
-    window.location.reload();
   };
 
   if (isLoading) {

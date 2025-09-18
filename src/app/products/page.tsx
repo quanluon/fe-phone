@@ -22,6 +22,7 @@ import { PRODUCT_TYPE_LABELS, SORT_OPTIONS } from '@/lib/constants';
 function ProductsContent() {
   const t = useTranslations('products');
   const searchParams = useSearchParams();
+
   const router = useRouter();
 
   // Helper function to get translated product type label
@@ -53,6 +54,18 @@ function ProductsContent() {
     min: searchParams.get('minPrice') || '',
     max: searchParams.get('maxPrice') || ''
   });
+
+  useEffect(()=>{
+    setSearchQuery(searchParams.get('search') || '');
+    setSelectedCategory(searchParams.get('category') || '');
+    setSelectedBrand(searchParams.get('brand') || '');
+    setSelectedType(searchParams.get('productType') || '');
+    setSortBy(searchParams.get('sortBy') || 'created_at_desc');
+    setPriceRange({
+      min: searchParams.get('minPrice') || '',
+      max: searchParams.get('maxPrice') || ''
+    });
+  },[searchParams])
 
   // Debounced values
   const debouncedSearchQuery = useDebounce(searchQuery, 500);

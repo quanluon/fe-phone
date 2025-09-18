@@ -13,9 +13,7 @@ export const Footer: React.FC = () => {
   const router = useRouter();
 
   const handleCategoryClick = (categoryId: string) => {
-    // Navigate to the category page and refresh
     router.push(`/products?category=${categoryId}`);
-    window.location.reload();
   };
 
 
