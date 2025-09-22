@@ -59,21 +59,6 @@ export const NAV_ITEMS = [
   // },
 ];
 
-// Category icons mapping
-export const CATEGORY_ICONS = {
-  'Televisions': TvIcon,
-  'Laptop & PC': ComputerDesktopIcon,
-  'Mobile & Tablets': DevicePhoneMobileIcon,
-  'Games & Videos': PuzzlePieceIcon,
-  'Home Appliances': HomeIcon,
-  'Health & Sports': HeartIcon,
-  'Watches': ClockIcon,
-  'Accessories': SpeakerWaveIcon,
-  'Smartphones': DevicePhoneMobileIcon,
-  'Tablets': DeviceTabletIcon,
-  'Laptops': ComputerDesktopIcon,
-  'AirPods': SpeakerWaveIcon,
-};
 
 // Product type labels
 export const PRODUCT_TYPE_LABELS = {
@@ -272,9 +257,9 @@ export const SOCIAL_LINKS ={}
 
 // Contact information
 export const CONTACT_INFO = {
-  name: 'Nguyễn Công Mobile',
-  title: 'Nguyễn Công Mobile - Apple Products & Accessories',
-  email: 'support@cozycommerce.com',
+  name: 'NC Mobile',
+  title: 'NC Mobile - Apple Products & Accessories',
+  email: 'ncmobile@support.com',
   phone: '+1 (555) 123-4567',
   address: '123 Commerce Street, Business City, BC 12345',
   hours: 'Mon-Fri: 9AM-6PM, Sat-Sun: 10AM-4PM',

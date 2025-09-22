@@ -93,6 +93,7 @@ export interface Category {
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
+  image: string;
 }
 
 // Brand Types

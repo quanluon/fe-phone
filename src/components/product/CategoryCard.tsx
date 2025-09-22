@@ -1,23 +1,20 @@
-import React from 'react';
-import Link from 'next/link';
-import { Category } from '@/types';
-import { Card } from '@/components/ui';
-import { CATEGORY_ICONS } from '@/lib/constants';
+import { Card, NextImage } from "@/components/ui";
+import { Category } from "@/types";
+import { DevicePhoneMobileIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
+import React from "react";
 
 interface CategoryCardProps {
   category: Category;
-  icon?: React.ReactNode;
   onClick?: () => void;
   className?: string;
 }
 
 export const CategoryCard: React.FC<CategoryCardProps> = ({
   category,
-  icon,
   onClick,
   className,
 }) => {
-  const IconComponent = CATEGORY_ICONS[category.name as keyof typeof CATEGORY_ICONS];
 
   const handleClick = () => {
     if (onClick) {
@@ -26,15 +23,22 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
   };
 
   const content = (
-    <Card 
+    <Card
       className={`group cursor-pointer transition-all duration-300 hover:shadow-md hover:scale-105 ${className}`}
       onClick={handleClick}
     >
       <div className="flex flex-col items-center text-center p-4">
         {/* Icon */}
-        <div className="w-16 h-16 mb-3 flex items-center justify-center rounded-full bg-blue-50 group-hover:bg-blue-100 transition-colors">
-          {icon || (IconComponent && <IconComponent className="w-8 h-8 text-blue-600" />)}
-        </div>
+        {category.image ? (
+          <NextImage
+            src={category.image}
+            alt={category.name}
+            width={100}
+            height={100}
+          />
+        ) : (
+          <DevicePhoneMobileIcon />
+        )}
 
         {/* Category Name */}
         <h3 className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors">
@@ -55,10 +59,5 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
     return content;
   }
 
-  return (
-    <Link href={`/products?category=${category._id}`}>
-      {content}
-    </Link>
-  );
+  return <Link href={`/products?category=${category._id}`}>{content}</Link>;
 };
-

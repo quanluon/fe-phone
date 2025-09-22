@@ -1,35 +1,29 @@
 'use client';
 
-import React, { useState, useMemo, Suspense, useEffect } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
-import { 
-  FunnelIcon, 
+import { ProductCard } from '@/components/product/ProductCard';
+import { Badge } from '@/components/ui/Badge';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import { useBrands } from '@/hooks/useBrands';
+import { useCategories } from '@/hooks/useCategories';
+import { useDebounce } from '@/hooks/useDebounce';
+import { useProducts } from '@/hooks/useProducts';
+import { SORT_OPTIONS } from '@/lib/constants';
+import { Product, ProductQuery } from '@/types';
+import {
+  FunnelIcon,
   MagnifyingGlassIcon,
   XMarkIcon
 } from '@heroicons/react/24/outline';
-import { ProductCard } from '@/components/product/ProductCard';
-import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
-import { Badge } from '@/components/ui/Badge';
-import { useProducts } from '@/hooks/useProducts';
-import { useCategories } from '@/hooks/useCategories';
-import { useBrands } from '@/hooks/useBrands';
-import { useDebounce } from '@/hooks/useDebounce';
-import { Product, ProductQuery, ProductType } from '@/types';
-import { PRODUCT_TYPE_LABELS, SORT_OPTIONS } from '@/lib/constants';
+import { useTranslations } from 'next-intl';
+import { useRouter, useSearchParams } from 'next/navigation';
+import React, { Suspense, useEffect, useMemo, useState } from 'react';
 
 function ProductsContent() {
   const t = useTranslations('products');
   const searchParams = useSearchParams();
 
   const router = useRouter();
-
-  // Helper function to get translated product type label
-  const getProductTypeLabel = (type: string) => {
-    return t(`productTypes.${type}` as keyof typeof t) || type;
-  };
-
   // Helper function to get translated sort option label
   const getSortOptionLabel = (value: string) => {
     const sortKeyMap: Record<string, string> = {
@@ -48,7 +42,6 @@ function ProductsContent() {
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
   const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || '');
   const [selectedBrand, setSelectedBrand] = useState(searchParams.get('brand') || '');
-  const [selectedType, setSelectedType] = useState(searchParams.get('productType') || '');
   const [sortBy, setSortBy] = useState(searchParams.get('sortBy') || 'created_at_desc');
   const [priceRange, setPriceRange] = useState({
     min: searchParams.get('minPrice') || '',
@@ -59,7 +52,6 @@ function ProductsContent() {
     setSearchQuery(searchParams.get('search') || '');
     setSelectedCategory(searchParams.get('category') || '');
     setSelectedBrand(searchParams.get('brand') || '');
-    setSelectedType(searchParams.get('productType') || '');
     setSortBy(searchParams.get('sortBy') || 'created_at_desc');
     setPriceRange({
       min: searchParams.get('minPrice') || '',
@@ -83,12 +75,11 @@ function ProductsContent() {
     if (debouncedSearchQuery) params.search = debouncedSearchQuery;
     if (selectedCategory) params.category = selectedCategory;
     if (selectedBrand) params.brand = selectedBrand;
-    if (selectedType) params.productType = selectedType as ProductType;
     if (debouncedPriceRange.min) params.minPrice = Number(debouncedPriceRange.min);
     if (debouncedPriceRange.max) params.maxPrice = Number(debouncedPriceRange.max);
 
     return params;
-  }, [debouncedSearchQuery, selectedCategory, selectedBrand, selectedType, sortBy, debouncedPriceRange]);
+  }, [debouncedSearchQuery, selectedCategory, selectedBrand, sortBy, debouncedPriceRange]);
 
   const { data: products, isLoading, error } = useProducts(query);
   const { data: categories } = useCategories();
@@ -106,7 +97,6 @@ function ProductsContent() {
     if (debouncedSearchQuery) params.set('search', debouncedSearchQuery);
     if (selectedCategory) params.set('category', selectedCategory);
     if (selectedBrand) params.set('brand', selectedBrand);
-    if (selectedType) params.set('productType', selectedType);
     if (sortBy) params.set('sortBy', sortBy);
     if (debouncedPriceRange.min) params.set('minPrice', debouncedPriceRange.min);
     if (debouncedPriceRange.max) params.set('maxPrice', debouncedPriceRange.max);
@@ -118,7 +108,7 @@ function ProductsContent() {
     if (currentUrl !== newUrl) {
       router.replace(newUrl, { scroll: false });
     }
-  }, [debouncedSearchQuery, selectedCategory, selectedBrand, selectedType, sortBy, debouncedPriceRange, router]);
+  }, [debouncedSearchQuery, selectedCategory, selectedBrand, sortBy, debouncedPriceRange, router]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -133,7 +123,6 @@ function ProductsContent() {
     setSearchQuery('');
     setSelectedCategory('');
     setSelectedBrand('');
-    setSelectedType('');
     setSortBy('created_at_desc');
     setPriceRange({ min: '', max: '' });
     router.push('/products');
@@ -143,7 +132,6 @@ function ProductsContent() {
     searchQuery,
     selectedCategory,
     selectedBrand,
-    selectedType,
     priceRange.min,
     priceRange.max
   ].filter(Boolean).length;
@@ -238,28 +226,6 @@ function ProductsContent() {
                   {brands?.map((brand) => (
                     <option key={brand._id} value={brand._id}>
                       {brand.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Product Type Filter */}
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {t('productType')}
-                </label>
-                <select
-                  value={selectedType}
-                  onChange={(e) => {
-                    setSelectedType(e.target.value);
-                    handleFilterChange();
-                  }}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">{t('allTypes')}</option>
-                  {Object.entries(PRODUCT_TYPE_LABELS).map(([key]) => (
-                    <option key={key} value={key}>
-                      {getProductTypeLabel(key)}
                     </option>
                   ))}
                 </select>
