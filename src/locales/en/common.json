@@ -83,7 +83,12 @@
       "gamesVideos": "Games & Videos",
       "homeAppliances": "Home Appliances",
       "healthSports": "Health & Sports",
-      "watches": "Watches"
+      "watches": "Watches",
+      "basicInfo": "Basic Information",
+      "image": "Category Image",
+      "categoryImage": "Category Image",
+      "noImage": "No image available",
+      "imageTip": "Upload a high-quality image (max 5MB). Recommended size: 400x400px or larger."
     },
     "newArrivals": {
       "title": "New Arrivals",

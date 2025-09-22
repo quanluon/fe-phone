@@ -83,7 +83,12 @@
       "gamesVideos": "Game & Video",
       "homeAppliances": "Thiết Bị Gia Dụng",
       "healthSports": "Sức Khỏe & Thể Thao",
-      "watches": "Đồng Hồ"
+      "watches": "Đồng Hồ",
+      "basicInfo": "Thông tin cơ bản",
+      "image": "Hình ảnh danh mục",
+      "categoryImage": "Hình ảnh danh mục",
+      "noImage": "Không có hình ảnh",
+      "imageTip": "Tải lên hình ảnh chất lượng cao (tối đa 5MB). Kích thước khuyến nghị: 400x400px hoặc lớn hơn."
     },
     "newArrivals": {
       "title": "Sản Phẩm Mới",
