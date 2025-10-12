@@ -3,8 +3,7 @@ import { Metadata } from 'next';
 import { ProductDetailClient } from './ProductDetailClient';
 import { CONTACT_INFO } from '@/lib/constants';
 import { Product } from '@/types';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+import { safeServerFetch, buildApiUrl } from '@/lib/utils/server-fetch';
 
 // Helper function to strip HTML tags from description
 function stripHtmlTags(html: string): string {
@@ -16,19 +15,31 @@ async function getProduct(identifier: string): Promise<Product | null> {
     // Extract _id from the identifier (format: _id-slug)
     const productId = identifier.split('-')[0];
     
-    const response = await fetch(`${API_URL}/api/products/${productId}`, {
-      next: { revalidate: 3600 }, // Revalidate every hour (ISR)
-      method: 'GET'
-    });
-    
-    if (!response.ok) {
+    if (!productId) {
+      console.warn('Invalid product identifier:', identifier);
       return null;
     }
     
-    const data = await response.json();
+    const apiUrl = buildApiUrl(`/api/products/${productId}`);
+    const { data, error } = await safeServerFetch<{ data: Product }>(apiUrl, {
+      timeout: 5000,
+      retries: 1,
+      next: { revalidate: 3600 }, // Revalidate every hour (ISR)
+    });
+    
+    if (error) {
+      console.error('Error fetching product:', error);
+      return null;
+    }
+    
+    if (!data || !data.data) {
+      console.warn('Invalid API response structure');
+      return null;
+    }
+    
     return data.data;
   } catch (error) {
-    console.error('Error fetching product:', error);
+    console.error('Unexpected error in getProduct:', error);
     return null;
   }
 }
@@ -83,19 +94,30 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 // Generate static params for ISR (Incremental Static Regeneration)
 export async function generateStaticParams() {
+  // Always return empty array to avoid build-time API calls
+  // This prevents build failures if API is not available during build
+  return [];
+  
+  /* 
+  // Uncomment this if you want to pre-generate pages at build time
+  // Only do this if your API is always available during build
   try {
-    // Fetch products from API
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+    
     const response = await fetch(`${API_URL}/api/products?limit=50`, {
-      next: { revalidate: 3600 } // Cache for 1 hour
+      next: { revalidate: 3600 },
+      signal: controller.signal,
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
     
+    clearTimeout(timeoutId);
+    
     if (!response.ok) {
-      // Fallback to common slugs if API fails
-      return [
-        { slug: 'iphone-15-pro-max' },
-        { slug: 'iphone-15-pro' },
-        { slug: 'macbook-pro-16' },
-      ];
+      console.warn(`API responded with status: ${response.status} during static params generation`);
+      return [];
     }
     
     const data = await response.json();
@@ -106,13 +128,9 @@ export async function generateStaticParams() {
     }));
   } catch (error) {
     console.error('Error generating static params:', error);
-    // Fallback to common slugs
-    return [
-      { slug: 'iphone-15-pro-max' },
-      { slug: 'iphone-15-pro' },
-      { slug: 'macbook-pro-16' },
-    ];
+    return [];
   }
+  */
 }
 
 // Enable ISR for better performance

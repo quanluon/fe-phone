@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next';
+import { safeServerFetch, buildApiUrl } from '@/lib/utils/server-fetch';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://yoursite.com';
 
 interface Product {
@@ -40,16 +40,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   try {
     // Fetch products for dynamic routes
-    const productsResponse = await fetch(`${API_URL}/api/products?limit=1000`, {
-      next: { revalidate: 3600 }, // Revalidate every hour
-    });
+    const { data: productsData, error: productsError } = await safeServerFetch<{ data: { products: Product[] } }>(
+      buildApiUrl('/api/products?limit=1000'),
+      {
+        timeout: 8000,
+        retries: 1,
+        next: { revalidate: 3600 },
+      }
+    );
 
     const productRoutes: MetadataRoute.Sitemap = [];
-    if (productsResponse.ok) {
-      const productsData = await productsResponse.json();
-      const products = productsData.data?.products || [];
-
-      products.forEach((product: Product) => {
+    if (!productsError && productsData?.data?.products) {
+      productsData.data.products.forEach((product: Product) => {
         productRoutes.push({
           url: `${BASE_URL}/products/${product._id}-${product.slug}`,
           lastModified: new Date(product.updatedAt),
@@ -60,16 +62,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
 
     // Fetch categories for dynamic routes
-    const categoriesResponse = await fetch(`${API_URL}/api/categories`, {
-      next: { revalidate: 3600 },
-    });
+    const { data: categoriesData, error: categoriesError } = await safeServerFetch<{ data: Category[] }>(
+      buildApiUrl('/api/categories'),
+      {
+        timeout: 8000,
+        retries: 1,
+        next: { revalidate: 3600 },
+      }
+    );
 
     const categoryRoutes: MetadataRoute.Sitemap = [];
-    if (categoriesResponse.ok) {
-      const categoriesData = await categoriesResponse.json();
-      const categories = categoriesData.data || [];
-
-      categories.forEach((category: Category) => {
+    if (!categoriesError && categoriesData?.data) {
+      categoriesData.data.forEach((category: Category) => {
         categoryRoutes.push({
           url: `${BASE_URL}/products?category=${category._id}`,
           lastModified: new Date(category.updatedAt),
