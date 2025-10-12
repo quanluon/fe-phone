@@ -17,14 +17,16 @@ export const LanguageSwitcher: React.FC = () => {
     // Update the UI store
     setLanguage(newLanguage);
     
+    // Set cookie for persistence
+    document.cookie = `NEXT_LOCALE=${newLanguage}; path=/; max-age=${60 * 60 * 24 * 365}`;
+    
     // Update URL with locale parameter to trigger middleware
     const currentUrl = new URL(window.location.href);
     currentUrl.searchParams.set('locale', newLanguage);
     
-    // Navigate to the new URL
-    router.push(currentUrl.pathname + currentUrl.search);
-    router.refresh()
-  }, [setLanguage, router]);
+    // Reload the page to apply language change
+    window.location.href = currentUrl.pathname + currentUrl.search;
+  }, [setLanguage]);
 
   return (
     <div className="relative">

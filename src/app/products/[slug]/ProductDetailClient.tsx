@@ -11,7 +11,9 @@ import {
   TruckIcon,
   ShieldCheckIcon,
   ArrowLeftIcon,
-  ExclamationTriangleIcon
+  ExclamationTriangleIcon,
+  PhoneIcon,
+  EnvelopeIcon
 } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartSolidIcon, StarIcon as StarSolidIcon } from '@heroicons/react/24/solid';
 import { Button } from '@/components/ui/Button';
@@ -24,6 +26,7 @@ import { useProduct } from '@/hooks/useProducts';
 import { formatCurrency, calculateDiscount, getImageUrl } from '@/lib/utils';
 import { getAttributeCategoryKey } from '@/lib/utils/attributeCategories';
 import { ProductVariant, Product, ProductAttribute } from '@/types';
+import { CONTACT_INFO } from '@/lib/constants';
 
 export function ProductDetailClient() {
   const params = useParams();
@@ -444,6 +447,29 @@ export function ProductDetailClient() {
               </Button>
             </div>
 
+            {/* Contact Support */}
+            <div className="pt-6 border-t">
+              <h3 className="text-sm font-semibold text-gray-900 mb-3">
+                {t('needHelp')}
+              </h3>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <a
+                  href={`tel:${CONTACT_INFO.phone}`}
+                  className="flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
+                >
+                  <PhoneIcon className="h-5 w-5" />
+                  {t('callUs')}
+                </a>
+                <a
+                  href={`mailto:${CONTACT_INFO.email}`}
+                  className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                >
+                  <EnvelopeIcon className="h-5 w-5" />
+                  {t('emailUs')}
+                </a>
+              </div>
+            </div>
+
             {/* Features */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 border-t">
               <div className="flex items-center gap-2">
@@ -487,9 +513,9 @@ export function ProductDetailClient() {
                 >
                   {t('specifications')}
                 </button>
-                <button className="py-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700">
+                {/* <button className="py-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700">
                   {t('reviews')} (124)
-                </button>
+                </button> */}
               </nav>
             </div>
             

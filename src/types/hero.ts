@@ -3,11 +3,11 @@ export interface HeroSlide {
   title: string;
   description: string;
   discount: string;
-  discountText: string;
+  discountText?: string;
   buttonText: string;
   buttonLink: string;
-  image: string;
-  imageAlt: string;
+  image?: string;
+  imageAlt?: string;
   backgroundColor: string;
   textColor: string;
 }

@@ -82,16 +82,18 @@ export const HeroSection: React.FC = () => {
               </button>
 
               <div className="flex flex-col lg:flex-row items-center min-h-[400px] lg:min-h-[500px]">
-                <div className="p-12 text-center lg:text-left">
-                  <div className="flex items-end gap-2 mb-3 sm:mb-4">
+                <div className={`p-12 text-center ${currentSlideData.image ? 'lg:text-left' : ''}`}>
+                  <div className="flex items-end gap-2 mb-3 sm:mb-4 justify-center lg:justify-start">
                     <div
                       className={`text-7xl font-bold ${currentSlideData.textColor}`}
                     >
                       {currentSlideData.discount}
                     </div>
-                    <div className="text-lg font-semibold text-red-600">
-                      {currentSlideData.discountText}
-                    </div>
+                    {currentSlideData.discountText && (
+                      <div className="text-lg font-semibold text-red-600">
+                        {currentSlideData.discountText}
+                      </div>
+                    )}
                   </div>
                   <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-900 mb-2 sm:mb-4">
                     {currentSlideData.title}
@@ -100,8 +102,8 @@ export const HeroSection: React.FC = () => {
                   <p className="hidden sm:block text-lg text-gray-600 mb-4 sm:mb-6 lg:mb-8">
                     {currentSlideData.description}
                   </p>
-                  {/* Hide button on mobile (will show below image) */}
-                  <div className="hidden sm:block">
+                  {/* Hide button on mobile (will show below image) when image exists */}
+                  <div className={currentSlideData.image ? "hidden sm:block" : "block"}>
                     <Link href={currentSlideData.buttonLink}>
                       <Button
                         size="lg"
@@ -112,27 +114,31 @@ export const HeroSection: React.FC = () => {
                     </Link>
                   </div>
                 </div>
-                <div className="relative h-80 sm:h-72 md:h-80 lg:h-80 xl:h-96 w-full p-4">
-                  <NextImage
-                    src={currentSlideData.image}
-                    alt={currentSlideData.imageAlt}
-                    fill
-                    className="object-contain drop-shadow-lg"
-                    priority={currentSlide === 0}
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 66vw"
-                  />
-                </div>
-                {/* Show button below image on mobile */}
-                <div className="sm:hidden w-full px-6 pb-6 mt-4">
-                  <Link href={currentSlideData.buttonLink}>
-                    <Button
-                      size="lg"
-                      className="bg-blue-600 hover:bg-blue-700 w-full px-8 py-3 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all"
-                    >
-                      {currentSlideData.buttonText}
-                    </Button>
-                  </Link>
-                </div>
+                {currentSlideData.image && (
+                  <>
+                    <div className="relative h-80 sm:h-72 md:h-80 lg:h-80 xl:h-96 w-full p-4">
+                      <NextImage
+                        src={currentSlideData.image}
+                        alt={currentSlideData.imageAlt || currentSlideData.title}
+                        fill
+                        className="object-contain drop-shadow-lg"
+                        priority={currentSlide === 0}
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 66vw"
+                      />
+                    </div>
+                    {/* Show button below image on mobile */}
+                    <div className="sm:hidden w-full px-6 pb-6 mt-4">
+                      <Link href={currentSlideData.buttonLink}>
+                        <Button
+                          size="lg"
+                          className="bg-blue-600 hover:bg-blue-700 w-full px-8 py-3 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all"
+                        >
+                          {currentSlideData.buttonText}
+                        </Button>
+                      </Link>
+                    </div>
+                  </>
+                )}
               </div>
 
               {/* Carousel Dots */}

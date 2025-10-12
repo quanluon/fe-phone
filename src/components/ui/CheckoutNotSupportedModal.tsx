@@ -103,13 +103,13 @@ export const CheckoutNotSupportedModal: React.FC<CheckoutNotSupportedModalProps>
               </div>
             </div>
 
-            <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+            {/* <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
               <MapPinIcon className="h-5 w-5 text-blue-600 flex-shrink-0" />
               <div>
                 <p className="text-sm font-medium text-gray-900">{t('checkout.contact.address')}</p>
                 <p className="text-sm text-gray-600">{CONTACT_INFO.address}</p>
               </div>
-            </div>
+            </div> */}
 
             <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
               <ClockIcon className="h-5 w-5 text-blue-600 flex-shrink-0" />

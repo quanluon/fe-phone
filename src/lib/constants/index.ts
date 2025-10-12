@@ -259,8 +259,8 @@ export const SOCIAL_LINKS ={}
 export const CONTACT_INFO = {
   name: 'NC Mobile',
   title: 'NC Mobile - Apple Products & Accessories',
-  email: 'ncmobile@support.com',
-  phone: '+1 (555) 123-4567',
-  address: '123 Commerce Street, Business City, BC 12345',
-  hours: 'Mon-Fri: 9AM-6PM, Sat-Sun: 10AM-4PM',
+  email: 'anhcong160496@gmail.com',
+  phone: '(+84) 0963761702',
+  // address: '123 Commerce Street, Business City, BC 12345',
+  hours: '24/7',
 };

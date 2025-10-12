@@ -1,4 +1,18 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from 'next-intl/plugin';
+
+const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
+
+const httpsHostnames = [
+  'store.storeimages.cdn-apple.com',
+  'example.com',
+  'adjxk71gc3.execute-api.ap-southeast-1.amazonaws.com',
+  'cdn2.cellphones.com.vn',
+  'mac-center.com.pe',
+  'cong-phone-dev.s3.ap-southeast-1.amazonaws.com',
+  'd10gwy2ckxccqn.cloudfront.net',
+  'pngimg.com'
+]
 
 const nextConfig: NextConfig = {
   // Optimize for production
@@ -11,7 +25,20 @@ const nextConfig: NextConfig = {
   
   // Image optimization (Vercel handles this automatically)
   images: {
-    domains: ['localhost', 'your-api-domain.com'], // Add your API domain here
+    remotePatterns: [
+      ...httpsHostnames.map((hostname) => ({
+        protocol: 'https' as const,
+        hostname,
+      })),
+      ...httpsHostnames.map((hostname) => ({
+        protocol: 'http' as const,
+        hostname,
+      })),
+      {
+        protocol: 'http' as const,
+        hostname: 'localhost',
+      },
+    ],
   },
   
   // Enable experimental features if needed
@@ -41,4 +68,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withNextIntl(nextConfig);

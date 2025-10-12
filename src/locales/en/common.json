@@ -147,7 +147,10 @@
       "warranty": "2 Year Warranty",
       "returns": "30 Day Returns",
       "rating": "rating",
-      "reviewsCount": "reviews"
+      "reviewsCount": "reviews",
+      "needHelp": "Need help?",
+      "callUs": "Call Us",
+      "emailUs": "Email Us"
     }
   },
   "products": {

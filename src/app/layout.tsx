@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
+import { getMessages, getLocale } from 'next-intl/server';
 import './globals.css';
 import { Providers } from './providers';
 import { CONTACT_INFO } from '@/lib/constants';
+import { LocaleInitializer } from '@/components/common/LocaleInitializer';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -65,11 +66,13 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const messages = await getMessages();
+  const locale = await getLocale();
 
   return (
-    <html lang="vi" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <body className={inter.className}>
         <NextIntlClientProvider messages={messages}>
+          <LocaleInitializer locale={locale as 'vi' | 'en'} />
           <Providers>
             {children}
           </Providers>

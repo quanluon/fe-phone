@@ -54,9 +54,25 @@ export const Footer: React.FC = () => {
             
             {/* Contact Info */}
             <div className="space-y-1 sm:space-y-2 text-xs sm:text-sm text-gray-300">
-              <p>📧 {CONTACT_INFO.email}</p>
-              <p>📞 {CONTACT_INFO.phone}</p>
-              <p>📍 {CONTACT_INFO.address}</p>
+              <p>
+                📧{' '}
+                <a
+                  href={`mailto:${CONTACT_INFO.email}`}
+                  className="hover:text-blue-400 transition-colors underline"
+                >
+                  {CONTACT_INFO.email}
+                </a>
+              </p>
+              <p>
+                📞{' '}
+                <a
+                  href={`tel:${CONTACT_INFO.phone}`}
+                  className="hover:text-blue-400 transition-colors underline"
+                >
+                  {CONTACT_INFO.phone}
+                </a>
+              </p>
+              {/* <p>📍 {CONTACT_INFO.address}</p> */}
               <p>🕒 {CONTACT_INFO.hours}</p>
             </div>
 
@@ -115,7 +131,7 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Newsletter Signup */}
-        <div className="border-t border-gray-800 mt-8 sm:mt-10 lg:mt-12 pt-6 sm:pt-8">
+        {/* <div className="border-t border-gray-800 mt-8 sm:mt-10 lg:mt-12 pt-6 sm:pt-8">
           <div className="max-w-md mx-auto text-center">
             <h3 className="text-base sm:text-lg font-semibold mb-2">{t('stayUpdated')}</h3>
             <p className="text-sm sm:text-base text-gray-300 mb-4">
@@ -132,7 +148,7 @@ export const Footer: React.FC = () => {
               </button>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 mt-6 sm:mt-8 pt-6 sm:pt-8">

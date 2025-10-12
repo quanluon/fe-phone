@@ -4,8 +4,7 @@
       "id": 1,
       "title": "Tai Nghe Chống Ồn Không Dây Thật",
       "description": "Trải nghiệm âm thanh tuyệt vời với công nghệ chống ồn tiên tiến và chất lượng âm thanh cao cấp.",
-      "discount": "30%",
-      "discountText": "SALE OFF",
+      "discount": "Nhiều ưu đãi hấp dẫn",
       "buttonText": "Mua Ngay",
       "buttonLink": "/products?productType=airpods",
       "image": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/airpods-pro-3-hero-select-202509_FMT_WHH?wid=752&hei=636&fmt=jpeg&qlt=90&.v=1754965266122",
@@ -15,15 +14,15 @@
     },
     {
       "id": 2,
-      "title": "iPhone 16 Pro & 16 Pro Max",
+      "title": "iPhone 17 Pro & 17 Pro Max",
       "description": "Điện thoại thông minh mới nhất với camera chuyên nghiệp và hiệu năng vượt trội.",
       "discount": "20%",
-      "discountText": "SALE OFF",
       "buttonText": "Khám Phá",
       "buttonLink": "/products?productType=iphone",
-      "image": "https://pngimg.com/uploads/iphone16/iphone16_PNG13.png",
-      "imageAlt": "iPhone 16 Pro",
+      "image": "https://cdn2.cellphones.com.vn/358x/media/catalog/product/i/p/iphone_17_pro_512gb_1.jpg",
+      "imageAlt": "iPhone 17 Pro",
       "backgroundColor": "from-gray-50 to-blue-50",
+      "discountText": "SALE OFF",
       "textColor": "text-gray-800"
     },
     {
@@ -43,12 +42,12 @@
   "sidePromotions": [
     {
       "id": 1,
-      "title": "iPhone 16 Pro & 16 Pro Max",
-      "subtitle": "LIMITED TIME OFFER",
-      "currentPrice": 32000000,
-      "originalPrice": 40000000,
-      "image": "https://pngimg.com/uploads/iphone16/iphone16_PNG13.png",
-      "imageAlt": "iPhone 16 Pro",
+      "title": "iPhone 17 Pro & 17 Pro Max",
+      "subtitle": "Thời gian giới hạn",
+      "currentPrice": 37490000,
+      "originalPrice": 45000000,
+      "image": "https://cdn2.cellphones.com.vn/358x/media/catalog/product/i/p/iphone_17_pro_512gb_1.jpg",
+      "imageAlt": "iPhone 17 Pro",
       "link": "/products?productType=iphone"
     },
     {
