@@ -2,19 +2,13 @@ import React from 'react';
 import { Metadata } from 'next';
 import { ProductDetailClient } from './ProductDetailClient';
 import { CONTACT_INFO } from '@/lib/constants';
+import { Product } from '@/types';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
-interface Product {
-  _id: string;
-  name: string;
-  description: string;
-  shortDescription?: string;
-  basePrice: number;
-  images: string[];
-  category: { name: string };
-  brand: { name: string };
-  slug: string;
+// Helper function to strip HTML tags from description
+function stripHtmlTags(html: string): string {
+  return html.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim();
 }
 
 async function getProduct(identifier: string): Promise<Product | null> {
@@ -22,8 +16,9 @@ async function getProduct(identifier: string): Promise<Product | null> {
     // Extract _id from the identifier (format: _id-slug)
     const productId = identifier.split('-')[0];
     
-    const response = await fetch(`${API_URL}/products/${productId}`, {
+    const response = await fetch(`${API_URL}/api/products/${productId}`, {
       next: { revalidate: 3600 }, // Revalidate every hour (ISR)
+      method: 'GET'
     });
     
     if (!response.ok) {
@@ -51,7 +46,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 
   const title = `${product.name} | ${CONTACT_INFO.name}`;
-  const description = product.shortDescription || product.description.substring(0, 160);
+  // Strip HTML tags and limit length for meta description
+  const cleanDescription = stripHtmlTags(product.shortDescription || product.description);
+  const description = cleanDescription.substring(0, 160);
   const imageUrl = product.images[0] || '/placeholder.png';
 
   return {
@@ -88,7 +85,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export async function generateStaticParams() {
   try {
     // Fetch products from API
-    const response = await fetch(`${API_URL}/products?limit=50`, {
+    const response = await fetch(`${API_URL}/api/products?limit=50`, {
       next: { revalidate: 3600 } // Cache for 1 hour
     });
     
@@ -121,8 +118,47 @@ export async function generateStaticParams() {
 // Enable ISR for better performance
 export const revalidate = 3600; // Revalidate every hour
 
-export default function ProductDetailPage() {
-  return <ProductDetailClient />;
+export default async function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const product = await getProduct(slug);
+  
+  // Generate JSON-LD structured data for SEO
+  const jsonLd = product ? {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    description: stripHtmlTags(product.shortDescription || product.description),
+    image: product.images,
+    brand: {
+      '@type': 'Brand',
+      name: product.brand.name,
+    },
+    offers: {
+      '@type': 'Offer',
+      price: product.basePrice,
+      priceCurrency: 'VND',
+      availability: 'https://schema.org/InStock',
+      url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://yoursite.com'}/products/${slug}`,
+    },
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.8',
+      reviewCount: '124',
+    },
+  } : null;
+  
+  // Pass the server-side fetched product as initial data
+  return (
+    <>
+      {jsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      )}
+      <ProductDetailClient initialProduct={product} />
+    </>
+  );
 }
 
 

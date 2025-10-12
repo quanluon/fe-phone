@@ -28,7 +28,11 @@ import { getAttributeCategoryKey } from '@/lib/utils/attributeCategories';
 import { ProductVariant, Product, ProductAttribute } from '@/types';
 import { CONTACT_INFO } from '@/lib/constants';
 
-export function ProductDetailClient() {
+interface ProductDetailClientProps {
+  initialProduct: Product | null;
+}
+
+export function ProductDetailClient({ initialProduct }: ProductDetailClientProps) {
   const params = useParams();
   const router = useRouter();
   const t = useTranslations('product.detail');
@@ -41,11 +45,11 @@ export function ProductDetailClient() {
   // Extract _id from the identifier (format: _id-slug)
   const productId = identifier.split('-')[0];
   
-  // Fetch product data using only the _id
-  const { data: product, isLoading: productLoading, error: productError } = useProduct(productId);
+  // Fetch product data using only the _id, but use initialProduct as fallback
+  const { data: product, isLoading: productLoading } = useProduct(productId);
   
-  // Type assertion to fix TypeScript issues
-  const productData = product as Product;
+  // Use server-side fetched data initially, then client-side data when available
+  const productData = (product as Product) || initialProduct;
   
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -139,8 +143,8 @@ export function ProductDetailClient() {
     }
   };
 
-  // Loading state
-  if (productLoading) {
+  // Loading state - only show if we don't have initial data
+  if (productLoading && !productData) {
     return (
       <div className="min-h-screen bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -169,8 +173,8 @@ export function ProductDetailClient() {
     );
   }
 
-  // Error state
-  if (productError || !productData) {
+  // Error state - only show if we have no data at all
+  if (!productData) {
     return (
       <div className="min-h-screen bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
