@@ -65,7 +65,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     return {
       title,
       description,
-      keywords: `${product.name}, ${product.brand.name}, ${product.category.name}, Apple products, buy online`,
+      keywords: `${product.name}, ${product.brand.name}, ${product.category.name}, Apple products, buy online, iPhone, iPad, MacBook, mua online, điện thoại Apple`,
       openGraph: {
         title,
         description,
@@ -79,12 +79,59 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         ],
         type: 'website',
         siteName: CONTACT_INFO.name,
+        url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://yoursite.com'}/products/${slug}`,
+        locale: 'vi_VN',
+        countryName: 'Vietnam',
       },
       twitter: {
         card: 'summary_large_image',
         title,
         description,
         images: [imageUrl],
+        creator: '@ncmobile',
+        site: '@ncmobile',
+      },
+      // Additional meta tags for Vietnamese social platforms
+      other: {
+        // Zalo sharing
+        'zalo:title': title,
+        'zalo:description': description,
+        'zalo:image': imageUrl,
+        
+        // Facebook Messenger
+        'fb:app_id': process.env.NEXT_PUBLIC_FACEBOOK_APP_ID || '',
+        
+        // WhatsApp sharing
+        'whatsapp:title': title,
+        'whatsapp:description': description,
+        'whatsapp:image': imageUrl,
+        
+        // Viber sharing
+        'viber:title': title,
+        'viber:description': description,
+        'viber:image': imageUrl,
+        
+        // Telegram sharing
+        'telegram:title': title,
+        'telegram:description': description,
+        'telegram:image': imageUrl,
+        
+        // Vietnamese SEO
+        'geo.region': 'VN',
+        'geo.placename': 'Vietnam',
+        'geo.position': '16.0583;108.2772',
+        'ICBM': '16.0583, 108.2772',
+        
+        // Additional social tags
+        'article:author': CONTACT_INFO.name,
+        'article:section': 'Technology',
+        'article:tag': `${product.brand.name}, ${product.category.name}`,
+        'product:brand': product.brand.name,
+        'product:category': product.category.name,
+        'product:price:amount': product.basePrice.toString(),
+        'product:price:currency': 'VND',
+        'product:availability': 'in stock',
+        'product:condition': 'new',
       },
       alternates: {
         canonical: `/products/${slug}`,

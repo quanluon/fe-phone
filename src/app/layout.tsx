@@ -11,8 +11,8 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: CONTACT_INFO.title,
-  description: 'Your trusted destination for the latest Apple products and accessories. We offer competitive prices, fast shipping, and exceptional customer service.',
-  keywords: 'Apple, iPhone, iPad, MacBook, Apple Watch, AirPods, electronics, technology',
+  description: 'Điểm đến tin cậy cho các sản phẩm Apple và phụ kiện mới nhất. Giá cả cạnh tranh, giao hàng nhanh chóng và dịch vụ khách hàng xuất sắc. Mua iPhone, iPad, MacBook, Apple Watch, AirPods chính hãng tại NC Mobile.',
+  keywords: 'Apple, iPhone, iPad, MacBook, Apple Watch, AirPods, điện thoại Apple, máy tính Apple, phụ kiện Apple, mua online, NC Mobile, chính hãng, giá rẻ',
   authors: [{ name: CONTACT_INFO.name }],
   creator: CONTACT_INFO.name,
   publisher: CONTACT_INFO.name,
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
   openGraph: {
     title: CONTACT_INFO.title,
-    description: 'Your trusted destination for the latest Apple products and accessories.',
+    description: 'Điểm đến tin cậy cho các sản phẩm Apple và phụ kiện mới nhất. Giá cả cạnh tranh, giao hàng nhanh chóng.',
     url: '/',
     siteName: CONTACT_INFO.name,
     images: [
@@ -37,12 +37,15 @@ export const metadata: Metadata = {
     ],
     locale: 'vi_VN',
     type: 'website',
+    countryName: 'Vietnam',
   },
   twitter: {
     card: 'summary_large_image',
     title: CONTACT_INFO.title,
-    description: 'Your trusted destination for the latest Apple products and accessories.',
+    description: 'Điểm đến tin cậy cho các sản phẩm Apple và phụ kiện mới nhất.',
     images: ['/og-image.jpg'],
+    creator: '@ncmobile',
+    site: '@ncmobile',
   },
   robots: {
     index: true,
@@ -57,6 +60,48 @@ export const metadata: Metadata = {
   },
   verification: {
     google: 'your-google-verification-code',
+  },
+  // Additional meta tags for Vietnamese social platforms
+  other: {
+    // Zalo sharing
+    'zalo:title': CONTACT_INFO.title,
+    'zalo:description': 'Điểm đến tin cậy cho các sản phẩm Apple và phụ kiện mới nhất. Mua iPhone, iPad, MacBook chính hãng.',
+    'zalo:image': '/og-image.jpg',
+    
+    // Facebook Messenger
+    'fb:app_id': process.env.NEXT_PUBLIC_FACEBOOK_APP_ID || '',
+    
+    // WhatsApp sharing
+    'whatsapp:title': CONTACT_INFO.title,
+    'whatsapp:description': 'Điểm đến tin cậy cho các sản phẩm Apple và phụ kiện mới nhất.',
+    'whatsapp:image': '/og-image.jpg',
+    
+    // Viber sharing
+    'viber:title': CONTACT_INFO.title,
+    'viber:description': 'Điểm đến tin cậy cho các sản phẩm Apple và phụ kiện mới nhất.',
+    'viber:image': '/og-image.jpg',
+    
+    // Telegram sharing
+    'telegram:title': CONTACT_INFO.title,
+    'telegram:description': 'Điểm đến tin cậy cho các sản phẩm Apple và phụ kiện mới nhất.',
+    'telegram:image': '/og-image.jpg',
+    
+    // Vietnamese SEO
+    'geo.region': 'VN',
+    'geo.placename': 'Vietnam',
+    'geo.position': '16.0583;108.2772',
+    'ICBM': '16.0583, 108.2772',
+    
+    // Business information
+    'business:contact_data:phone_number': CONTACT_INFO.phone,
+    'business:contact_data:email': CONTACT_INFO.email,
+    'business:contact_data:website': process.env.NEXT_PUBLIC_APP_URL || '',
+    
+    // Mobile app tags
+    'mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-status-bar-style': 'default',
+    'apple-mobile-web-app-title': CONTACT_INFO.name,
   },
 };
 
