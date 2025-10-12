@@ -33,6 +33,7 @@ export const metadata: Metadata = {
         width: 1200,
         height: 630,
         alt: CONTACT_INFO.name,
+        type: 'image/jpeg',
       },
     ],
     locale: 'vi_VN',
@@ -43,7 +44,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: CONTACT_INFO.title,
     description: 'Điểm đến tin cậy cho các sản phẩm Apple và phụ kiện mới nhất.',
-    images: ['/og-image.jpg'],
+    images: {
+      url: '/og-image.jpg',
+      alt: CONTACT_INFO.name,
+    },
     creator: '@ncmobile',
     site: '@ncmobile',
   },
@@ -63,6 +67,20 @@ export const metadata: Metadata = {
   },
   // Additional meta tags for Vietnamese social platforms
   other: {
+    // Enhanced Open Graph tags
+    'og:title': CONTACT_INFO.title,
+    'og:description': 'Điểm đến tin cậy cho các sản phẩm Apple và phụ kiện mới nhất. Giá cả cạnh tranh, giao hàng nhanh chóng.',
+    'og:image': '/og-image.jpg',
+    'og:image:width': '1200',
+    'og:image:height': '630',
+    'og:image:type': 'image/jpeg',
+    'og:image:alt': CONTACT_INFO.name,
+    'og:url': process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+    'og:type': 'website',
+    'og:site_name': CONTACT_INFO.name,
+    'og:locale': 'vi_VN',
+    'og:country-name': 'Vietnam',
+    
     // Zalo sharing
     'zalo:title': CONTACT_INFO.title,
     'zalo:description': 'Điểm đến tin cậy cho các sản phẩm Apple và phụ kiện mới nhất. Mua iPhone, iPad, MacBook chính hãng.',
@@ -102,6 +120,11 @@ export const metadata: Metadata = {
     'apple-mobile-web-app-capable': 'yes',
     'apple-mobile-web-app-status-bar-style': 'default',
     'apple-mobile-web-app-title': CONTACT_INFO.name,
+    
+    // Additional meta tags
+    'theme-color': '#1f2937',
+    'msapplication-TileColor': '#1f2937',
+    'msapplication-TileImage': '/og-image.jpg',
   },
 };
 

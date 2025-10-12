@@ -75,7 +75,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
             width: 1200,
             height: 630,
             alt: product.name,
+            type: 'image/jpeg',
           },
+          ...product.images.slice(1, 4).map((img: string, index: number) => ({
+            url: img,
+            width: 1200,
+            height: 630,
+            alt: `${product.name} - Hình ${index + 2}`,
+            type: 'image/jpeg',
+          })),
         ],
         type: 'website',
         siteName: CONTACT_INFO.name,
@@ -87,12 +95,38 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         card: 'summary_large_image',
         title,
         description,
-        images: [imageUrl],
+        images: {
+          url: imageUrl,
+          alt: product.name,
+        },
         creator: '@ncmobile',
         site: '@ncmobile',
       },
       // Additional meta tags for Vietnamese social platforms
       other: {
+        // Enhanced Open Graph tags
+        'og:title': title,
+        'og:description': description,
+        'og:image': imageUrl,
+        'og:image:width': '1200',
+        'og:image:height': '630',
+        'og:image:type': 'image/jpeg',
+        'og:image:alt': product.name,
+        'og:url': `${process.env.NEXT_PUBLIC_APP_URL || 'https://yoursite.com'}/products/${slug}`,
+        'og:type': 'website',
+        'og:site_name': CONTACT_INFO.name,
+        'og:locale': 'vi_VN',
+        'og:country-name': 'Vietnam',
+        
+        // Product-specific Open Graph
+        'product:brand': product.brand.name,
+        'product:category': product.category.name,
+        'product:price:amount': product.basePrice.toString(),
+        'product:price:currency': 'VND',
+        'product:availability': 'in stock',
+        'product:condition': 'new',
+        'product:retailer': CONTACT_INFO.name,
+        
         // Zalo sharing
         'zalo:title': title,
         'zalo:description': description,
@@ -122,16 +156,24 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         'geo.position': '16.0583;108.2772',
         'ICBM': '16.0583, 108.2772',
         
-        // Additional social tags
+        // Article tags
         'article:author': CONTACT_INFO.name,
         'article:section': 'Technology',
         'article:tag': `${product.brand.name}, ${product.category.name}`,
-        'product:brand': product.brand.name,
-        'product:category': product.category.name,
-        'product:price:amount': product.basePrice.toString(),
-        'product:price:currency': 'VND',
-        'product:availability': 'in stock',
-        'product:condition': 'new',
+        'article:published_time': new Date().toISOString(),
+        'article:modified_time': new Date().toISOString(),
+        
+        // Mobile app tags
+        'al:ios:app_name': 'NC Mobile',
+        'al:ios:app_store_id': 'ncmobile://product/' + slug,
+        'al:android:app_name': 'NC Mobile',
+        'al:android:package': 'com.ncmobile.app',
+        'al:android:url': 'ncmobile://product/' + slug,
+        
+        // Additional meta tags
+        'theme-color': '#1f2937',
+        'msapplication-TileColor': '#1f2937',
+        'msapplication-TileImage': imageUrl,
       },
       alternates: {
         canonical: `/products/${slug}`,
