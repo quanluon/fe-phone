@@ -23,7 +23,7 @@ async function getProduct(identifier: string): Promise<Product | null> {
     const productId = identifier.split('-')[0];
     
     const response = await fetch(`${API_URL}/products/${productId}`, {
-      cache: 'no-store', // Always fetch fresh data for metadata
+      next: { revalidate: 3600 }, // Revalidate every hour (ISR)
     });
     
     if (!response.ok) {
