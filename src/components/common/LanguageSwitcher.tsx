@@ -3,12 +3,10 @@
 import { LANGUAGE_OPTIONS } from '@/lib/constants';
 import { useUIStore } from '@/stores/ui';
 import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
 import React, { useCallback } from 'react';
 
 export const LanguageSwitcher: React.FC = () => {
   const { language, setLanguage } = useUIStore();
-  const router = useRouter();
   const t = useTranslations('header');
 
   const handleLanguageChange = useCallback((newLocale: string) => {

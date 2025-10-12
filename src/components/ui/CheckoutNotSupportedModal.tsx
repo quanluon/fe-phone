@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import { useTranslations } from 'next-intl';
-import { XMarkIcon, PhoneIcon, EnvelopeIcon, MapPinIcon, ClockIcon } from '@heroicons/react/24/outline';
 import { CONTACT_INFO } from '@/lib/constants';
+import { ClockIcon, EnvelopeIcon, PhoneIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { useTranslations } from 'next-intl';
+import React, { useEffect } from 'react';
 import { Button } from './Button';
 
 interface CheckoutNotSupportedModalProps {

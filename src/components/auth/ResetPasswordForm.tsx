@@ -15,7 +15,7 @@ interface ResetPasswordFormProps {
   onSwitchToLogin: () => void;
 }
 
-export function ResetPasswordForm({ token, onSuccess, onSwitchToLogin }: ResetPasswordFormProps) {
+export function ResetPasswordForm({ onSuccess }: ResetPasswordFormProps) {
   const t = useTranslations('auth');
   const { mutateAsync: resetPassword, isPending } = useResetPassword();
   const { addToast } = useToastStore();
