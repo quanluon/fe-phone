@@ -18,7 +18,7 @@
       "description": "Điện thoại thông minh mới nhất với camera chuyên nghiệp và hiệu năng vượt trội.",
       "discount": "20%",
       "buttonText": "Khám Phá",
-      "buttonLink": "/products?productType=iphone",
+      "buttonLink": "/products/68ebb7c483f3ef8f773fe2f5-ip-17",
       "image": "https://cdn2.cellphones.com.vn/358x/media/catalog/product/i/p/iphone_17_pro_512gb_1.jpg",
       "imageAlt": "iPhone 17 Pro",
       "backgroundColor": "from-gray-50 to-blue-50",
@@ -48,7 +48,7 @@
       "originalPrice": 45000000,
       "image": "https://cdn2.cellphones.com.vn/358x/media/catalog/product/i/p/iphone_17_pro_512gb_1.jpg",
       "imageAlt": "iPhone 17 Pro",
-      "link": "/products?productType=iphone"
+      "link": "/products/68ebb7c483f3ef8f773fe2f5-ip-17"
     },
     {
       "id": 2,
