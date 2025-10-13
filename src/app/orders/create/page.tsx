@@ -11,6 +11,7 @@ import { useAuthStore } from "@/stores/auth";
 import { useCartStore } from "@/stores/cart";
 import { useToastStore } from "@/stores/toast";
 import { ApiErrorResponse, CreateOrderRequest } from "@/types";
+import { PAYMENT_METHODS } from "@/lib/constants";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -190,12 +191,10 @@ export default function CreateOrderPage() {
   };
 
   // Payment methods for the form
-  const paymentMethods = [
-    { value: "cash", label: t("payment.methods.cash") },
-    { value: "bank_transfer", label: t("payment.methods.bank_transfer") },
-    { value: "momo", label: t("payment.methods.momo") },
-    { value: "zalopay", label: t("payment.methods.zalopay") },
-  ];
+  const paymentMethods = PAYMENT_METHODS.map(method => ({
+    value: method.value,
+    label: t(method.label)
+  }));
 
   const handleNext = () => {
     if (step === 1 && validateStep1()) {

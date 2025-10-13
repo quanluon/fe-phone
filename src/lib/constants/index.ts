@@ -257,3 +257,52 @@ export const CONTACT_INFO = {
   // address: '123 Commerce Street, Business City, BC 12345',
   hours: '24/7',
 };
+
+// Order-related constants
+export enum PaymentMethod {
+  CASH = 'cash',
+  BANK_TRANSFER = 'bank_transfer',
+  CREDIT_CARD = 'credit_card',
+  MOMO = 'momo',
+  ZALOPAY = 'zalopay'
+}
+
+export enum OrderStatus {
+  PENDING = 'pending',
+  CONFIRMED = 'confirmed',
+  PROCESSING = 'processing',
+  SHIPPED = 'shipped',
+  DELIVERED = 'delivered',
+  CANCELLED = 'cancelled'
+}
+
+export enum PaymentStatus {
+  PENDING = 'pending',
+  PAID = 'paid',
+  FAILED = 'failed',
+  REFUNDED = 'refunded'
+}
+
+export const PAYMENT_METHODS = [
+  { value: PaymentMethod.CASH, label: 'payment.methods.cash' },
+  { value: PaymentMethod.BANK_TRANSFER, label: 'payment.methods.bank_transfer' },
+  { value: PaymentMethod.CREDIT_CARD, label: 'payment.methods.credit_card' },
+  { value: PaymentMethod.MOMO, label: 'payment.methods.momo' },
+  { value: PaymentMethod.ZALOPAY, label: 'payment.methods.zalopay' },
+] as const;
+
+export const ORDER_STATUSES = [
+  { value: OrderStatus.PENDING, label: 'orders.status.pending', color: 'orange' },
+  { value: OrderStatus.CONFIRMED, label: 'orders.status.confirmed', color: 'blue' },
+  { value: OrderStatus.PROCESSING, label: 'orders.status.processing', color: 'purple' },
+  { value: OrderStatus.SHIPPED, label: 'orders.status.shipped', color: 'cyan' },
+  { value: OrderStatus.DELIVERED, label: 'orders.status.delivered', color: 'green' },
+  { value: OrderStatus.CANCELLED, label: 'orders.status.cancelled', color: 'red' },
+] as const;
+
+export const PAYMENT_STATUSES = [
+  { value: PaymentStatus.PENDING, label: 'orders.paymentStatus.pending', color: 'orange' },
+  { value: PaymentStatus.PAID, label: 'orders.paymentStatus.paid', color: 'green' },
+  { value: PaymentStatus.FAILED, label: 'orders.paymentStatus.failed', color: 'red' },
+  { value: PaymentStatus.REFUNDED, label: 'orders.paymentStatus.refunded', color: 'blue' },
+] as const;
