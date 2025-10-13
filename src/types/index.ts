@@ -372,8 +372,6 @@ export interface CreateOrderRequest {
     quantity: number;
   }>;
   shippingAddress?: {
-    fullName: string;
-    phone: string;
     address: string;
     city: string;
     district: string;

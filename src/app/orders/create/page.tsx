@@ -25,8 +25,6 @@ interface CustomerFormData {
 }
 
 interface ShippingFormData {
-  fullName: string;
-  phone: string;
   address: string;
   city: string;
   district: string;
@@ -48,8 +46,6 @@ const initialFormData: OrderFormData = {
     phone: "",
   },
   shippingAddress: {
-    fullName: "",
-    phone: "",
     address: "",
     city: "",
     district: "",
@@ -339,32 +335,6 @@ export default function CreateOrderPage() {
                     {t("shippingAddress.description")}
                   </p>
                   <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        {t("shippingAddress.fullName")}
-                      </label>
-                      <Input
-                        value={formData.shippingAddress.fullName}
-                        onChange={(e) =>
-                          handleShippingInputChange("fullName", e.target.value)
-                        }
-                        placeholder={t("shippingAddress.fullNamePlaceholder")}
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        {t("shippingAddress.phone")}
-                      </label>
-                      <Input
-                        value={formData.shippingAddress.phone}
-                        onChange={(e) =>
-                          handleShippingInputChange("phone", e.target.value)
-                        }
-                        placeholder={t("shippingAddress.phonePlaceholder")}
-                      />
-                    </div>
-
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         {t("shippingAddress.address")}
