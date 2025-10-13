@@ -190,7 +190,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         )}
 
         {/* Price */}
-        <div className="flex items-center gap-2 mb-2 sm:mb-3">
+        <div className="flex items-center gap-2 mb-2 sm:mb-3 sm:flex-col sm:items-start">
           <span className="text-base sm:text-lg font-semibold text-gray-900">
             {formatCurrency(selectedVariant.price, currency)}
           </span>
