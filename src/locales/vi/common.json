@@ -625,6 +625,7 @@
       },
       "shippingAddress": {
         "title": "Địa chỉ giao hàng",
+        "description": "Tất cả các trường địa chỉ giao hàng đều tùy chọn",
         "fullName": "Họ và tên người nhận",
         "fullNamePlaceholder": "Nhập họ và tên người nhận",
         "phone": "Số điện thoại người nhận",

@@ -252,7 +252,8 @@ export const CONTACT_INFO = {
   name: 'NC Mobile',
   title: 'NC Mobile - Apple Products & Accessories',
   email: 'anhcong160496@gmail.com',
-  phone: '(+84) 0963761702',
+  phone: '(+84) 963 761 702',
+  phoneLink: '+84963761702', // Clean format for tel: links
   // address: '123 Commerce Street, Business City, BC 12345',
   hours: '24/7',
 };

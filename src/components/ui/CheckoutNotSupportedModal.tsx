@@ -82,7 +82,7 @@ export const CheckoutNotSupportedModal: React.FC<CheckoutNotSupportedModalProps>
               <div>
                 <p className="text-sm font-medium text-gray-900">{t('checkout.contact.phone')}</p>
                 <a 
-                  href={`tel:${CONTACT_INFO.phone}`}
+                  href={`tel:${CONTACT_INFO.phoneLink}`}
                   className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
                 >
                   {CONTACT_INFO.phone}
@@ -130,7 +130,7 @@ export const CheckoutNotSupportedModal: React.FC<CheckoutNotSupportedModalProps>
               {t('checkout.notSupported.close')}
             </Button>
             <Button
-              onClick={() => window.open(`tel:${CONTACT_INFO.phone}`, '_self')}
+              onClick={() => window.open(`tel:${CONTACT_INFO.phoneLink}`, '_self')}
               className="flex-1 bg-blue-600 hover:bg-blue-700"
             >
               {t('checkout.notSupported.callNow')}

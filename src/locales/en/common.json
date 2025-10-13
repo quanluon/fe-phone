@@ -625,6 +625,7 @@
       },
       "shippingAddress": {
         "title": "Shipping Address",
+        "description": "All shipping address fields are optional",
         "fullName": "Recipient's Full Name",
         "fullNamePlaceholder": "Enter recipient's full name",
         "phone": "Recipient's Phone Number",

@@ -15,6 +15,9 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
+// Constants for localStorage
+const SAVED_ORDER_INFO_KEY = "savedOrderInfo";
+
 interface CustomerFormData {
   name: string;
   email: string;
@@ -57,11 +60,31 @@ const initialFormData: OrderFormData = {
   paymentMethod: "cash",
 };
 
+// Helper functions for localStorage
+const saveOrderInfoToLocalStorage = (formData: OrderFormData) => {
+  try {
+    localStorage.setItem(SAVED_ORDER_INFO_KEY, JSON.stringify(formData));
+  } catch (error) {
+    console.error("Failed to save order info to localStorage:", error);
+  }
+};
+
+const loadOrderInfoFromLocalStorage = (): Partial<OrderFormData> | null => {
+  try {
+    const savedData = localStorage.getItem(SAVED_ORDER_INFO_KEY);
+    return savedData ? JSON.parse(savedData) : null;
+  } catch (error) {
+    console.error("Failed to load order info from localStorage:", error);
+    return null;
+  }
+};
+
 // Payment methods will be translated in the component
 
 export default function CreateOrderPage() {
   const router = useRouter();
   const t = useTranslations("orders.create");
+  const tCart = useTranslations("cart");
   const { items, totalPrice, clearCart } = useCartStore();
   const { isAuthenticated } = useAuthStore();
   const { data: userProfile } = useProfile();
@@ -71,7 +94,21 @@ export default function CreateOrderPage() {
   const [formData, setFormData] = useState<OrderFormData>(initialFormData);
   const [step, setStep] = useState(1);
 
-  // Auto-fill user data if logged in
+  // Load saved order info from localStorage on mount
+  useEffect(() => {
+    const savedInfo = loadOrderInfoFromLocalStorage();
+    if (savedInfo) {
+      setFormData((prev) => ({
+        ...prev,
+        ...savedInfo,
+        // Don't load notes and payment method from previous orders
+        notes: "",
+        paymentMethod: prev.paymentMethod,
+      }));
+    }
+  }, []);
+
+  // Auto-fill user data if logged in (takes priority over saved data)
   useEffect(() => {
     if (isAuthenticated && userProfile) {
       setFormData((prev) => ({
@@ -156,30 +193,6 @@ export default function CreateOrderPage() {
     return true;
   };
 
-  const validateStep2 = (): boolean => {
-    const { shippingAddress } = formData;
-    const requiredFields = [
-      "fullName",
-      "phone",
-      "address",
-      "city",
-      "district",
-      "ward",
-    ];
-
-    for (const field of requiredFields) {
-      if (!shippingAddress[field as keyof ShippingFormData].trim()) {
-        addToast({
-          title: "Lỗi",
-          message: t(`validation.${field}Required`),
-          type: "error",
-        });
-        return false;
-      }
-    }
-    return true;
-  };
-
   // Payment methods for the form
   const paymentMethods = [
     { value: "cash", label: t("payment.methods.cash") },
@@ -191,16 +204,6 @@ export default function CreateOrderPage() {
   const handleNext = () => {
     if (step === 1 && validateStep1()) {
       setStep(2);
-      setFormData((prev) => ({
-        ...prev,
-        shippingAddress: {
-          ...prev.shippingAddress,
-          fullName: prev.shippingAddress?.fullName || prev.customer.name,
-          phone: prev.customer?.phone ||  prev.customer.phone,
-        },
-      }));
-    } else if (step === 2 && validateStep2()) {
-      setStep(3);
     }
   };
 
@@ -211,7 +214,7 @@ export default function CreateOrderPage() {
   };
 
   const handleSubmitOrder = async () => {
-    if (!validateStep2()) return;
+    if (!validateStep1()) return;
 
     const orderData: CreateOrderRequest = {
       customer: {
@@ -232,6 +235,10 @@ export default function CreateOrderPage() {
     createOrderMutation.mutate(orderData, {
       onSuccess: (response) => {
         const order = response.data;
+        
+        // Save form data to localStorage for future orders
+        saveOrderInfoToLocalStorage(formData);
+        
         addToast({
           title: t("success.title"),
           message: t("success.message", { orderNumber: order.orderNumber }),
@@ -270,7 +277,7 @@ export default function CreateOrderPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Order Form */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Step 1: Customer Information */}
+            {/* Step 1: Customer Information & Shipping Address */}
             {step === 1 && (
               <Card className="p-6">
                 <h2 className="text-xl font-semibold mb-6">
@@ -322,120 +329,121 @@ export default function CreateOrderPage() {
                     />
                   </div>
                 </div>
-              </Card>
-            )}
 
-            {/* Step 2: Shipping Address */}
-            {step === 2 && (
-              <Card className="p-6">
-                <h2 className="text-xl font-semibold mb-6">
-                  {t("shippingAddress.title")}
-                </h2>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Họ và tên người nhận *
-                    </label>
-                    <Input
-                      value={formData.shippingAddress.fullName}
-                      onChange={(e) =>
-                        handleShippingInputChange("fullName", e.target.value)
-                      }
-                      placeholder="Nhập họ và tên người nhận"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Số điện thoại người nhận *
-                    </label>
-                    <Input
-                      value={formData.shippingAddress.phone}
-                      onChange={(e) =>
-                        handleShippingInputChange("phone", e.target.value)
-                      }
-                      placeholder="Nhập số điện thoại người nhận"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Địa chỉ chi tiết *
-                    </label>
-                    <Input
-                      value={formData.shippingAddress.address}
-                      onChange={(e) =>
-                        handleShippingInputChange("address", e.target.value)
-                      }
-                      placeholder="Số nhà, tên đường"
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Shipping Address Section */}
+                <div className="mt-8 pt-8 border-t">
+                  <h3 className="text-lg font-semibold mb-4">
+                    {t("shippingAddress.title")}
+                  </h3>
+                  <p className="text-sm text-gray-500 mb-4">
+                    {t("shippingAddress.description")}
+                  </p>
+                  <div className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Thành phố *
+                        {t("shippingAddress.fullName")}
                       </label>
                       <Input
-                        value={formData.shippingAddress.city}
+                        value={formData.shippingAddress.fullName}
                         onChange={(e) =>
-                          handleShippingInputChange("city", e.target.value)
+                          handleShippingInputChange("fullName", e.target.value)
                         }
-                        placeholder="Thành phố"
+                        placeholder={t("shippingAddress.fullNamePlaceholder")}
                       />
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Quận/Huyện *
-                      </label>
-                      <Input
-                        value={formData.shippingAddress.district}
-                        onChange={(e) =>
-                          handleShippingInputChange("district", e.target.value)
-                        }
-                        placeholder="Quận/Huyện"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Phường/Xã *
-                      </label>
-                      <Input
-                        value={formData.shippingAddress.ward}
-                        onChange={(e) =>
-                          handleShippingInputChange("ward", e.target.value)
-                        }
-                        placeholder="Phường/Xã"
-                      />
-                    </div>
-                  </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Mã bưu điện
-                    </label>
-                    <Input
-                      value={formData.shippingAddress.postalCode}
-                      onChange={(e) =>
-                        handleShippingInputChange("postalCode", e.target.value)
-                      }
-                      placeholder="Mã bưu điện (tùy chọn)"
-                    />
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        {t("shippingAddress.phone")}
+                      </label>
+                      <Input
+                        value={formData.shippingAddress.phone}
+                        onChange={(e) =>
+                          handleShippingInputChange("phone", e.target.value)
+                        }
+                        placeholder={t("shippingAddress.phonePlaceholder")}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        {t("shippingAddress.address")}
+                      </label>
+                      <Input
+                        value={formData.shippingAddress.address}
+                        onChange={(e) =>
+                          handleShippingInputChange("address", e.target.value)
+                        }
+                        placeholder={t("shippingAddress.addressPlaceholder")}
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          {t("shippingAddress.city")}
+                        </label>
+                        <Input
+                          value={formData.shippingAddress.city}
+                          onChange={(e) =>
+                            handleShippingInputChange("city", e.target.value)
+                          }
+                          placeholder={t("shippingAddress.cityPlaceholder")}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          {t("shippingAddress.district")}
+                        </label>
+                        <Input
+                          value={formData.shippingAddress.district}
+                          onChange={(e) =>
+                            handleShippingInputChange("district", e.target.value)
+                          }
+                          placeholder={t("shippingAddress.districtPlaceholder")}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          {t("shippingAddress.ward")}
+                        </label>
+                        <Input
+                          value={formData.shippingAddress.ward}
+                          onChange={(e) =>
+                            handleShippingInputChange("ward", e.target.value)
+                          }
+                          placeholder={t("shippingAddress.wardPlaceholder")}
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        {t("shippingAddress.postalCode")}
+                      </label>
+                      <Input
+                        value={formData.shippingAddress.postalCode}
+                        onChange={(e) =>
+                          handleShippingInputChange("postalCode", e.target.value)
+                        }
+                        placeholder={t("shippingAddress.postalCodePlaceholder")}
+                      />
+                    </div>
                   </div>
                 </div>
               </Card>
             )}
 
-            {/* Step 3: Payment & Notes */}
-            {step === 3 && (
+            {/* Step 2: Payment & Notes */}
+            {step === 2 && (
               <Card className="p-6">
                 <h2 className="text-xl font-semibold mb-6">
-                  Phương thức thanh toán & Ghi chú
+                  {t("payment.title")}
                 </h2>
                 <div className="space-y-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-3">
-                      Phương thức thanh toán
+                      {t("payment.paymentMethod")}
                     </label>
                     <div className="space-y-2">
                       {paymentMethods.map((method) => (
@@ -461,7 +469,7 @@ export default function CreateOrderPage() {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Ghi chú đơn hàng
+                      {t("payment.notes")}
                     </label>
                     <Textarea
                       value={formData.notes}
@@ -471,7 +479,7 @@ export default function CreateOrderPage() {
                           notes: e.target.value,
                         }))
                       }
-                      placeholder="Ghi chú thêm cho đơn hàng (tùy chọn)"
+                      placeholder={t("payment.notesPlaceholder")}
                       rows={4}
                     />
                   </div>
@@ -489,7 +497,7 @@ export default function CreateOrderPage() {
                 {t("navigation.back")}
               </Button>
 
-              {step < 3 ? (
+              {step < 2 ? (
                 <Button onClick={handleNext}>{t("navigation.continue")}</Button>
               ) : (
                 <Button
@@ -530,7 +538,7 @@ export default function CreateOrderPage() {
                         {item.variant.color} - {item.variant.storage}
                       </p>
                       <p className="text-sm text-gray-600">
-                        Số lượng: {item.quantity}
+                        {tCart("quantity")}: {item.quantity}
                       </p>
                     </div>
                     <div className="text-right">
@@ -587,20 +595,6 @@ export default function CreateOrderPage() {
                     }`}
                   >
                     2
-                  </div>
-                  {t("progress.step2")}
-                </div>
-                <div
-                  className={`flex items-center ${
-                    step >= 3 ? "text-green-600" : "text-gray-400"
-                  }`}
-                >
-                  <div
-                    className={`w-6 h-6 rounded-full flex items-center justify-center text-sm font-medium mr-3 ${
-                      step >= 3 ? "bg-green-600 text-white" : "bg-gray-200"
-                    }`}
-                  >
-                    3
                   </div>
                   {t("progress.step3")}
                 </div>

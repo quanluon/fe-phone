@@ -66,7 +66,7 @@ export const Footer: React.FC = () => {
               <p>
                 📞{' '}
                 <a
-                  href={`tel:${CONTACT_INFO.phone}`}
+                  href={`tel:${CONTACT_INFO.phoneLink}`}
                   className="hover:text-blue-400 transition-colors underline"
                 >
                   {CONTACT_INFO.phone}

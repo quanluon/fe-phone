@@ -458,7 +458,7 @@ export function ProductDetailClient({ initialProduct }: ProductDetailClientProps
               </h3>
               <div className="flex flex-col sm:flex-row gap-3">
                 <a
-                  href={`tel:${CONTACT_INFO.phone}`}
+                  href={`tel:${CONTACT_INFO.phoneLink}`}
                   className="flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
                 >
                   <PhoneIcon className="h-5 w-5" />
