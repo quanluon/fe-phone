@@ -59,7 +59,7 @@ export const HeroSection: React.FC = () => {
           {/* Main Hero Banner */}
           <div className="lg:col-span-2">
             <Card
-              className={`relative overflow-hidden bg-gradient-to-r ${currentSlideData.backgroundColor} border-0 shadow-2xl h-full`}
+              className={`relative overflow-hidden bg-white border-0 shadow-2xl h-full`}
               style={{
                 boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.05)'
               }}
@@ -85,12 +85,12 @@ export const HeroSection: React.FC = () => {
                 <div className={`p-12 text-center ${currentSlideData.image ? 'lg:text-left' : ''}`}>
                   <div className="flex items-end gap-2 mb-3 sm:mb-4 justify-center lg:justify-start">
                     <div
-                      className={`text-7xl font-bold ${currentSlideData.textColor}`}
+                      className={`text-2xl font-bold ${currentSlideData.textColor}`}
                     >
                       {currentSlideData.discount}
                     </div>
                     {currentSlideData.discountText && (
-                      <div className="text-lg font-semibold text-red-600">
+                      <div className="text-lg font-semibold text-red-500">
                         {currentSlideData.discountText}
                       </div>
                     )}
@@ -121,7 +121,7 @@ export const HeroSection: React.FC = () => {
                         src={currentSlideData.image}
                         alt={currentSlideData.imageAlt || currentSlideData.title}
                         fill
-                        className="object-contain drop-shadow-lg"
+                        className="object-contain"
                         priority={currentSlide === 0}
                         fetchPriority={currentSlide === 0 ? "high" : "low"}
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 66vw"
