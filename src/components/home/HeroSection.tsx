@@ -123,7 +123,9 @@ export const HeroSection: React.FC = () => {
                         fill
                         className="object-contain drop-shadow-lg"
                         priority={currentSlide === 0}
+                        fetchPriority={currentSlide === 0 ? "high" : "low"}
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 66vw"
+                        loading={currentSlide === 0 ? "eager" : "lazy"}
                       />
                     </div>
                     {/* Show button below image on mobile */}
@@ -171,9 +173,9 @@ export const HeroSection: React.FC = () => {
                 >
                   <div className="flex items-center p-4 sm:p-8 h-full">
                     <div className="flex-1">
-                      <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
+                      <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
                         {promotion.title}
-                      </h3>
+                      </h2>
                       <p className="text-sm sm:text-base text-red-600 font-semibold mb-3">
                         {promotion.subtitle}
                       </p>
@@ -208,6 +210,7 @@ export const HeroSection: React.FC = () => {
                         fill
                         className="object-contain"
                         sizes="(max-width: 640px) 80px, 96px"
+                        loading="lazy"
                       />
                     </div>
                   </div>

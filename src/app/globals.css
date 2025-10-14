@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Disable Ant Design's default font loading */
+.ant-app,
+.ant-modal,
+.ant-message,
+.ant-notification {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+}
+
 @layer base {
 :root {
     --background: 0 0% 100%;

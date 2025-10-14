@@ -25,7 +25,11 @@
     "profile": "Hồ sơ",
     "orders": "Đơn hàng",
     "signOut": "Đăng xuất",
-    "languageSelector": "Chọn ngôn ngữ"
+    "languageSelector": "Chọn ngôn ngữ",
+    "search": "Tìm kiếm",
+    "wishlist": "Danh sách yêu thích",
+    "cart": "Giỏ hàng",
+    "menu": "Menu"
   },
   "home": {
     "hero": {

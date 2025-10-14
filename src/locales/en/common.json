@@ -25,7 +25,11 @@
     "profile": "Profile",
     "orders": "Orders",
     "signOut": "Sign Out",
-    "languageSelector": "Select language"
+    "languageSelector": "Select language",
+    "search": "Search",
+    "wishlist": "Wishlist",
+    "cart": "Cart",
+    "menu": "Menu"
   },
   "home": {
     "hero": {

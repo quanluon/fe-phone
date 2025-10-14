@@ -167,20 +167,31 @@ export const Header: React.FC = () => {
             {/* Action Buttons */}
             <div className="flex items-center space-x-1 sm:space-x-2 lg:space-x-4">
               {/* Search Icon (Mobile) */}
-              <button className="md:hidden p-1.5 sm:p-2 text-gray-600 hover:text-blue-600">
+              <button 
+                className="md:hidden p-1.5 sm:p-2 text-gray-700 hover:text-blue-600"
+                aria-label={t('header.search')}
+              >
                 <MagnifyingGlassIcon className="h-5 w-5" />
               </button>
 
               {/* User Icon */}
-              <Link href={isAuthenticated ? "/profile" : "/auth?mode=login"} className="p-1.5 sm:p-2 text-gray-600 hover:text-blue-600">
+              <Link 
+                href={isAuthenticated ? "/profile" : "/auth?mode=login"} 
+                className="p-1.5 sm:p-2 text-gray-700 hover:text-blue-600"
+                aria-label={isAuthenticated ? t('header.profile') : t('header.signIn')}
+              >
                 <UserIcon className="h-5 w-5" />
               </Link>
 
               {/* Wishlist */}
-              <Link href="/wishlist" className="relative p-1.5 sm:p-2 text-gray-600 hover:text-blue-600">
+              <Link 
+                href="/wishlist" 
+                className="relative p-1.5 sm:p-2 text-gray-700 hover:text-blue-600"
+                aria-label={t('header.wishlist')}
+              >
                 <HeartIcon className="h-5 w-5" />
                 {wishlistItems.length > 0 && (
-                  <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-600 text-white text-xs font-semibold rounded-full flex items-center justify-center">
                     {wishlistItems.length}
                   </span>
                 )}
@@ -189,11 +200,12 @@ export const Header: React.FC = () => {
               {/* Cart */}
               <button 
                 onClick={() => setShowCartSidebar(true)}
-                className="relative p-1.5 sm:p-2 text-gray-600 hover:text-blue-600"
+                className="relative p-1.5 sm:p-2 text-gray-700 hover:text-blue-600"
+                aria-label={t('header.cart')}
               >
                 <ShoppingCartIcon className="h-5 w-5" />
                 {totalItems > 0 && (
-                  <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-600 text-white text-xs font-semibold rounded-full flex items-center justify-center">
                     {totalItems}
                   </span>
                 )}
@@ -202,7 +214,8 @@ export const Header: React.FC = () => {
               {/* Mobile Menu Button */}
               <button
                 onClick={() => setShowMobileMenu(!showMobileMenu)}
-                className="lg:hidden p-1.5 sm:p-2 text-gray-600 hover:text-blue-600"
+                className="lg:hidden p-1.5 sm:p-2 text-gray-700 hover:text-blue-600"
+                aria-label={t('header.menu')}
               >
                 <Bars3Icon className="h-5 w-5" />
               </button>
