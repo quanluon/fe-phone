@@ -7,6 +7,7 @@ import { useLogout } from '@/hooks/useAuth';
 import { useCart } from '@/hooks/useCart';
 import { useDebounce } from '@/hooks/useDebounce';
 import { CONTACT_INFO } from '@/lib/constants';
+import { logger } from '@/lib/utils/logger';
 import { useAuthStore } from '@/stores/auth';
 import { useWishlistStore } from '@/stores/wishlist';
 import {
@@ -57,7 +58,7 @@ export const Header: React.FC = () => {
       setShowUserMenu(false);
       router.push('/');
     } catch (error) {
-      console.debug('Logout failed:', error);
+      logger.debug({ error }, 'Logout failed');
     }
   };
 

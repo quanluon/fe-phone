@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { CloudArrowUpIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { fileApi } from "@/lib/api/files";
+import { logger } from "@/lib/utils/logger";
 import { NextImage } from "./NextImage";
 
 interface SingleFileUploadProps {
@@ -111,7 +112,7 @@ export function SingleFileUpload({
       // Notify parent component
       onFileUploaded(uploadData.publicUrl);
     } catch (error) {
-      console.error("Upload error:", error);
+      logger.error({ error }, "Upload error");
       setFile((prev) =>
         prev
           ? {
@@ -130,7 +131,7 @@ export function SingleFileUpload({
         await fileApi.deleteFile(file.key);
         onFileRemoved();
       } catch (error) {
-        console.error("Delete error:", error);
+        logger.error({ error, fileKey: file.key }, "Delete error");
       } finally {
         setFile(null);
       }

@@ -10,6 +10,7 @@ import { useCreateOrder } from "@/hooks/useOrders";
 import { useAuthStore } from "@/stores/auth";
 import { useCartStore } from "@/stores/cart";
 import { useToastStore } from "@/stores/toast";
+import { logger } from "@/lib/utils/logger";
 import { ApiErrorResponse, CreateOrderRequest } from "@/types";
 import { PAYMENT_METHODS } from "@/lib/constants";
 import { useTranslations } from "next-intl";
@@ -62,7 +63,7 @@ const saveOrderInfoToLocalStorage = (formData: OrderFormData) => {
   try {
     localStorage.setItem(SAVED_ORDER_INFO_KEY, JSON.stringify(formData));
   } catch (error) {
-    console.error("Failed to save order info to localStorage:", error);
+    logger.error({ error }, "Failed to save order info to localStorage");
   }
 };
 
@@ -71,7 +72,7 @@ const loadOrderInfoFromLocalStorage = (): Partial<OrderFormData> | null => {
     const savedData = localStorage.getItem(SAVED_ORDER_INFO_KEY);
     return savedData ? JSON.parse(savedData) : null;
   } catch (error) {
-    console.error("Failed to load order info from localStorage:", error);
+    logger.error({ error }, "Failed to load order info from localStorage");
     return null;
   }
 };

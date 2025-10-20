@@ -11,6 +11,7 @@ import { getAttributeCategoryKey } from "@/lib/utils/attributeCategories";
 import { useLoadingStore } from "@/stores/loading";
 import { useUIStore } from "@/stores/ui";
 import { useWishlistStore } from "@/stores/wishlist";
+import { logger } from "@/lib/utils/logger";
 import { Product, ProductAttribute, ProductVariant } from "@/types";
 import {
   ArrowLeftIcon,
@@ -58,7 +59,7 @@ export function ProductDetailClient({
   // Use server-side fetched data initially, then client-side data when available
   const productData = (product as Product) || initialProduct;
 
-  if (productData) {
+  if (!productLoading) {
     hideLoading();
   }
 
@@ -112,10 +113,10 @@ export function ProductDetailClient({
 
       // If validation failed, the error toast is already shown by the store
       if (!result.isValid) {
-        console.warn("Cart validation failed:", result.error);
+        logger.warn({ productId: productData._id, variantId: selectedVariant._id, error: result.error }, "Cart validation failed");
       }
     } catch (error) {
-      console.error("Error adding to cart:", error);
+      logger.error({ error, productId: productData._id, variantId: selectedVariant?._id }, "Error adding to cart");
     } finally {
       setIsAddingToCart(false);
     }
@@ -132,10 +133,10 @@ export function ProductDetailClient({
       if (result.isValid) {
         router.push("/orders/create");
       } else {
-        console.warn("Cart validation failed:", result.error);
+        logger.warn({ productId: productData._id, variantId: selectedVariant._id, error: result.error }, "Cart validation failed");
       }
     } catch (error) {
-      console.error("Error buying now:", error);
+      logger.error({ error, productId: productData._id, variantId: selectedVariant?._id }, "Error buying now");
     } finally {
       setIsBuyingNow(false);
     }

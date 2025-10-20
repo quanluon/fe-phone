@@ -11,6 +11,7 @@ import {
   useUpdateProfile,
 } from "@/hooks/useAuth";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
+import { logger } from "@/lib/utils/logger";
 import { useToastStore } from "@/stores/toast";
 import {
   CalendarIcon,
@@ -166,7 +167,7 @@ export function ProfileClient() {
         message: t("profile.passwordChangeSuccessMessage"),
       });
     } catch (error) {
-      console.error("Password change error:", error);
+      logger.error({ error }, "Password change error");
       addToast({
         type: "error",
         title: t("profile.passwordChangeError"),

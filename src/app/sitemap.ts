@@ -1,4 +1,5 @@
 import { MetadataRoute } from 'next';
+import { logger } from '@/lib/utils/logger';
 import { safeServerFetch, buildApiUrl } from '@/lib/utils/server-fetch';
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://yoursite.com';
@@ -85,7 +86,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     return [...staticRoutes, ...productRoutes, ...categoryRoutes];
   } catch (error) {
-    console.error('Error generating sitemap:', error);
+    logger.error({ error }, 'Error generating sitemap');
     // Return at least static routes if API fails
     return staticRoutes;
   }

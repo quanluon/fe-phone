@@ -9,6 +9,7 @@ import { Product, ProductVariant } from '@/types';
 import { Card, Badge, NextImage } from '@/components/ui';
 import { Button } from '@/components/ui/Button';
 import { formatCurrency, calculateDiscount, getImageUrl } from '@/lib/utils';
+import { logger } from '@/lib/utils/logger';
 import { useCart } from '@/hooks/useCart';
 import { useWishlistStore } from '@/stores/wishlist';
 import { useUIStore } from '@/stores/ui';
@@ -54,7 +55,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       
       // If validation failed, the error toast is already shown by the store
       if (!result.isValid) {
-        console.warn('Cart validation failed:', result.error);
+        logger.warn({ productId: product._id, variantId: selectedVariant._id, error: result.error }, 'Cart validation failed');
       }
     }
   };

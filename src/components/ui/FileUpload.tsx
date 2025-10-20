@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { CloudArrowUpIcon, XMarkIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { fileApi } from "@/lib/api/files";
+import { logger } from "@/lib/utils/logger";
 import { NextImage } from "./NextImage";
 
 interface FileUploadProps {
@@ -152,7 +153,7 @@ export function FileUpload({
       }
 
     } catch (error) {
-      console.error('Upload error:', error);
+      logger.error({ error }, 'Upload error');
         setFiles(prev => prev.map((f, index) => 
         index === fileIndex ? {
           ...f,
@@ -171,7 +172,7 @@ export function FileUpload({
         await fileApi.deleteFile(file.key);
         onFilesRemoved([file.key]);
       } catch (error) {
-        console.error('Delete error:', error);
+        logger.error({ error, fileKey: file.key }, 'Delete error');
       }
     }
     

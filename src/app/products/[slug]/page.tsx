@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 import { ProductDetailClient } from './ProductDetailClient';
 import { CONTACT_INFO } from '@/lib/constants';
 import { Product } from '@/types';
+import { logger } from '@/lib/utils/logger';
 import { safeServerFetch, buildApiUrl } from '@/lib/utils/server-fetch';
 
 // Helper function to strip HTML tags from description
@@ -16,7 +17,7 @@ async function getProduct(identifier: string): Promise<Product | null> {
     const productId = identifier.split('-')[0];
     
     if (!productId) {
-      console.warn('Invalid product identifier:', identifier);
+      logger.warn({ identifier }, 'Invalid product identifier');
       return null;
     }
     
@@ -27,18 +28,18 @@ async function getProduct(identifier: string): Promise<Product | null> {
     });
     
     if (error) {
-      console.error('Error fetching product:', error);
+      logger.error({ error, productId }, 'Error fetching product');
       return null;
     }
     
     if (!data || !data.data) {
-      console.warn('Invalid API response structure');
+      logger.warn({ productId, data }, 'Invalid API response structure');
       return null;
     }
     
     return data.data;
   } catch (error) {
-    console.error('Unexpected error in getProduct:', error);
+    logger.error({ error, identifier }, 'Unexpected error in getProduct');
     return null;
   }
 }
@@ -180,7 +181,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       },
     };
   } catch (error) {
-    console.error('Error generating metadata:', error);
+    logger.error({ error }, 'Error generating metadata');
     // Fallback metadata
     return {
       title: 'Product | ' + CONTACT_INFO.name,
@@ -242,7 +243,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
       </>
     );
   } catch (error) {
-    console.error('Error in ProductDetailPage:', error);
+    logger.error({ error }, 'Error in ProductDetailPage');
     // Return fallback component
     return <ProductDetailClient initialProduct={null} />;
   }

@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { logger } from './logger';
 
 // Utility function to merge Tailwind classes
 export function cn(...inputs: ClassValue[]) {
@@ -210,7 +211,7 @@ export function handleImageError(event: React.SyntheticEvent<HTMLImageElement, E
       img.src = DEFAULT_IMAGE;
     } catch (error) {
       // If even the placeholder fails, hide the image element
-      console.warn('Failed to load placeholder image:', error);
+      logger.warn({ error }, 'Failed to load placeholder image');
       img.style.display = 'none';
     }
   }

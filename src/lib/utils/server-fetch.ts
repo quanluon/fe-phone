@@ -2,6 +2,8 @@
  * Server-side fetch utilities with proper error handling for Vercel deployment
  */
 
+import { logger } from './logger';
+
 interface FetchOptions {
   timeout?: number;
   retries?: number;
@@ -54,13 +56,13 @@ export async function safeServerFetch<T = unknown>(
         if (isLastAttempt) {
           return { data: null, error: errorMsg };
         }
-        console.warn(`${errorMsg}, retrying... (attempt ${attempt + 1}/${retries + 1})`);
+        logger.warn({ timeout, attempt: attempt + 1, retries: retries + 1, url }, `${errorMsg}, retrying... (attempt ${attempt + 1}/${retries + 1})`);
       } else {
         const errorMsg = error instanceof Error ? error.message : 'Unknown fetch error';
         if (isLastAttempt) {
           return { data: null, error: errorMsg };
         }
-        console.warn(`Fetch error: ${errorMsg}, retrying... (attempt ${attempt + 1}/${retries + 1})`);
+        logger.warn({ error, attempt: attempt + 1, retries: retries + 1, url }, `Fetch error: ${errorMsg}, retrying... (attempt ${attempt + 1}/${retries + 1})`);
       }
 
       // Wait before retry (exponential backoff)
@@ -80,7 +82,7 @@ export function getApiBaseUrl(): string {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   
   if (!apiUrl) {
-    console.warn('NEXT_PUBLIC_API_URL not set, using fallback');
+    logger.warn('NEXT_PUBLIC_API_URL not set, using fallback');
     return 'http://localhost:3001';
   }
 

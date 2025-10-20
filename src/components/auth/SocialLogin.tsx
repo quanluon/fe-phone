@@ -1,5 +1,6 @@
 import { useSocialLogin } from '@/hooks/useAuth';
 import { useToastStore } from '@/stores/toast';
+import { logger } from '@/lib/utils/logger';
 import { useTranslations } from 'next-intl';
 import React, { useState } from 'react';
 import { SocialLoginButton } from './SocialLoginButton';
@@ -53,7 +54,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
       });
       onSuccess?.();
     } catch (error: unknown) {
-      console.error(`${provider} login error:`, error);
+      logger.error({ error, provider }, `${provider} login error`);
       const errorMessage = (error as ApiErrorResponse)?.response?.data?.message || t('loginError');
       addToast({
         type: 'error',
