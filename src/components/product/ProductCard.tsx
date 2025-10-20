@@ -12,8 +12,7 @@ import { formatCurrency, calculateDiscount, getImageUrl } from '@/lib/utils';
 import { useCart } from '@/hooks/useCart';
 import { useWishlistStore } from '@/stores/wishlist';
 import { useUIStore } from '@/stores/ui';
-import { useLoadingStore } from '@/stores/loading';
-import { useRouter } from 'next/navigation';
+import { useProductNavigation } from '@/hooks/useProductNavigation';
 
 interface ProductCardProps {
   product: Product;
@@ -31,15 +30,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   className,
 }) => {
   const t = useTranslations('product');
-  const tCommon = useTranslations('common');
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(product.variants[0]);
   const [isHovered, setIsHovered] = useState(false);
   
   const { addItem: addToCart, getItemQuantity } = useCart();
   const { isInWishlist, toggleItem: toggleWishlist } = useWishlistStore();
   const { currency } = useUIStore();
-  const { showLoading, hideLoading } = useLoadingStore();
-  const router = useRouter();
+  const { navigateToProduct } = useProductNavigation();
   const isInWishlistState = isInWishlist(product._id);
   const discount = selectedVariant.originalPrice 
     ? calculateDiscount(selectedVariant.price, selectedVariant.originalPrice)
@@ -74,10 +71,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     if (onViewProduct) {
       onViewProduct(product);
     } else {
-      showLoading(tCommon('loading'));
-      router.push(`/products/${product._id}-${product.slug}`);
-      // Hide loading after a short delay to ensure navigation has started
-      setTimeout(() => hideLoading(), 300);
+      navigateToProduct(product);
     }
   };
 

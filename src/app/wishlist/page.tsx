@@ -3,10 +3,10 @@
 import { Card, NextImage } from '@/components/ui';
 import { Button } from '@/components/ui/Button';
 import { useCart } from '@/hooks/useCart';
+import { useProductNavigation } from '@/hooks/useProductNavigation';
 import { useWishlistStore } from '@/stores/wishlist';
 import { formatCurrency, getImageUrl } from '@/lib/utils';
 import { useUIStore } from '@/stores/ui';
-import { useLoadingStore } from '@/stores/loading';
 import {
   ArrowLeftIcon,
   HeartIcon,
@@ -14,18 +14,15 @@ import {
   TrashIcon
 } from '@heroicons/react/24/outline';
 import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Product } from '@/types';
 
 export default function WishlistPage() {
   const t = useTranslations('wishlist');
-  const tCommon = useTranslations('common');
   const { items: wishlistItems, removeItem: removeFromWishlist, clearWishlist } = useWishlistStore();
   const { addItem: addToCart } = useCart();
   const { currency } = useUIStore();
-  const { showLoading, hideLoading } = useLoadingStore();
-  const router = useRouter();
+  const { navigateToProduct } = useProductNavigation();
 
   const handleRemoveFromWishlist = (productId: string) => {
     removeFromWishlist(productId);
@@ -40,12 +37,6 @@ export default function WishlistPage() {
 
   const handleClearWishlist = () => {
     clearWishlist();
-  };
-
-  const handleNavigateToProduct = (productId: string, productSlug: string) => {
-    showLoading(tCommon('loading'));
-    router.push(`/products/${productId}-${productSlug}`);
-    setTimeout(() => hideLoading(), 300);
   };
 
   if (wishlistItems.length === 0) {
@@ -174,7 +165,7 @@ export default function WishlistPage() {
                     href={`/products/${product._id}-${product.slug}`}
                     onClick={(e) => {
                       e.preventDefault();
-                      handleNavigateToProduct(product._id, product.slug);
+                      navigateToProduct(product);
                     }}
                   >
                     <Button variant="outline" className="w-full">
