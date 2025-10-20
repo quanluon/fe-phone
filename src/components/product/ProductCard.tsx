@@ -12,6 +12,7 @@ import { formatCurrency, calculateDiscount, getImageUrl } from '@/lib/utils';
 import { useCart } from '@/hooks/useCart';
 import { useWishlistStore } from '@/stores/wishlist';
 import { useUIStore } from '@/stores/ui';
+import { useLoadingStore } from '@/stores/loading';
 import { useRouter } from 'next/navigation';
 
 interface ProductCardProps {
@@ -30,12 +31,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   className,
 }) => {
   const t = useTranslations('product');
+  const tCommon = useTranslations('common');
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(product.variants[0]);
   const [isHovered, setIsHovered] = useState(false);
   
   const { addItem: addToCart, getItemQuantity } = useCart();
   const { isInWishlist, toggleItem: toggleWishlist } = useWishlistStore();
   const { currency } = useUIStore();
+  const { showLoading, hideLoading } = useLoadingStore();
   const router = useRouter();
   const isInWishlistState = isInWishlist(product._id);
   const discount = selectedVariant.originalPrice 
@@ -70,8 +73,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const handleViewProduct = () => {
     if (onViewProduct) {
       onViewProduct(product);
-    }else {
+    } else {
+      showLoading(tCommon('loading'));
       router.push(`/products/${product._id}-${product.slug}`);
+      // Hide loading after a short delay to ensure navigation has started
+      setTimeout(() => hideLoading(), 300);
     }
   };
 
@@ -84,7 +90,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     >
       {/* Product Image */}
       <div className="relative aspect-square overflow-hidden bg-gray-100">
-        <Link href={`/products/${product._id}-${product.slug}`}>
+        <Link 
+          href={`/products/${product._id}-${product.slug}`}
+          onClick={(e) => {
+            e.preventDefault();
+            handleViewProduct();
+          }}
+        >
           <NextImage
             src={getImageUrl(selectedVariant.images[0] || product.images[0])}
             alt={product.name}
@@ -157,7 +169,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         <p className="text-xs text-gray-500 mb-1">{product.brand.name}</p>
 
         {/* Product Name */}
-        <Link href={`/products/${product._id}-${product.slug}`}>
+        <Link 
+          href={`/products/${product._id}-${product.slug}`}
+          onClick={(e) => {
+            e.preventDefault();
+            handleViewProduct();
+          }}
+        >
           <h3 className="font-medium text-gray-900 mb-2 line-clamp-2 hover:text-blue-600 transition-colors text-sm sm:text-base">
             {product.name}
           </h3>

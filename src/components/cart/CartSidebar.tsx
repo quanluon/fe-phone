@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/Button';
 import { useCart } from '@/hooks/useCart';
 import { formatCurrency, getImageUrl } from '@/lib/utils';
 import { useUIStore } from '@/stores/ui';
+import { useLoadingStore } from '@/stores/loading';
 import {
   MinusIcon,
   PlusIcon,
@@ -13,6 +14,7 @@ import {
   XMarkIcon
 } from '@heroicons/react/24/outline';
 import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import React from 'react';
 
@@ -23,8 +25,11 @@ interface CartSidebarProps {
 
 export const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
   const t = useTranslations('cart');
+  const tCommon = useTranslations('common');
   const { items, totalItems, totalPrice, updateQuantity, removeItem } = useCart();
   const { currency } = useUIStore();
+  const { showLoading, hideLoading } = useLoadingStore();
+  const router = useRouter();
 
   const handleQuantityChange = (productId: string, variantId: string, newQuantity: number) => {
     if (newQuantity <= 0) {
@@ -36,6 +41,13 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => 
 
   const handleRemoveItem = (productId: string, variantId: string) => {
     removeItem(productId, variantId);
+  };
+
+  const handleNavigateToProduct = (productId: string, productSlug: string) => {
+    showLoading(tCommon('loading'));
+    onClose();
+    router.push(`/products/${productId}-${productSlug}`);
+    setTimeout(() => hideLoading(), 300);
   };
 
   return (
@@ -95,7 +107,10 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => 
                       <Link
                         href={`/products/${item.product._id}-${item.product.slug}`}
                         className="text-sm font-medium text-gray-900 hover:text-blue-600 line-clamp-2"
-                        onClick={onClose}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleNavigateToProduct(item.product._id, item.product.slug);
+                        }}
                       >
                         {item.product.name}
                       </Link>

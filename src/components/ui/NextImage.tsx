@@ -15,13 +15,14 @@ interface NextImageProps extends Omit<ImageProps, "onErrorCapture"> {
 }
 
 /**
- * Enhanced Next.js Image component with default error handling.
+ * Enhanced Next.js Image component with default error handling and lazy loading.
  * Automatically falls back to a placeholder image when the original image fails to load.
  */
 export const NextImage: React.FC<NextImageProps> = ({
   onErrorCapture,
   src,
   alt,
+  loading = "lazy",
   ...props
 }) => {
   const [hasError, setHasError] = useState(false);
@@ -60,7 +61,13 @@ export const NextImage: React.FC<NextImageProps> = ({
   }
 
   return (
-    <Image src={imageSrc} alt={alt} onErrorCapture={handleError} {...props} />
+    <Image 
+      src={imageSrc} 
+      alt={alt} 
+      loading={loading}
+      onErrorCapture={handleError} 
+      {...props} 
+    />
   );
 };
 

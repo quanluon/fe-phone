@@ -106,6 +106,8 @@
   },
   "product": {
     "addToCart": "Add to Cart",
+    "buyNow": "Buy Now",
+    "buyingNow": "Processing...",
     "outOfStock": "Out of Stock",
     "inStock": "in stock",
     "new": "New",
@@ -568,7 +570,6 @@
     "orderNumber": "Order #{orderNumber}",
     "orderDate": "Order Date",
     "orderStatus": "Order Status",
-    "paymentStatus": "Payment Status",
     "totalAmount": "Total Amount",
     "customer": "Customer",
     "viewDetails": "View Details",
@@ -653,6 +654,7 @@
         "methods": {
           "cash": "Cash on Delivery (COD)",
           "bank_transfer": "Bank Transfer",
+          "credit_card": "Credit Card",
           "momo": "MoMo Wallet",
           "zalopay": "ZaloPay Wallet"
         }
@@ -678,7 +680,7 @@
         "emailRequired": "Please enter your email",
         "phoneRequired": "Please enter your phone number",
         "fullNameRequired": "Please enter recipient's full name",
-        "phoneRequired": "Please enter recipient's phone number",
+        "recipientPhoneRequired": "Please enter recipient's phone number",
         "addressRequired": "Please enter address",
         "cityRequired": "Please enter city",
         "districtRequired": "Please enter district",

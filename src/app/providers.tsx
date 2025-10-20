@@ -7,6 +7,7 @@ import { ConfigProvider } from 'antd';
 import { queryClient } from '@/lib/api/queryClient';
 import { Layout } from '@/components/layout/Layout';
 import { ToastContainer } from '@/components/ui/Toast';
+import { GlobalLoading } from '@/components/ui';
 import { useToastStore } from '@/stores/toast';
 
 interface ProvidersProps {
@@ -34,6 +35,7 @@ export function Providers({ children }: ProvidersProps) {
           {children}
         </Layout>
         <ToastContainer toasts={toasts} onRemove={removeToast} />
+        <GlobalLoading />
         <ReactQueryDevtools initialIsOpen={false} />
       </ConfigProvider>
     </QueryClientProvider>

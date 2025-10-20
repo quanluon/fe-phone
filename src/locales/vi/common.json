@@ -106,6 +106,8 @@
   },
   "product": {
     "addToCart": "Thêm Vào Giỏ",
+    "buyNow": "Mua Ngay",
+    "buyingNow": "Đang xử lý...",
     "outOfStock": "Hết Hàng",
     "inStock": "còn hàng",
     "new": "Mới",
@@ -568,7 +570,6 @@
     "orderNumber": "Đơn hàng #{orderNumber}",
     "orderDate": "Ngày đặt hàng",
     "orderStatus": "Trạng thái đơn hàng",
-    "paymentStatus": "Trạng thái thanh toán",
     "totalAmount": "Tổng tiền",
     "customer": "Khách hàng",
     "viewDetails": "Xem chi tiết",
@@ -653,6 +654,7 @@
         "methods": {
           "cash": "Thanh toán khi nhận hàng (COD)",
           "bank_transfer": "Chuyển khoản ngân hàng",
+          "credit_card": "Thẻ tín dụng",
           "momo": "Ví MoMo",
           "zalopay": "Ví ZaloPay"
         }
@@ -678,7 +680,7 @@
         "emailRequired": "Vui lòng nhập email",
         "phoneRequired": "Vui lòng nhập số điện thoại",
         "fullNameRequired": "Vui lòng nhập họ tên người nhận",
-        "phoneRequired": "Vui lòng nhập số điện thoại người nhận",
+        "recipientPhoneRequired": "Vui lòng nhập số điện thoại người nhận",
         "addressRequired": "Vui lòng nhập địa chỉ",
         "cityRequired": "Vui lòng nhập thành phố",
         "districtRequired": "Vui lòng nhập quận/huyện",

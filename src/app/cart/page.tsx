@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/Button';
 import { useCart } from '@/hooks/useCart';
 import { formatCurrency, getImageUrl } from '@/lib/utils';
 import { useUIStore } from '@/stores/ui';
+import { useLoadingStore } from '@/stores/loading';
 import {
   ArrowLeftIcon,
   MinusIcon,
@@ -13,12 +14,16 @@ import {
   TrashIcon
 } from '@heroicons/react/24/outline';
 import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 export default function CartPage() {
   const t = useTranslations('cart');
+  const tCommon = useTranslations('common');
   const { items, totalItems, totalPrice, updateQuantity, removeItem, clearCart } = useCart();
   const { currency } = useUIStore();
+  const { showLoading, hideLoading } = useLoadingStore();
+  const router = useRouter();
 
   const handleQuantityChange = (productId: string, variantId: string, newQuantity: number) => {
     if (newQuantity <= 0) {
@@ -34,6 +39,12 @@ export default function CartPage() {
 
   const handleClearCart = () => {
     clearCart();
+  };
+
+  const handleNavigateToProduct = (productId: string, productSlug: string) => {
+    showLoading(tCommon('loading'));
+    router.push(`/products/${productId}-${productSlug}`);
+    setTimeout(() => hideLoading(), 300);
   };
 
   if (items.length === 0) {
@@ -117,6 +128,10 @@ export default function CartPage() {
                         <div className="flex-1">
                           <Link
                             href={`/products/${item.product._id}-${item.product.slug}`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleNavigateToProduct(item.product._id, item.product.slug);
+                            }}
                             className="text-sm sm:text-base font-medium text-gray-900 hover:text-blue-600 line-clamp-2"
                           >
                             {item.product.name}

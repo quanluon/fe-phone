@@ -55,6 +55,7 @@ export function ProductDetailClient({ initialProduct }: ProductDetailClientProps
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [isBuyingNow, setIsBuyingNow] = useState(false);
   const [activeTab, setActiveTab] = useState<'description' | 'specifications'>('description');
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   
@@ -93,6 +94,26 @@ export function ProductDetailClient({ initialProduct }: ProductDetailClientProps
       console.error('Error adding to cart:', error);
     } finally {
       setIsAddingToCart(false);
+    }
+  };
+
+  const handleBuyNow = async () => {
+    if (!productData || !selectedVariant) return;
+    
+    setIsBuyingNow(true);
+    try {
+      const result = addToCart(productData, selectedVariant, quantity);
+      
+      // If validation succeeded, redirect to orders page
+      if (result.isValid) {
+        router.push('/orders/create');
+      } else {
+        console.warn('Cart validation failed:', result.error);
+      }
+    } catch (error) {
+      console.error('Error buying now:', error);
+    } finally {
+      setIsBuyingNow(false);
     }
   };
 
@@ -412,42 +433,59 @@ export function ProductDetailClient({ initialProduct }: ProductDetailClientProps
             </div>
 
             {/* Action Buttons */}
-            <div className="flex gap-3">
+            <div className="space-y-3">
+              <div className="flex gap-3">
+                <Button
+                  size="lg"
+                  onClick={handleAddToCart}
+                  disabled={availableStock === 0 || isAddingToCart}
+                  className="flex-1"
+                  variant="outline"
+                >
+                  <ShoppingCartIcon className="h-5 w-5 mr-2" />
+                  {availableStock === 0 
+                    ? (cartQuantity > 0 ? tProduct('allItemsInCart') : tProduct('outOfStock'))
+                    : isAddingToCart 
+                      ? t('adding') 
+                      : tProduct('addToCart')
+                  }
+                </Button>
+                
+                <Button
+                  size="lg"
+                  variant="outline"
+                  onClick={handleToggleWishlist}
+                  className="px-4"
+                >
+                  {isInWishlistState ? (
+                    <HeartSolidIcon className="h-5 w-5 text-red-500" />
+                  ) : (
+                    <HeartIcon className="h-5 w-5" />
+                  )}
+                </Button>
+                
+                <Button
+                  size="lg"
+                  variant="outline"
+                  onClick={handleShare}
+                  className="px-4"
+                >
+                  <ShareIcon className="h-5 w-5" />
+                </Button>
+              </div>
+              
               <Button
                 size="lg"
-                onClick={handleAddToCart}
-                disabled={availableStock === 0 || isAddingToCart}
-                className="flex-1"
+                onClick={handleBuyNow}
+                disabled={availableStock === 0 || isBuyingNow}
+                className="w-full bg-blue-600 hover:bg-blue-700"
               >
-                <ShoppingCartIcon className="h-5 w-5 mr-2" />
                 {availableStock === 0 
                   ? (cartQuantity > 0 ? tProduct('allItemsInCart') : tProduct('outOfStock'))
-                  : isAddingToCart 
-                    ? t('adding') 
-                    : tProduct('addToCart')
+                  : isBuyingNow 
+                    ? tProduct('buyingNow') 
+                    : tProduct('buyNow')
                 }
-              </Button>
-              
-              <Button
-                size="lg"
-                variant="outline"
-                onClick={handleToggleWishlist}
-                className="px-4"
-              >
-                {isInWishlistState ? (
-                  <HeartSolidIcon className="h-5 w-5 text-red-500" />
-                ) : (
-                  <HeartIcon className="h-5 w-5" />
-                )}
-              </Button>
-              
-              <Button
-                size="lg"
-                variant="outline"
-                onClick={handleShare}
-                className="px-4"
-              >
-                <ShareIcon className="h-5 w-5" />
               </Button>
             </div>
 
