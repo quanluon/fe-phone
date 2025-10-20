@@ -1,7 +1,7 @@
-import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
 import { useLoadingStore } from '@/stores/loading';
 import { Product } from '@/types';
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
 
 /**
  * Hook for navigating to product detail page with loading state
@@ -10,7 +10,7 @@ import { Product } from '@/types';
 export function useProductNavigation() {
   const router = useRouter();
   const tCommon = useTranslations('common');
-  const { showLoading, hideLoading } = useLoadingStore();
+  const { showLoading } = useLoadingStore();
 
   /**
    * Navigate to product detail page
@@ -19,10 +19,9 @@ export function useProductNavigation() {
   const navigateToProduct = (product: Product | { _id: string; slug: string }) => {
     showLoading(tCommon('loading'));
     router.push(`/products/${product._id}-${product.slug}`);
-    // Hide loading after a short delay to ensure navigation has started
-    setTimeout(() => hideLoading(), 300);
   };
 
   return { navigateToProduct };
 }
+
 
