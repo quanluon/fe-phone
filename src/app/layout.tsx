@@ -142,7 +142,7 @@ export default async function RootLayout({
         {/* Preconnect to critical origins for better performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://adjxk71gc3.execute-api.ap-southeast-1.amazonaws.com" />
+        <link rel="preconnect" href="https://oh8kpjl5uf.execute-api.ap-southeast-1.amazonaws.com" />
         <link rel="dns-prefetch" href="https://d10gwy2ckxccqn.cloudfront.net" />
       </head>
       <body className={inter.className}>

@@ -46,7 +46,7 @@ Set these in your Vercel project settings:
 
 | Variable | Value | Description |
 |----------|-------|-------------|
-| `NEXT_PUBLIC_API_URL` | `https://adjxk71gc3.execute-api.ap-southeast-1.amazonaws.com/dev` | Your backend API URL |
+| `NEXT_PUBLIC_API_URL` | `https://oh8kpjl5uf.execute-api.ap-southeast-1.amazonaws.com/dev` | Your backend API URL |
 | `NEXT_PUBLIC_APP_URL` | `https://your-app.vercel.app` | Your Vercel app URL |
 
 ### **How to Set Environment Variables:**
