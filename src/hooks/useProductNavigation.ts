@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation';
 export function useProductNavigation() {
   const router = useRouter();
   const tCommon = useTranslations('common');
-  const { showLoading } = useLoadingStore();
+  const { showLoading, hideLoading } = useLoadingStore();
 
   /**
    * Navigate to product detail page
@@ -19,6 +19,9 @@ export function useProductNavigation() {
   const navigateToProduct = (product: Product | { _id: string; slug: string }) => {
     showLoading(tCommon('loading'));
     router.push(`/products/${product._id}-${product.slug}`);
+    setTimeout(() => {
+      hideLoading();
+    }, 400);
   };
 
   return { navigateToProduct };

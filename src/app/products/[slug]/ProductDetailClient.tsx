@@ -8,10 +8,9 @@ import { useProduct } from "@/hooks/useProducts";
 import { CONTACT_INFO } from "@/lib/constants";
 import { calculateDiscount, formatCurrency, getImageUrl } from "@/lib/utils";
 import { getAttributeCategoryKey } from "@/lib/utils/attributeCategories";
-import { useLoadingStore } from "@/stores/loading";
+import { logger } from "@/lib/utils/logger";
 import { useUIStore } from "@/stores/ui";
 import { useWishlistStore } from "@/stores/wishlist";
-import { logger } from "@/lib/utils/logger";
 import { Product, ProductAttribute, ProductVariant } from "@/types";
 import {
   ArrowLeftIcon,
@@ -45,7 +44,6 @@ export function ProductDetailClient({
   const t = useTranslations("product.detail");
   const tProduct = useTranslations("product");
   const tAttributeCategories = useTranslations("product.attributeCategories");
-  const { hideLoading } = useLoadingStore();
 
   // Get product identifier from URL params
   const identifier = params.slug as string;
@@ -58,10 +56,6 @@ export function ProductDetailClient({
 
   // Use server-side fetched data initially, then client-side data when available
   const productData = (product as Product) || initialProduct;
-
-  if (!productLoading) {
-    hideLoading();
-  }
 
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(
     null
