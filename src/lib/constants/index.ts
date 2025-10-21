@@ -24,7 +24,7 @@ import {
 
 // Navigation items
 export const NAV_ITEMS = [
-  { label: 'Top Popular', href: '/products?sortBy=created_at_desc' },
+  { label: 'Top Popular', href: '/products?sortBy=created_at_desc' }, // Note: sortBy is used in URL params for UI state only
   // { label: 'Flash Sale', href: '/products?isFeatured=true' },
   // { label: 'TV & Video', href: '/products?productType=accessories' },
   { label: 'Cell Phone', href: '/products?productType=iphone' },

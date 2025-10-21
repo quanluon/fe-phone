@@ -209,12 +209,8 @@ export interface ProductFilters {
   storage?: string;
   size?: string;
   search?: string;
-  sortBy?:
-    | "price_asc"
-    | "price_desc"
-    | "name_asc"
-    | "name_desc"
-    | "created_at_desc";
+  sort?: string; // Backend field name: createdAt, basePrice, name
+  order?: "asc" | "desc"; // Sort direction
   isFeatured?: boolean;
   isNew?: boolean;
 }

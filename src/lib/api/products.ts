@@ -38,7 +38,7 @@ export const productApi = {
 
   // Get best selling products (mock implementation)
   getBestSellingProducts: async (limit: number = 8) => {
-    return api.get<Product[]>(`/api/products?sortBy=created_at_desc&limit=${limit}`);
+    return api.get<Product[]>(`/api/products?sort=createdAt&order=desc&limit=${limit}`);
   },
 
   // Search products

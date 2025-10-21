@@ -69,8 +69,24 @@ function ProductsContent() {
     const params: ProductQuery = {
       page: 1,
       limit: 12,
-      sortBy: sortBy as ProductQuery['sortBy'],
     };
+
+    // Transform sortBy (e.g., "created_at_desc") into separate sort and order params
+    // Handle combined field names like "created_at"
+    if (sortBy.includes('created_at')) {
+      params.sort = 'createdAt';
+      params.order = sortBy.endsWith('_asc') ? 'asc' : 'desc';
+    } else if (sortBy.includes('price')) {
+      params.sort = 'basePrice';
+      params.order = sortBy.endsWith('_asc') ? 'asc' : 'desc';
+    } else if (sortBy.includes('name')) {
+      params.sort = 'name';
+      params.order = sortBy.endsWith('_asc') ? 'asc' : 'desc';
+    } else {
+      // Default fallback
+      params.sort = 'createdAt';
+      params.order = 'desc';
+    }
 
     if (debouncedSearchQuery) params.search = debouncedSearchQuery;
     if (selectedCategory) params.category = selectedCategory;
