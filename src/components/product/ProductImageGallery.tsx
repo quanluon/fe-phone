@@ -1,9 +1,10 @@
-'use client';
+"use client";
 
-import { NextImage } from '@/components/ui';
-import { getImageUrl } from '@/lib/utils';
-import { GuaranteeSection } from './GuaranteeSection';
-import { Product } from '@/types';
+import { NextImage } from "@/components/ui";
+import { getImageUrl } from "@/lib/utils";
+import { GuaranteeSection } from "./GuaranteeSection";
+import { Product, ProductAttributeType } from "@/types";
+import { useMemo } from "react";
 
 interface ProductImageGalleryProps {
   images: string[];
@@ -22,6 +23,11 @@ export function ProductImageGallery({
   onImageClick,
   product,
 }: ProductImageGalleryProps) {
+  const hasGuarantee = useMemo(() => {
+    return product?.attributes?.some(
+      (attribute) => attribute.type === ProductAttributeType.GUARANTEE
+    );
+  }, [product]);
   return (
     <div className="flex flex-col h-full">
       <div className="space-y-4 flex-1 flex flex-col">
@@ -33,8 +39,8 @@ export function ProductImageGallery({
           <NextImage
             src={getImageUrl(images[selectedIndex])}
             alt={productName}
-            width={400}
-            height={400}
+            width={hasGuarantee ? 400 : 800}
+            height={hasGuarantee ? 400 : 800}
             className="max-w-full max-h-full w-auto h-auto object-contain"
           />
         </div>
@@ -48,8 +54,8 @@ export function ProductImageGallery({
                 onClick={() => onIndexChange(index)}
                 className={`flex-shrink-0 w-16 h-16 bg-white rounded-lg overflow-hidden border-2 transition-all hover:border-blue-300 ${
                   selectedIndex === index
-                    ? 'border-blue-500'
-                    : 'border-gray-200'
+                    ? "border-blue-500"
+                    : "border-gray-200"
                 }`}
               >
                 <NextImage
@@ -65,11 +71,12 @@ export function ProductImageGallery({
         )}
 
         {/* Guarantee Section */}
-        <div className="flex-1 overflow-y-auto">
-          {product && <GuaranteeSection product={product} />}
-        </div>
+        {hasGuarantee && (
+          <div className="flex-1 overflow-y-auto">
+            {product && <GuaranteeSection product={product} />}
+          </div>
+        )}
       </div>
     </div>
   );
 }
-
