@@ -16,8 +16,14 @@ export interface Pagination {
   pages: number;
 }
 
+export enum ProductAttributeType {
+  CUSTOM = 'custom',
+  GUARANTEE = 'guarantee',
+}
+
 // Product Types
 export interface ProductAttribute {
+  type?: ProductAttributeType;
   name: string;
   value: string;
   unit?: string;

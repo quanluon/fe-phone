@@ -157,6 +157,13 @@
       "needHelp": "Need help?",
       "callUs": "Call Us",
       "emailUs": "Email Us"
+    },
+    "guarantee": {
+      "title": "Warranty & Guarantee",
+      "warranty": "Warranty",
+      "quality": "Quality",
+      "service": "Service",
+      "commitment": "We are committed to providing you with the best products and service quality"
     }
   },
   "products": {

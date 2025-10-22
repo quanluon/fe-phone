@@ -1,6 +1,6 @@
 import React from 'react';
 import { Metadata } from 'next';
-import { ProductDetailClient } from './ProductDetailClient';
+import { ProductDetail } from '../../../components/product';
 import { CONTACT_INFO } from '@/lib/constants';
 import { Product } from '@/types';
 import { logger } from '@/lib/utils/logger';
@@ -204,7 +204,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   try {
     const { slug } = await params;
     const product = await getProduct(slug);
-    
+
     // Generate JSON-LD structured data for SEO
     const jsonLd = product ? {
       '@context': 'https://schema.org',
@@ -239,13 +239,13 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
           />
         )}
-        <ProductDetailClient initialProduct={product} />
+        <ProductDetail initialProduct={product} />
       </>
     );
   } catch (error) {
     logger.error({ error }, 'Error in ProductDetailPage');
     // Return fallback component
-    return <ProductDetailClient initialProduct={null} />;
+    return <ProductDetail initialProduct={null} />;
   }
 }
 

@@ -209,22 +209,24 @@ export const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
                   onClick={handlePrev}
                   disabled={currentIndex === 0}
                   className={cn(
-                    "absolute left-4 top-1/2 -translate-y-1/2 z-10 p-3 rounded-full bg-black bg-opacity-50 text-white hover:bg-opacity-70 transition-all",
+                    "absolute left-4 top-1/2 -translate-y-1/2 z-10 p-4 rounded-full bg-white text-gray-900 hover:bg-gray-100 transition-all shadow-lg border-2 border-gray-200",
                     currentIndex === 0 && "opacity-50 cursor-not-allowed"
                   )}
+                  aria-label="Previous image"
                 >
-                  <ChevronLeftIcon className="h-6 w-6" />
+                  <ChevronLeftIcon className="h-8 w-8" />
                 </button>
                 
                 <button
                   onClick={handleNext}
                   disabled={currentIndex === images.length - 1}
                   className={cn(
-                    "absolute right-4 top-1/2 -translate-y-1/2 z-10 p-3 rounded-full bg-black bg-opacity-50 text-white hover:bg-opacity-70 transition-all",
+                    "absolute right-4 top-1/2 -translate-y-1/2 z-10 p-4 rounded-full bg-white text-gray-900 hover:bg-gray-100 transition-all shadow-lg border-2 border-gray-200",
                     currentIndex === images.length - 1 && "opacity-50 cursor-not-allowed"
                   )}
+                  aria-label="Next image"
                 >
-                  <ChevronRightIcon className="h-6 w-6" />
+                  <ChevronRightIcon className="h-8 w-8" />
                 </button>
               </>
             )}
@@ -242,14 +244,13 @@ export const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
               <NextImage
                 src={images[currentIndex]}
                 alt={t('thumbnail', { index: currentIndex + 1 })}
-                width={800}
-                height={600}
+                width={400}
+                height={400}
                 className="max-w-full max-h-full object-contain transition-transform duration-200"
                 style={{
                   transform: `scale(${zoom}) translate(${position.x / zoom}px, ${position.y / zoom}px)`,
                   transformOrigin: 'center center'
                 }}
-                priority
               />
             </div>
           </div>

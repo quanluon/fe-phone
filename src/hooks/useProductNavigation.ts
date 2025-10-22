@@ -17,11 +17,11 @@ export function useProductNavigation() {
    * @param product - Product object containing _id and slug
    */
   const navigateToProduct = (product: Product | { _id: string; slug: string }) => {
-    showLoading(tCommon('loading'));
+    // showLoading(tCommon('loading'));
     router.push(`/products/${product._id}-${product.slug}`);
-    setTimeout(() => {
-      hideLoading();
-    }, 400);
+    // setTimeout(() => {
+    //   hideLoading();
+    // }, 400);
   };
 
   return { navigateToProduct };

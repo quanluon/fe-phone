@@ -22,7 +22,6 @@ export const NextImage: React.FC<NextImageProps> = ({
   onErrorCapture,
   src,
   alt,
-  loading = "lazy",
   ...props
 }) => {
   const [hasError, setHasError] = useState(false);
@@ -64,7 +63,6 @@ export const NextImage: React.FC<NextImageProps> = ({
     <Image 
       src={imageSrc} 
       alt={alt} 
-      loading={loading}
       onErrorCapture={handleError} 
       {...props} 
     />

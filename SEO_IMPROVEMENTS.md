@@ -14,13 +14,13 @@ This document outlines all the SEO improvements implemented for the product deta
 
 **Solution:**
 - Modified `page.tsx` to fetch product data server-side
-- Pass product data as `initialProduct` prop to `ProductDetailClient`
+- Pass product data as `initialProduct` prop to `ProductDetail`
 - Product content is now rendered in the initial HTML
 - Client-side fetching still works for dynamic updates
 
 **Files Modified:**
 - `fe/src/app/products/[slug]/page.tsx`
-- `fe/src/app/products/[slug]/ProductDetailClient.tsx`
+- `fe/src/app/products/[slug]/ProductDetail.tsx`
 
 ### 2. **Structured Data (JSON-LD)**
 

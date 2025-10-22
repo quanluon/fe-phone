@@ -195,7 +195,7 @@ Add React error boundaries for client-side error handling:
 ```typescript
 // Wrap components in error boundaries
 <ErrorBoundary fallback={<ErrorPage />}>
-  <ProductDetailClient />
+  <ProductDetail />
 </ErrorBoundary>
 ```
 
