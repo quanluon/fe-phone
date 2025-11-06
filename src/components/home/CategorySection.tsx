@@ -1,3 +1,5 @@
+'use client';
+
 import { CategoryCard } from "@/components/product/CategoryCard";
 import { useCategories } from "@/hooks/useCategories";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
