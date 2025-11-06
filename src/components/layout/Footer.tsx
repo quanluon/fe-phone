@@ -18,23 +18,17 @@ export const Footer: React.FC = () => {
 
 
   const footerLinks = {
-    company: [
-      { label: t('aboutUs'), href: '/about' },
-      { label: t('contact'), href: '/contact' },
-      { label: t('careers'), href: '/careers' },
-      { label: t('press'), href: '/press' },
-    ],
     support: [
-      { label: t('helpCenter'), href: '/help' },
-      { label: t('shippingInfo'), href: '/shipping' },
-      { label: t('returns'), href: '/returns' },
-      { label: t('sizeGuide'), href: '/size-guide' },
+      { label: t('helpCenter'), href: '/#' },
+      { label: t('shippingInfo'), href: '/#' },
+      { label: t('returns'), href: '/#' },
+      { label: t('sizeGuide'), href: '/#' },
     ],
     legal: [
-      { label: t('privacyPolicy'), href: '/privacy' },
-      { label: t('termsOfService'), href: '/terms' },
-      { label: t('cookiePolicy'), href: '/cookies' },
-      { label: t('accessibility'), href: '/accessibility' },
+      { label: t('privacyPolicy'), href: '/#' },
+      { label: t('termsOfService'), href: '/#' },
+      { label: t('cookiePolicy'), href: '/#' },
+      { label: t('accessibility'), href: '/#' },
     ]
   };
 
