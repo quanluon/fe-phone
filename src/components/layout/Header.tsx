@@ -1,35 +1,35 @@
-'use client';
+"use client";
 
-import { CartSidebar } from '@/components/cart/CartSidebar';
-import { DynamicNavigation } from '@/components/layout/DynamicNavigation';
-import { Input } from '@/components/ui/Input';
-import { useLogout } from '@/hooks/useAuth';
-import { useCart } from '@/hooks/useCart';
-import { useDebounce } from '@/hooks/useDebounce';
-import { CONTACT_INFO } from '@/lib/constants';
-import { logger } from '@/lib/utils/logger';
-import { useAuthStore } from '@/stores/auth';
-import { useWishlistStore } from '@/stores/wishlist';
+import { CartSidebar } from "@/components/cart/CartSidebar";
+import { DynamicNavigation } from "@/components/layout/DynamicNavigation";
+import { Input } from "@/components/ui/Input";
+import { useLogout } from "@/hooks/useAuth";
+import { useCart } from "@/hooks/useCart";
+import { useDebounce } from "@/hooks/useDebounce";
+import { CONTACT_INFO } from "@/lib/constants";
+import { logger } from "@/lib/utils/logger";
+import { useAuthStore } from "@/stores/auth";
+import { useWishlistStore } from "@/stores/wishlist";
 import {
   Bars3Icon,
   ChevronDownIcon,
   HeartIcon,
   MagnifyingGlassIcon,
   ShoppingCartIcon,
-  UserIcon
-} from '@heroicons/react/24/outline';
-import { useTranslations } from 'next-intl';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
-import { LanguageSwitcher } from '../common/LanguageSwitcher';
+  UserIcon,
+} from "@heroicons/react/24/outline";
+import { useTranslations } from "next-intl";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { LanguageSwitcher } from "../common/LanguageSwitcher";
 
 export const Header: React.FC = () => {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showCartSidebar, setShowCartSidebar] = useState(false);
-  
+
   const t = useTranslations();
   const router = useRouter();
   const { totalItems } = useCart();
@@ -43,7 +43,9 @@ export const Header: React.FC = () => {
   // Navigate to products page when debounced search query changes
   useEffect(() => {
     if (debouncedSearchQuery.trim()) {
-      router.push(`/products?search=${encodeURIComponent(debouncedSearchQuery.trim())}`);
+      router.push(
+        `/products?search=${encodeURIComponent(debouncedSearchQuery.trim())}`
+      );
     }
   }, [debouncedSearchQuery, router]);
 
@@ -56,9 +58,9 @@ export const Header: React.FC = () => {
     try {
       await logoutMutation.mutateAsync();
       setShowUserMenu(false);
-      router.push('/');
+      router.push("/");
     } catch (error) {
-      logger.debug({ error }, 'Logout failed');
+      logger.debug({ error }, "Logout failed");
     }
   };
 
@@ -75,12 +77,21 @@ export const Header: React.FC = () => {
                 <CurrencySwitcher />
               </div> */}
             </div>
-            
+
             {/* Center - Free delivery message */}
             <div className="text-center hidden sm:block flex-1">
-              <p className="text-xs sm:text-sm">{t('header.freeDelivery')}</p>
+              <p className="text-xs sm:text-sm">
+                {t("header.justMeDesc")}
+                {" "}📞{" "}
+                <a
+                  href={`tel:${CONTACT_INFO.phoneLink}`}
+                  className="hover:text-blue-400 transition-colors underline"
+                >
+                  {CONTACT_INFO.phone}
+                </a>
+              </p>
             </div>
-            
+
             {/* Right side - Auth links */}
             <div className="flex items-center space-x-2 sm:space-x-4">
               {isAuthenticated ? (
@@ -90,50 +101,60 @@ export const Header: React.FC = () => {
                     className="flex items-center space-x-1 hover:text-blue-200 transition-colors"
                   >
                     <UserIcon className="h-4 w-4" />
-                    <span className="hidden sm:inline">{user?.firstName || user?.email}</span>
+                    <span className="hidden sm:inline">
+                      {user?.firstName || user?.email}
+                    </span>
                     <ChevronDownIcon className="h-3 w-3" />
                   </button>
-                  
+
                   {showUserMenu && (
                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
                       <Link
                         href="/profile"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       >
-                        {t('header.profile')}
+                        {t("header.profile")}
                       </Link>
                       <Link
                         href="/orders"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       >
-                        {t('header.orders')}
+                        {t("header.orders")}
                       </Link>
                       <button
                         onClick={handleLogout}
                         disabled={logoutMutation.isPending}
                         className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        {logoutMutation.isPending ? t('common.loading') : t('header.signOut')}
+                        {logoutMutation.isPending
+                          ? t("common.loading")
+                          : t("header.signOut")}
                       </button>
                     </div>
                   )}
                 </div>
               ) : (
                 <>
-                  <Link href="/auth?mode=register" className="hover:text-blue-200 transition-colors text-xs sm:text-sm">
-                    {t('header.createAccount')}
+                  <Link
+                    href="/auth?mode=register"
+                    className="hover:text-blue-200 transition-colors text-xs sm:text-sm"
+                  >
+                    {t("header.createAccount")}
                   </Link>
-                  <Link href="/auth?mode=login" className="hover:text-blue-200 transition-colors text-xs sm:text-sm">
-                    {t('header.signIn')}
+                  <Link
+                    href="/auth?mode=login"
+                    className="hover:text-blue-200 transition-colors text-xs sm:text-sm"
+                  >
+                    {t("header.signIn")}
                   </Link>
                 </>
               )}
             </div>
           </div>
-          
+
           {/* Mobile free delivery message */}
           <div className="text-center sm:hidden mt-2">
-            <p className="text-xs">{t('header.freeDelivery')}</p>
+            <p className="text-xs">{t("header.justMeDesc")}</p>
           </div>
         </div>
       </div>
@@ -145,7 +166,9 @@ export const Header: React.FC = () => {
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-1 sm:space-x-2">
               <ShoppingCartIcon className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600 hidden sm:inline" />
-              <span className="text-lg sm:text-sm md:text-sm font-bold text-gray-900">{CONTACT_INFO.name}</span>
+              <span className="text-lg sm:text-sm md:text-sm font-bold text-gray-900">
+                {CONTACT_INFO.name}
+              </span>
             </Link>
 
             {/* Desktop Navigation */}
@@ -156,7 +179,7 @@ export const Header: React.FC = () => {
               <form onSubmit={handleSearch} className="w-full">
                 <Input
                   type="search"
-                  placeholder={t('header.searchPlaceholder')}
+                  placeholder={t("header.searchPlaceholder")}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   leftIcon={<MagnifyingGlassIcon className="h-4 w-4" />}
@@ -168,19 +191,21 @@ export const Header: React.FC = () => {
             {/* Action Buttons */}
             <div className="flex items-center space-x-1 sm:space-x-2 lg:space-x-4">
               {/* User Icon - Desktop Only */}
-              <Link 
-                href={isAuthenticated ? "/profile" : "/auth?mode=login"} 
+              <Link
+                href={isAuthenticated ? "/profile" : "/auth?mode=login"}
                 className="hidden lg:block p-1.5 sm:p-2 text-gray-700 hover:text-blue-600"
-                aria-label={isAuthenticated ? t('header.profile') : t('header.signIn')}
+                aria-label={
+                  isAuthenticated ? t("header.profile") : t("header.signIn")
+                }
               >
                 <UserIcon className="h-5 w-5" />
               </Link>
 
               {/* Wishlist */}
-              <Link 
-                href="/wishlist" 
+              <Link
+                href="/wishlist"
                 className="relative p-1.5 sm:p-2 text-gray-700 hover:text-blue-600"
-                aria-label={t('header.wishlist')}
+                aria-label={t("header.wishlist")}
               >
                 <HeartIcon className="h-5 w-5" />
                 {wishlistItems.length > 0 && (
@@ -191,10 +216,10 @@ export const Header: React.FC = () => {
               </Link>
 
               {/* Cart */}
-              <button 
+              <button
                 onClick={() => setShowCartSidebar(true)}
                 className="relative p-1.5 sm:p-2 text-gray-700 hover:text-blue-600"
-                aria-label={t('header.cart')}
+                aria-label={t("header.cart")}
               >
                 <ShoppingCartIcon className="h-5 w-5" />
                 {totalItems > 0 && (
@@ -208,7 +233,7 @@ export const Header: React.FC = () => {
               <button
                 onClick={() => setShowMobileMenu(!showMobileMenu)}
                 className="lg:hidden p-1.5 sm:p-2 text-gray-700 hover:text-blue-600"
-                aria-label={t('header.menu')}
+                aria-label={t("header.menu")}
               >
                 <Bars3Icon className="h-5 w-5" />
               </button>
@@ -223,7 +248,7 @@ export const Header: React.FC = () => {
                 <form onSubmit={handleSearch}>
                   <Input
                     type="search"
-                    placeholder={t('header.searchPlaceholder')}
+                    placeholder={t("header.searchPlaceholder")}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     leftIcon={<MagnifyingGlassIcon className="h-4 w-4" />}
@@ -246,14 +271,14 @@ export const Header: React.FC = () => {
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
                       onClick={() => setShowMobileMenu(false)}
                     >
-                      {t('header.profile')}
+                      {t("header.profile")}
                     </Link>
                     <Link
                       href="/orders"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
                       onClick={() => setShowMobileMenu(false)}
                     >
-                      {t('header.orders')}
+                      {t("header.orders")}
                     </Link>
                     <button
                       onClick={() => {
@@ -263,7 +288,9 @@ export const Header: React.FC = () => {
                       disabled={logoutMutation.isPending}
                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      {logoutMutation.isPending ? t('common.loading') : t('header.signOut')}
+                      {logoutMutation.isPending
+                        ? t("common.loading")
+                        : t("header.signOut")}
                     </button>
                   </div>
                 ) : (
@@ -271,7 +298,7 @@ export const Header: React.FC = () => {
                     <div className="flex items-center space-x-2 px-2 py-2 mb-2">
                       <UserIcon className="h-5 w-5 text-gray-600" />
                       <span className="text-sm font-medium text-gray-900">
-                        {t('header.account')}
+                        {t("header.account")}
                       </span>
                     </div>
                     <Link
@@ -279,14 +306,14 @@ export const Header: React.FC = () => {
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
                       onClick={() => setShowMobileMenu(false)}
                     >
-                      {t('header.createAccount')}
+                      {t("header.createAccount")}
                     </Link>
                     <Link
                       href="/auth?mode=login"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
                       onClick={() => setShowMobileMenu(false)}
                     >
-                      {t('header.signIn')}
+                      {t("header.signIn")}
                     </Link>
                   </div>
                 )}
@@ -302,9 +329,9 @@ export const Header: React.FC = () => {
       </header>
 
       {/* Cart Sidebar */}
-      <CartSidebar 
-        isOpen={showCartSidebar} 
-        onClose={() => setShowCartSidebar(false)} 
+      <CartSidebar
+        isOpen={showCartSidebar}
+        onClose={() => setShowCartSidebar(false)}
       />
     </>
   );
