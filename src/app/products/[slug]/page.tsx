@@ -165,9 +165,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         'article:modified_time': new Date().toISOString(),
         
         // Mobile app tags
-        'al:ios:app_name': 'NC Mobile',
+        'al:ios:app_name': 'Nguyen Cong Mobile',
         'al:ios:app_store_id': 'ncmobile://product/' + slug,
-        'al:android:app_name': 'NC Mobile',
+        'al:android:app_name': 'Nguyen Cong Mobile',
         'al:android:package': 'com.ncmobile.app',
         'al:android:url': 'ncmobile://product/' + slug,
         

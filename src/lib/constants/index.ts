@@ -249,8 +249,8 @@ export const SOCIAL_LINKS ={}
 
 // Contact information
 export const CONTACT_INFO = {
-  name: 'NC Mobile',
-  title: 'NC Mobile - Apple Products & Accessories',
+  name: 'Nguyen Cong Mobile',
+  title: 'Nguyen Cong Mobile - Apple Products & Accessories',
   email: 'anhcong160496@gmail.com',
   phone: '(+84) 963 761 702',
   phoneLink: '+84963761702', // Clean format for tel: links

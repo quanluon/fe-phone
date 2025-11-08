@@ -11,11 +11,33 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: CONTACT_INFO.title,
-  description: 'Điểm đến tin cậy cho các sản phẩm Apple và phụ kiện mới nhất. Giá cả cạnh tranh, giao hàng nhanh chóng và dịch vụ khách hàng xuất sắc. Mua iPhone, iPad, MacBook, Apple Watch, AirPods chính hãng tại NC Mobile.',
-  keywords: 'Apple, iPhone, iPad, MacBook, Apple Watch, AirPods, điện thoại Apple, máy tính Apple, phụ kiện Apple, mua online, NC Mobile, chính hãng, giá rẻ',
+  description: 'Điểm đến tin cậy cho các sản phẩm Apple và phụ kiện mới nhất. Giá cả cạnh tranh, giao hàng nhanh chóng và dịch vụ khách hàng xuất sắc. Mua iPhone, iPad, MacBook, Apple Watch, AirPods chính hãng tại Nguyen Cong Mobile.',
+  keywords: 'Apple, iPhone, iPad, MacBook, Apple Watch, AirPods, điện thoại Apple, máy tính Apple, phụ kiện Apple, mua online, Nguyen Cong Mobile, chính hãng, giá rẻ',
   authors: [{ name: CONTACT_INFO.name }],
   creator: CONTACT_INFO.name,
   publisher: CONTACT_INFO.name,
+  icons: {
+    icon: '/favicon.ico',
+  },
+  manifest: '/site.manifest.json',
+  themeColor: '#1f2937',
+  appleWebApp: {
+    title: CONTACT_INFO.name,
+    statusBarStyle: 'default',
+  },
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+  },
+  alternates: {
+    canonical: '/',
+    languages: {
+      'vi': '/vi',
+      'en': '/en',
+    },
+  },
   formatDetection: {
     email: false,
     address: false,

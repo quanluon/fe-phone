@@ -167,18 +167,10 @@ export const Header: React.FC = () => {
 
             {/* Action Buttons */}
             <div className="flex items-center space-x-1 sm:space-x-2 lg:space-x-4">
-              {/* Search Icon (Mobile) */}
-              <button 
-                className="md:hidden p-1.5 sm:p-2 text-gray-700 hover:text-blue-600"
-                aria-label={t('header.search')}
-              >
-                <MagnifyingGlassIcon className="h-5 w-5" />
-              </button>
-
-              {/* User Icon */}
+              {/* User Icon - Desktop Only */}
               <Link 
                 href={isAuthenticated ? "/profile" : "/auth?mode=login"} 
-                className="p-1.5 sm:p-2 text-gray-700 hover:text-blue-600"
+                className="hidden lg:block p-1.5 sm:p-2 text-gray-700 hover:text-blue-600"
                 aria-label={isAuthenticated ? t('header.profile') : t('header.signIn')}
               >
                 <UserIcon className="h-5 w-5" />
@@ -223,25 +215,87 @@ export const Header: React.FC = () => {
             </div>
           </div>
 
-          {/* Mobile Search Bar */}
+          {/* Mobile Menu */}
           {showMobileMenu && (
-            <div className="md:hidden py-4 border-t">
-              <form onSubmit={handleSearch}>
-                <Input
-                  type="search"
-                  placeholder={t('header.searchPlaceholder')}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  leftIcon={<MagnifyingGlassIcon className="h-4 w-4" />}
-                />
-              </form>
-            </div>
-          )}
+            <div className="lg:hidden border-t">
+              {/* Mobile Search Bar */}
+              <div className="py-4 px-2">
+                <form onSubmit={handleSearch}>
+                  <Input
+                    type="search"
+                    placeholder={t('header.searchPlaceholder')}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    leftIcon={<MagnifyingGlassIcon className="h-4 w-4" />}
+                  />
+                </form>
+              </div>
 
-          {/* Mobile Navigation */}
-          {showMobileMenu && (
-            <div className="lg:hidden py-4 border-t">
-              <DynamicNavigation className="flex flex-col space-y-2" />
+              {/* Mobile Profile Section */}
+              <div className="py-4 px-2 border-t border-gray-200">
+                {isAuthenticated ? (
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-2 px-2 py-2 bg-gray-50 rounded-md">
+                      <UserIcon className="h-5 w-5 text-gray-600" />
+                      <span className="text-sm font-medium text-gray-900">
+                        {user?.firstName || user?.email}
+                      </span>
+                    </div>
+                    <Link
+                      href="/profile"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      {t('header.profile')}
+                    </Link>
+                    <Link
+                      href="/orders"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      {t('header.orders')}
+                    </Link>
+                    <button
+                      onClick={() => {
+                        handleLogout();
+                        setShowMobileMenu(false);
+                      }}
+                      disabled={logoutMutation.isPending}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {logoutMutation.isPending ? t('common.loading') : t('header.signOut')}
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-2 px-2 py-2 mb-2">
+                      <UserIcon className="h-5 w-5 text-gray-600" />
+                      <span className="text-sm font-medium text-gray-900">
+                        {t('header.account')}
+                      </span>
+                    </div>
+                    <Link
+                      href="/auth?mode=register"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      {t('header.createAccount')}
+                    </Link>
+                    <Link
+                      href="/auth?mode=login"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      {t('header.signIn')}
+                    </Link>
+                  </div>
+                )}
+              </div>
+
+              {/* Mobile Navigation Links */}
+              <div className="py-4 px-2 border-t border-gray-200">
+                <DynamicNavigation className="flex flex-col space-y-2" />
+              </div>
             </div>
           )}
         </div>
