@@ -6,6 +6,7 @@ import './globals.css';
 import { Providers } from './providers';
 import { CONTACT_INFO } from '@/lib/constants';
 import { LocaleInitializer } from '@/components/common/LocaleInitializer';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -169,6 +170,7 @@ export default async function RootLayout({
           <LocaleInitializer locale={locale as 'vi' | 'en'} />
           <Providers>
             {children}
+            <SpeedInsights />
           </Providers>
         </NextIntlClientProvider>
       </body>
