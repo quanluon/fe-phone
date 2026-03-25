@@ -1,6 +1,7 @@
 "use client"
 
 import { SearchBar } from "@/components/molecules/SearchBar"
+import { BottomNav } from "@/components/molecules/BottomNav"
 import { CategoryTabs } from "@/components/organisms/CategoryTabs"
 import { HomeHeader } from "@/components/organisms/HomeHeader"
 import { NewArrivals } from "@/components/organisms/NewArrivals"
@@ -17,6 +18,7 @@ export default function HomePage() {
         <CategoryTabs />
         <NewArrivals />
       </div>
+      <BottomNav />
     </main>
   )
 }

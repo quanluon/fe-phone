@@ -77,7 +77,7 @@ export const Header: React.FC = () => {
               <LanguageSwitcher />
               <span className="hidden sm:inline text-white/55">|</span>
               <span className="hidden sm:inline text-white/80">
-                Genuine Apple products, nationwide support
+                {t("header.genuineSupport")}
               </span>
             </div>
             <div className="flex items-center gap-3 text-white/85">
