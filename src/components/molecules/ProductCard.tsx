@@ -100,12 +100,12 @@ export const ProductCard = ({
            )}
            
            <div className="mt-2 rounded-2xl bg-slate-50 px-3 py-2">
-             <div className="flex items-center gap-2">
-                <span className="font-display text-lg font-semibold text-slate-900">
+             <div className="flex flex-col items-start gap-1 wrap">
+                <span className="font-display text-lg font-semibold leading-none text-slate-900">
                   {formatCurrency(selectedVariant.price)}
                 </span>
                 {selectedVariant.originalPrice && (
-                  <span className="text-xs text-slate-400 line-through">
+                  <span className="text-xs leading-none text-slate-400 line-through">
                     {formatCurrency(selectedVariant.originalPrice)}
                   </span>
                 )}
