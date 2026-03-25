@@ -12,26 +12,26 @@
 
 @layer base {
 :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222.2 84% 4.9%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96%;
-    --accent-foreground: 222.2 84% 4.9%;
+  --background: 42 33% 97%;
+  --foreground: 215 29% 16%;
+  --card: 0 0% 100%;
+  --card-foreground: 215 29% 16%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 215 29% 16%;
+  --primary: 206 75% 36%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 35 46% 92%;
+  --secondary-foreground: 215 29% 16%;
+  --muted: 36 38% 94%;
+  --muted-foreground: 217 11% 44%;
+  --accent: 168 33% 88%;
+  --accent-foreground: 172 66% 16%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
-    --radius: 0.5rem;
+  --border: 30 21% 86%;
+  --input: 30 21% 86%;
+  --ring: 206 75% 36%;
+  --radius: 1rem;
   }
 
   .dark {
@@ -63,8 +63,26 @@
   }
   
   body {
+    min-height: 100vh;
     background-color: hsl(var(--background));
+    background-image:
+      radial-gradient(1100px circle at -12% -20%, rgba(255, 213, 153, 0.22), transparent 45%),
+      radial-gradient(900px circle at 110% -10%, rgba(110, 176, 228, 0.2), transparent 48%),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.95));
     color: hsl(var(--foreground));
+    font-family: var(--font-sans), "Segoe UI", sans-serif;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display), var(--font-sans), "Segoe UI", sans-serif;
+    letter-spacing: -0.015em;
   }
 }
 
@@ -137,15 +155,15 @@
 
   /* Gradient backgrounds */
   .gradient-blue {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #0f4c75 0%, #3282b8 100%);
   }
 
   .gradient-purple {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background: linear-gradient(135deg, #005f73 0%, #0a9396 100%);
   }
 
   .gradient-green {
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    background: linear-gradient(135deg, #94d2bd 0%, #e9d8a6 100%);
   }
 
   /* Glass morphism effect */
@@ -187,7 +205,7 @@
 
   /* Text effects */
   .text-gradient {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #005f73 0%, #ca6702 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -197,7 +215,37 @@
   .border-gradient {
     border: 2px solid transparent;
     background: linear-gradient(white, white) padding-box,
-                linear-gradient(135deg, #667eea 0%, #764ba2 100%) border-box;
+                linear-gradient(135deg, #0f4c75 0%, #ca6702 100%) border-box;
+  }
+
+  .surface-panel {
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.72));
+    box-shadow: 0 12px 35px -25px rgba(8, 42, 66, 0.45);
+    backdrop-filter: blur(12px);
+  }
+
+  .soft-grid {
+    background-image:
+      linear-gradient(to right, rgba(142, 122, 87, 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(142, 122, 87, 0.06) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  .stagger-fade-in {
+    animation: fadeIn 0.7s ease-out both;
+  }
+
+  .stagger-fade-in:nth-child(2) {
+    animation-delay: 80ms;
+  }
+
+  .stagger-fade-in:nth-child(3) {
+    animation-delay: 160ms;
+  }
+
+  .stagger-fade-in:nth-child(4) {
+    animation-delay: 240ms;
   }
 }
 

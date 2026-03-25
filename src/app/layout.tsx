@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Fraunces, Manrope } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getLocale } from 'next-intl/server';
 import './globals.css';
@@ -8,7 +8,17 @@ import { CONTACT_INFO } from '@/lib/constants';
 import { LocaleInitializer } from '@/components/common/LocaleInitializer';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
-const inter = Inter({ subsets: ['latin'] });
+const manrope = Manrope({
+  subsets: ['latin', 'vietnamese'],
+  variable: '--font-sans',
+  display: 'swap',
+});
+
+const fraunces = Fraunces({
+  subsets: ['latin', 'vietnamese'],
+  variable: '--font-display',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: CONTACT_INFO.title,
@@ -165,7 +175,7 @@ export default async function RootLayout({
         <link rel="preconnect" href="https://oh8kpjl5uf.execute-api.ap-southeast-1.amazonaws.com" />
         <link rel="dns-prefetch" href="https://d10gwy2ckxccqn.cloudfront.net" />
       </head>
-      <body className={inter.className}>
+      <body className={`${manrope.variable} ${fraunces.variable} font-sans antialiased`}>
         <NextIntlClientProvider messages={messages}>
           <LocaleInitializer locale={locale as 'vi' | 'en'} />
           <Providers>

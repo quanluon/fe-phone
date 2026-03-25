@@ -1,4 +1,8 @@
 import type { Config } from 'tailwindcss';
+import forms from '@tailwindcss/forms';
+import typography from '@tailwindcss/typography';
+import aspectRatio from '@tailwindcss/aspect-ratio';
+import tailwindcssAnimate from 'tailwindcss-animate';
 
 const config: Config = {
   content: [
@@ -49,7 +53,8 @@ const config: Config = {
         sm: 'calc(var(--radius) - 4px)',
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-display)', 'var(--font-sans)', 'serif'],
       },
       spacing: {
         '18': '4.5rem',
@@ -97,9 +102,10 @@ const config: Config = {
     },
   },
   plugins: [
-    require('@tailwindcss/forms'),
-    require('@tailwindcss/typography'),
-    require('@tailwindcss/aspect-ratio'),
+    forms,
+    typography,
+    aspectRatio,
+    tailwindcssAnimate,
   ],
 };
 
