@@ -25,7 +25,10 @@ export async function safeServerFetch<T = unknown>(
       const timeoutId = setTimeout(() => controller.abort(), timeout);
 
       // Remove Next.js specific options for server-side fetch
-      const { next: _, ...cleanFetchOptions } = fetchOptions;
+      const cleanFetchOptions: RequestInit = { ...fetchOptions };
+      if ('next' in cleanFetchOptions) {
+        delete (cleanFetchOptions as RequestInit & { next?: unknown }).next;
+      }
       
       const response = await fetch(url, {
         ...cleanFetchOptions,

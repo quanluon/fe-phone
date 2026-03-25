@@ -2,19 +2,39 @@ import * as React from "react"
 
 import { cn } from "@/lib/shadcn-utils"
 
+export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+  variant?: "default" | "outlined" | "elevated"
+  padding?: "none" | "sm" | "md" | "lg"
+}
+
 const Card = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      "rounded-lg border bg-card text-card-foreground shadow-sm",
-      className
-    )}
-    {...props}
-  />
-))
+  CardProps
+>(({ className, variant = "default", padding = "none", ...props }, ref) => {
+  const variantClass =
+    variant === "outlined"
+      ? "border border-border bg-card text-card-foreground shadow-sm"
+      : variant === "elevated"
+        ? "border-0 bg-card text-card-foreground shadow-md"
+        : "border bg-card text-card-foreground shadow-sm"
+
+  const paddingClass =
+    padding === "sm"
+      ? "p-3"
+      : padding === "md"
+        ? "p-4"
+        : padding === "lg"
+          ? "p-6"
+          : ""
+
+  return (
+    <div
+      ref={ref}
+      className={cn("rounded-lg", variantClass, paddingClass, className)}
+      {...props}
+    />
+  )
+})
 Card.displayName = "Card"
 
 const CardHeader = React.forwardRef<

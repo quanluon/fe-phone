@@ -2,7 +2,7 @@
 
 import { CartSidebar } from "@/components/cart/CartSidebar";
 import { DynamicNavigation } from "@/components/layout/DynamicNavigation";
-import { Input } from "@/components/ui/Input";
+import { Input } from "@/components/atoms/Input";
 import { useLogout } from "@/hooks/useAuth";
 import { useCart } from "@/hooks/useCart";
 import { useDebounce } from "@/hooks/useDebounce";
