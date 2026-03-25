@@ -29,11 +29,11 @@ export function ProductImageGallery({
     );
   }, [product]);
   return (
-    <div className="flex flex-col h-full">
-      <div className="space-y-4 flex-1 flex flex-col">
+    <div className="flex h-full min-h-0 flex-col">
+      <div className="flex flex-1 flex-col space-y-4">
         {/* Main Image */}
         <div
-          className="flex-shrink-0 bg-white rounded-lg overflow-hidden cursor-pointer hover:opacity-90 transition-opacity flex items-center justify-center"
+          className="flex min-h-[24rem] flex-1 items-center justify-center overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-4 shadow-sm transition-opacity hover:opacity-95 lg:min-h-0"
           onClick={() => onImageClick(selectedIndex)}
         >
           <NextImage
@@ -47,15 +47,15 @@ export function ProductImageGallery({
 
         {/* Thumbnail Images */}
         {images.length > 1 && (
-          <div className="flex-shrink-0 flex gap-2 overflow-x-auto overflow-y-hidden pb-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+          <div className="flex flex-shrink-0 gap-2 overflow-x-auto overflow-y-hidden pb-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
             {images.map((image, index) => (
               <button
                 key={index}
                 onClick={() => onIndexChange(index)}
-                className={`flex-shrink-0 w-16 h-16 bg-white rounded-lg overflow-hidden border-2 transition-all hover:border-blue-300 ${
+                className={`h-20 w-20 flex-shrink-0 overflow-hidden rounded-2xl border-2 bg-white transition-all hover:border-blue-300 ${
                   selectedIndex === index
                     ? "border-blue-500"
-                    : "border-gray-200"
+                    : "border-slate-200"
                 }`}
               >
                 <NextImage
@@ -72,7 +72,7 @@ export function ProductImageGallery({
 
         {/* Guarantee Section */}
         {hasGuarantee && (
-          <div className="flex-1 overflow-y-auto">
+          <div className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm lg:max-h-[18rem] lg:overflow-y-auto">
             {product && <GuaranteeSection product={product} />}
           </div>
         )}

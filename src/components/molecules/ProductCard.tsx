@@ -32,7 +32,7 @@ export const ProductCard = ({
       : null
 
   return (
-    <Card className="group relative overflow-hidden rounded-[1.75rem] border border-white/70 bg-white/90 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-medium">
+    <Card className="group relative overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
       <CardContent className="p-0">
         <div className="relative aspect-[3/4] w-full overflow-hidden bg-slate-100">
           <Link href={`/products/${product._id}-${product.slug}`}>
@@ -45,7 +45,7 @@ export const ProductCard = ({
           </Link>
 
           <div className="absolute right-3 top-3">
-             <Badge variant="secondary" className="gap-1 rounded-full bg-white/90 px-2 py-1 text-xs hover:bg-white">
+             <Badge variant="secondary" className="gap-1 rounded-full bg-white/95 px-2 py-1 text-xs">
                 <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
                 <span>4.7</span>
              </Badge>
@@ -54,7 +54,7 @@ export const ProductCard = ({
           <Button
             shape="circle"
             variant="ghost" 
-            className="absolute left-3 top-3 h-8 w-8 bg-white/85 backdrop-blur-md hover:bg-white"
+            className="absolute left-3 top-3 h-8 w-8 bg-white/95 backdrop-blur-md hover:bg-white"
             onClick={(e) => {
                 e.preventDefault()
                 onToggleWishlist?.(product)
@@ -84,22 +84,32 @@ export const ProductCard = ({
           </Button>
         </div>
 
-        <div className="space-y-1 px-3 pb-4 pt-3">
+        <div className="space-y-2 px-3 pb-4 pt-3">
+           <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+             {product.brand.name}
+           </p>
            <Link href={`/products/${product._id}-${product.slug}`}>
              <h3 className="line-clamp-2 min-h-[2.6rem] text-base font-semibold leading-snug text-slate-900 transition group-hover:text-sky-800">
                {product.name}
              </h3>
            </Link>
+           {product.shortDescription && (
+             <p className="line-clamp-2 text-sm text-slate-500">
+               {product.shortDescription}
+             </p>
+           )}
            
-           <div className="flex items-center gap-2">
-              <span className="font-display text-lg font-semibold text-slate-900">
-                {formatCurrency(selectedVariant.price)}
-              </span>
-              {selectedVariant.originalPrice && (
-                <span className="text-xs text-slate-400 line-through">
-                  {formatCurrency(selectedVariant.originalPrice)}
+           <div className="mt-2 rounded-2xl bg-slate-50 px-3 py-2">
+             <div className="flex items-center gap-2">
+                <span className="font-display text-lg font-semibold text-slate-900">
+                  {formatCurrency(selectedVariant.price)}
                 </span>
-              )}
+                {selectedVariant.originalPrice && (
+                  <span className="text-xs text-slate-400 line-through">
+                    {formatCurrency(selectedVariant.originalPrice)}
+                  </span>
+                )}
+             </div>
            </div>
         </div>
       </CardContent>

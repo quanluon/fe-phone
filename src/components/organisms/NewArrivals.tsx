@@ -44,7 +44,7 @@ export const NewArrivals = () => {
           Xem tất cả
         </Link>
       </div>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         {products?.data?.map((product) => (
           <div key={product._id} className="stagger-fade-in">
             <ProductCard 

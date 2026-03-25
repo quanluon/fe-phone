@@ -8,21 +8,22 @@ export function ProductContactSupport() {
   const t = useTranslations('product.detail');
 
   return (
-    <div className="pt-6 border-t">
-      <h3 className="text-sm font-semibold text-gray-900 mb-3">
+    <div className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm">
+      <h3 className="mb-2 text-base font-semibold text-slate-950">
         {t('needHelp')}
       </h3>
-      <div className="flex flex-col sm:flex-row gap-3">
+      <p className="mb-4 text-sm text-slate-500">Talk to a specialist before checkout if you need help picking the right variant.</p>
+      <div className="flex flex-col gap-3 sm:flex-row">
         <a
           href={`tel:${CONTACT_INFO.phoneLink}`}
-          className="flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
+          className="flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-emerald-700"
         >
           <PhoneIcon className="h-5 w-5" />
           {t('callUs')}
         </a>
         <a
           href={`mailto:${CONTACT_INFO.email}`}
-          className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+          className="flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-slate-800"
         >
           <EnvelopeIcon className="h-5 w-5" />
           {t('emailUs')}
@@ -31,4 +32,3 @@ export function ProductContactSupport() {
     </div>
   );
 }
-

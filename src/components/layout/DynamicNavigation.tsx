@@ -40,14 +40,14 @@ export const DynamicNavigation: React.FC<DynamicNavigationProps> = ({ className 
   if (isMobile) {
     return (
       <nav className={`flex flex-col space-y-2 ${className}`}>
-        <div className="px-3 py-2 text-sm font-medium text-gray-500 uppercase tracking-wider">
+        <div className="px-3 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
           {t('categories')}
         </div>
         {categories.map((category: Category) => (
           <button
             key={category._id}
             onClick={() => handleCategoryClick(category._id)}
-            className="block w-full text-left px-3 py-2 text-gray-700 hover:bg-gray-50 hover:text-blue-600 rounded-md transition-colors"
+            className="block w-full rounded-xl px-3 py-3 text-left text-sm font-medium text-slate-700 transition-colors hover:bg-white hover:text-slate-950"
           >
             {category.name}
           </button>
@@ -58,12 +58,12 @@ export const DynamicNavigation: React.FC<DynamicNavigationProps> = ({ className 
 
   // Desktop version - dropdown
   return (
-    <nav className={`hidden lg:flex items-center space-x-6 xl:space-x-8 ${className}`}>
+    <nav className={`hidden lg:flex items-center space-x-5 xl:space-x-6 ${className}`}>
       <div className="relative group">
         <button
           onClick={() => setIsOpen(!isOpen)}
           onMouseEnter={() => setIsOpen(true)}
-          className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 transition-colors text-sm xl:text-base"
+          className="flex items-center space-x-1 rounded-full px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 hover:text-slate-950 xl:text-base"
         >
           <span>{t('categories')}</span>
           <ChevronDownIcon 
@@ -72,10 +72,9 @@ export const DynamicNavigation: React.FC<DynamicNavigationProps> = ({ className 
             }`} 
           />
         </button>
-        
         {/* Dropdown Menu */}
         <div
-          className={`absolute top-full left-0 mt-1 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-50 transition-all duration-200 ${
+          className={`absolute top-full left-0 z-50 mt-2 w-72 rounded-2xl border border-slate-200 bg-white p-2 shadow-xl transition-all duration-200 ${
             isOpen 
               ? 'opacity-100 visible translate-y-0' 
               : 'opacity-0 invisible -translate-y-2'
@@ -88,7 +87,7 @@ export const DynamicNavigation: React.FC<DynamicNavigationProps> = ({ className 
               <button
                 key={category._id}
                 onClick={() => handleCategoryClick(category._id)}
-                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
+                className="block w-full rounded-xl px-4 py-2.5 text-left text-sm text-slate-700 transition-colors hover:bg-slate-50 hover:text-slate-950"
               >
                 {category.name}
               </button>

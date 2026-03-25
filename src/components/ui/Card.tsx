@@ -15,8 +15,8 @@ const Card = React.forwardRef<
     variant === "outlined"
       ? "border border-border bg-card text-card-foreground shadow-sm"
       : variant === "elevated"
-        ? "border-0 bg-card text-card-foreground shadow-md"
-        : "border bg-card text-card-foreground shadow-sm"
+        ? "border-0 bg-card text-card-foreground shadow-lg"
+        : "border border-border/80 bg-card text-card-foreground shadow-sm"
 
   const paddingClass =
     padding === "sm"
@@ -30,7 +30,7 @@ const Card = React.forwardRef<
   return (
     <div
       ref={ref}
-      className={cn("rounded-lg", variantClass, paddingClass, className)}
+      className={cn("rounded-2xl", variantClass, paddingClass, className)}
       {...props}
     />
   )

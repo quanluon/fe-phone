@@ -26,7 +26,7 @@ export const CategoryTabs = () => {
   }
 
   return (
-    <section className="space-y-3">
+    <section className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="font-display text-2xl font-semibold text-slate-900">Danh mục nổi bật</h2>
       </div>
@@ -39,10 +39,10 @@ export const CategoryTabs = () => {
               key={tab._id}
               onClick={() => handleClick(tab._id)}
               className={cn(
-                "whitespace-nowrap rounded-full border px-4 py-2 text-sm font-semibold transition",
+                "whitespace-nowrap rounded-full border px-4 py-2.5 text-sm font-semibold transition",
                 isActive
                   ? "border-slate-900 bg-slate-900 text-white shadow-sm"
-                  : "border-white/70 bg-white/80 text-slate-600 hover:border-slate-300 hover:text-slate-900"
+                  : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:text-slate-900"
               )}
             >
               {tab.name}

@@ -14,9 +14,12 @@ import {
   Bars3Icon,
   ChevronDownIcon,
   HeartIcon,
+  HomeIcon,
   MagnifyingGlassIcon,
   ShoppingCartIcon,
+  Squares2X2Icon,
   UserIcon,
+  XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -67,64 +70,57 @@ export const Header: React.FC = () => {
   return (
     <>
       {/* Top Bar */}
-      <div className="bg-blue-700 text-white py-2">
+      <div className="border-b border-slate-200/80 bg-slate-950 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between text-sm">
-            {/* Left side - Country & Currency */}
-            <div className="flex items-center space-x-2 sm:space-x-4">
+          <div className="flex min-h-10 flex-wrap items-center justify-between gap-2 py-2 text-xs sm:text-sm">
+            <div className="flex items-center gap-2 sm:gap-4">
               <LanguageSwitcher />
-              {/* <div className="hidden xs:block">
-                <CurrencySwitcher />
-              </div> */}
+              <span className="hidden sm:inline text-white/55">|</span>
+              <span className="hidden sm:inline text-white/80">
+                Genuine Apple products, nationwide support
+              </span>
             </div>
-
-            {/* Center - Free delivery message */}
-            <div className="text-center hidden sm:block flex-1">
-              <p className="text-xs sm:text-sm">
-                {t("header.justMeDesc")}
-                {" "}📞{" "}
-                <a
-                  href={`tel:${CONTACT_INFO.phoneLink}`}
-                  className="hover:text-blue-400 transition-colors underline"
-                >
-                  {CONTACT_INFO.phone}
-                </a>
-              </p>
+            <div className="flex items-center gap-3 text-white/85">
+              <span className="hidden md:inline">{t("header.justMeDesc")}</span>
+              <a
+                href={`tel:${CONTACT_INFO.phoneLink}`}
+                className="font-medium text-white transition-colors hover:text-sky-300"
+              >
+                {CONTACT_INFO.phone}
+              </a>
             </div>
-
-            {/* Right side - Auth links */}
-            <div className="flex items-center space-x-2 sm:space-x-4">
+            <div className="flex items-center gap-3 sm:gap-4">
               {isAuthenticated ? (
                 <div className="relative">
                   <button
                     onClick={() => setShowUserMenu(!showUserMenu)}
-                    className="flex items-center space-x-1 hover:text-blue-200 transition-colors"
+                    className="flex items-center gap-1 rounded-full border border-white/15 px-2.5 py-1.5 transition-colors hover:bg-white/10"
                   >
                     <UserIcon className="h-4 w-4" />
-                    <span className="hidden sm:inline">
+                    <span className="hidden sm:inline max-w-40 truncate">
                       {user?.firstName || user?.email}
                     </span>
                     <ChevronDownIcon className="h-3 w-3" />
                   </button>
 
                   {showUserMenu && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                    <div className="absolute right-0 mt-2 w-56 rounded-2xl border border-slate-200 bg-white p-2 shadow-xl z-50">
                       <Link
                         href="/profile"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        className="block rounded-xl px-4 py-2 text-sm text-gray-700 hover:bg-slate-50"
                       >
                         {t("header.profile")}
                       </Link>
                       <Link
                         href="/orders"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        className="block rounded-xl px-4 py-2 text-sm text-gray-700 hover:bg-slate-50"
                       >
                         {t("header.orders")}
                       </Link>
                       <button
                         onClick={handleLogout}
                         disabled={logoutMutation.isPending}
-                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="block w-full rounded-xl px-4 py-2 text-left text-sm text-gray-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         {logoutMutation.isPending
                           ? t("common.loading")
@@ -137,13 +133,13 @@ export const Header: React.FC = () => {
                 <>
                   <Link
                     href="/auth?mode=register"
-                    className="hover:text-blue-200 transition-colors text-xs sm:text-sm"
+                    className="hidden sm:inline transition-colors hover:text-sky-300"
                   >
                     {t("header.createAccount")}
                   </Link>
                   <Link
                     href="/auth?mode=login"
-                    className="hover:text-blue-200 transition-colors text-xs sm:text-sm"
+                    className="rounded-full border border-white/15 px-2.5 py-1.5 transition-colors hover:bg-white/10"
                   >
                     {t("header.signIn")}
                   </Link>
@@ -152,30 +148,30 @@ export const Header: React.FC = () => {
             </div>
           </div>
 
-          {/* Mobile free delivery message */}
-          <div className="text-center sm:hidden mt-2">
-            <p className="text-xs">{t("header.justMeDesc")}</p>
-          </div>
         </div>
       </div>
 
       {/* Main Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-40">
+      <header className="sticky top-0 z-40 border-b border-slate-200/80 bg-white/95 backdrop-blur">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-14 sm:h-16">
+          <div className="flex min-h-16 items-center gap-3 py-3">
             {/* Logo */}
-            <Link href="/" className="flex items-center space-x-1 sm:space-x-2">
-              <ShoppingCartIcon className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600 hidden sm:inline" />
-              <span className="text-lg sm:text-sm md:text-sm font-bold text-gray-900">
+            <Link href="/" className="flex items-center gap-2 rounded-full pr-2">
+              <div className="hidden h-10 w-10 items-center justify-center rounded-2xl bg-slate-900 text-white sm:flex">
+                <ShoppingCartIcon className="h-5 w-5" />
+              </div>
+              <span className="text-sm font-bold uppercase tracking-[0.18em] text-slate-900 sm:text-base">
                 {CONTACT_INFO.name}
               </span>
             </Link>
 
             {/* Desktop Navigation */}
-            <DynamicNavigation />
+            <div className="hidden lg:flex">
+              <DynamicNavigation />
+            </div>
 
             {/* Search Bar */}
-            <div className="hidden md:flex flex-1 max-w-md mx-4 lg:mx-8">
+            <div className="hidden md:flex flex-1">
               <form onSubmit={handleSearch} className="w-full">
                 <Input
                   type="search"
@@ -183,17 +179,16 @@ export const Header: React.FC = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   leftIcon={<MagnifyingGlassIcon className="h-4 w-4" />}
-                  className="w-full"
+                  className="w-full border-slate-200 bg-slate-50"
                 />
               </form>
             </div>
 
             {/* Action Buttons */}
-            <div className="flex items-center space-x-1 sm:space-x-2 lg:space-x-4">
-              {/* User Icon - Desktop Only */}
+            <div className="ml-auto flex items-center gap-1 sm:gap-2">
               <Link
                 href={isAuthenticated ? "/profile" : "/auth?mode=login"}
-                className="hidden lg:block p-1.5 sm:p-2 text-gray-700 hover:text-blue-600"
+                className="hidden rounded-full border border-transparent p-2 text-slate-700 transition-colors hover:border-slate-200 hover:bg-slate-50 hover:text-slate-950 lg:block"
                 aria-label={
                   isAuthenticated ? t("header.profile") : t("header.signIn")
                 }
@@ -204,12 +199,12 @@ export const Header: React.FC = () => {
               {/* Wishlist */}
               <Link
                 href="/wishlist"
-                className="relative p-1.5 sm:p-2 text-gray-700 hover:text-blue-600"
+                className="relative rounded-full border border-transparent p-2 text-slate-700 transition-colors hover:border-slate-200 hover:bg-slate-50 hover:text-slate-950"
                 aria-label={t("header.wishlist")}
               >
                 <HeartIcon className="h-5 w-5" />
                 {wishlistItems.length > 0 && (
-                  <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-600 text-white text-xs font-semibold rounded-full flex items-center justify-center">
+                  <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-rose-500 px-1 text-[11px] font-semibold text-white">
                     {wishlistItems.length}
                   </span>
                 )}
@@ -218,12 +213,12 @@ export const Header: React.FC = () => {
               {/* Cart */}
               <button
                 onClick={() => setShowCartSidebar(true)}
-                className="relative p-1.5 sm:p-2 text-gray-700 hover:text-blue-600"
+                className="relative rounded-full bg-slate-900 p-2 text-white transition-colors hover:bg-slate-800"
                 aria-label={t("header.cart")}
               >
                 <ShoppingCartIcon className="h-5 w-5" />
                 {totalItems > 0 && (
-                  <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-600 text-white text-xs font-semibold rounded-full flex items-center justify-center">
+                  <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-amber-400 px-1 text-[11px] font-semibold text-slate-950">
                     {totalItems}
                   </span>
                 )}
@@ -232,19 +227,23 @@ export const Header: React.FC = () => {
               {/* Mobile Menu Button */}
               <button
                 onClick={() => setShowMobileMenu(!showMobileMenu)}
-                className="lg:hidden p-1.5 sm:p-2 text-gray-700 hover:text-blue-600"
+                className="rounded-full border border-slate-200 p-2 text-slate-700 transition-colors hover:bg-slate-50 lg:hidden"
                 aria-label={t("header.menu")}
               >
-                <Bars3Icon className="h-5 w-5" />
+                {showMobileMenu ? (
+                  <XMarkIcon className="h-5 w-5" />
+                ) : (
+                  <Bars3Icon className="h-5 w-5" />
+                )}
               </button>
             </div>
           </div>
 
           {/* Mobile Menu */}
           {showMobileMenu && (
-            <div className="lg:hidden border-t">
+            <div className="border-t border-slate-200 py-4 lg:hidden">
               {/* Mobile Search Bar */}
-              <div className="py-4 px-2">
+              <div className="px-1 pb-4">
                 <form onSubmit={handleSearch}>
                   <Input
                     type="search"
@@ -252,15 +251,44 @@ export const Header: React.FC = () => {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     leftIcon={<MagnifyingGlassIcon className="h-4 w-4" />}
+                    className="border-slate-200 bg-slate-50"
                   />
                 </form>
               </div>
 
-              {/* Mobile Profile Section */}
-              <div className="py-4 px-2 border-t border-gray-200">
+              <div className="grid grid-cols-3 gap-2 pb-4">
+                <Link
+                  href="/"
+                  onClick={() => setShowMobileMenu(false)}
+                  className="flex flex-col items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-3 py-3 text-xs font-medium text-slate-700"
+                >
+                  <HomeIcon className="h-5 w-5" />
+                  Home
+                </Link>
+                <Link
+                  href="/products"
+                  onClick={() => setShowMobileMenu(false)}
+                  className="flex flex-col items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-3 py-3 text-xs font-medium text-slate-700"
+                >
+                  <Squares2X2Icon className="h-5 w-5" />
+                  Shop
+                </Link>
+                <button
+                  onClick={() => {
+                    setShowMobileMenu(false);
+                    setShowCartSidebar(true);
+                  }}
+                  className="flex flex-col items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-3 py-3 text-xs font-medium text-slate-700"
+                >
+                  <ShoppingCartIcon className="h-5 w-5" />
+                  Cart
+                </button>
+              </div>
+
+              <div className="rounded-3xl border border-slate-200 bg-slate-50 p-3">
                 {isAuthenticated ? (
                   <div className="space-y-2">
-                    <div className="flex items-center space-x-2 px-2 py-2 bg-gray-50 rounded-md">
+                    <div className="flex items-center space-x-2 rounded-2xl bg-white px-3 py-3">
                       <UserIcon className="h-5 w-5 text-gray-600" />
                       <span className="text-sm font-medium text-gray-900">
                         {user?.firstName || user?.email}
@@ -268,14 +296,14 @@ export const Header: React.FC = () => {
                     </div>
                     <Link
                       href="/profile"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+                      className="block rounded-xl px-4 py-2 text-sm text-gray-700 hover:bg-white"
                       onClick={() => setShowMobileMenu(false)}
                     >
                       {t("header.profile")}
                     </Link>
                     <Link
                       href="/orders"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+                      className="block rounded-xl px-4 py-2 text-sm text-gray-700 hover:bg-white"
                       onClick={() => setShowMobileMenu(false)}
                     >
                       {t("header.orders")}
@@ -286,7 +314,7 @@ export const Header: React.FC = () => {
                         setShowMobileMenu(false);
                       }}
                       disabled={logoutMutation.isPending}
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="block w-full rounded-xl px-4 py-2 text-left text-sm text-gray-700 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {logoutMutation.isPending
                         ? t("common.loading")
@@ -295,7 +323,7 @@ export const Header: React.FC = () => {
                   </div>
                 ) : (
                   <div className="space-y-2">
-                    <div className="flex items-center space-x-2 px-2 py-2 mb-2">
+                    <div className="mb-2 flex items-center space-x-2 px-2 py-2">
                       <UserIcon className="h-5 w-5 text-gray-600" />
                       <span className="text-sm font-medium text-gray-900">
                         {t("header.account")}
@@ -303,14 +331,14 @@ export const Header: React.FC = () => {
                     </div>
                     <Link
                       href="/auth?mode=register"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+                      className="block rounded-xl px-4 py-2 text-sm text-gray-700 hover:bg-white"
                       onClick={() => setShowMobileMenu(false)}
                     >
                       {t("header.createAccount")}
                     </Link>
                     <Link
                       href="/auth?mode=login"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+                      className="block rounded-xl px-4 py-2 text-sm text-gray-700 hover:bg-white"
                       onClick={() => setShowMobileMenu(false)}
                     >
                       {t("header.signIn")}
@@ -320,7 +348,7 @@ export const Header: React.FC = () => {
               </div>
 
               {/* Mobile Navigation Links */}
-              <div className="py-4 px-2 border-t border-gray-200">
+              <div className="mt-4 border-t border-slate-200 pt-4">
                 <DynamicNavigation className="flex flex-col space-y-2" />
               </div>
             </div>

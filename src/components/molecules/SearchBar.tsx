@@ -15,7 +15,7 @@ export const SearchBar = React.forwardRef<HTMLInputElement, SearchBarProps>(
           type="search"
           placeholder={placeholder}
           shape="pill"
-          className="h-12 border-white/80 bg-white/85 pl-10 pr-12 shadow-soft backdrop-blur-sm placeholder:text-slate-400 focus-visible:ring-2 focus-visible:ring-sky-700/50"
+          className="h-12 rounded-2xl border-slate-200 bg-white pl-10 pr-12 shadow-sm placeholder:text-slate-400 focus-visible:ring-2 focus-visible:ring-sky-700/50"
           {...props}
         />
         <button

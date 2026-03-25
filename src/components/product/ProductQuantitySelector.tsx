@@ -19,38 +19,38 @@ export function ProductQuantitySelector({
   const tProduct = useTranslations('product');
 
   return (
-    <div>
-      <h3 className="text-sm font-medium text-gray-900 mb-2">
+    <div className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm">
+      <h3 className="mb-3 text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">
         {t('quantity')}
       </h3>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-3">
         <button
           onClick={() => onQuantityChange(Math.max(1, quantity - 1))}
-          className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50"
+          className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-slate-50 text-lg hover:bg-white"
         >
           -
         </button>
-        <span className="w-12 text-center">{quantity}</span>
+        <span className="min-w-[3rem] text-center text-lg font-semibold text-slate-900">{quantity}</span>
         <button
           onClick={() => onQuantityChange(Math.min(availableStock, quantity + 1))}
           disabled={quantity >= availableStock}
-          className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-slate-50 text-lg hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
         >
           +
         </button>
       </div>
-      <div className="text-sm text-gray-500 mt-1">
+      <div className="mt-3 text-sm text-slate-500">
         {availableStock > 0 ? (
           <span>
             {availableStock} {t('available')}
             {cartQuantity > 0 && (
-              <span className="text-blue-600 ml-1">
+              <span className="ml-1 text-sky-700">
                 ({cartQuantity} {tProduct('inCartCount')})
               </span>
             )}
           </span>
         ) : (
-          <span className="text-red-600">
+          <span className="text-rose-600">
             {cartQuantity > 0
               ? tProduct('allItemsInCart')
               : tProduct('outOfStock')}
@@ -60,4 +60,3 @@ export function ProductQuantitySelector({
     </div>
   );
 }
-

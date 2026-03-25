@@ -1,6 +1,5 @@
 import pino from 'pino';
 
-const isServer = typeof window === 'undefined';
 const isDevelopment = process.env.NODE_ENV === 'development';
 
 /**
@@ -48,18 +47,6 @@ export const logger = pino({
       },
     },
   },
-  ...(isServer && isDevelopment
-    ? {
-        transport: {
-          target: 'pino-pretty',
-          options: {
-            colorize: true,
-            translateTime: 'HH:MM:ss Z',
-            ignore: 'pid,hostname',
-          },
-        },
-      }
-    : {}),
 });
 
 /**
@@ -71,4 +58,3 @@ export const createLogger = (context: Record<string, unknown>) => {
 };
 
 export default logger;
-

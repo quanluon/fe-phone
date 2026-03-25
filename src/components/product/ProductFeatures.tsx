@@ -7,20 +7,22 @@ export function ProductFeatures() {
   const t = useTranslations('product.detail');
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 border-t">
-      <div className="flex items-center gap-2">
-        <TruckIcon className="h-5 w-5 text-blue-600" />
-        <span className="text-sm text-gray-600">{t('freeShipping')}</span>
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+      <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
+        <TruckIcon className="h-5 w-5 text-sky-700" />
+        <p className="mt-3 text-sm font-semibold text-slate-900">{t('freeShipping')}</p>
+        <p className="mt-1 text-sm text-slate-500">Clear shipping messaging before checkout.</p>
       </div>
-      <div className="flex items-center gap-2">
-        <ShieldCheckIcon className="h-5 w-5 text-blue-600" />
-        <span className="text-sm text-gray-600">{t('warranty')}</span>
+      <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
+        <ShieldCheckIcon className="h-5 w-5 text-sky-700" />
+        <p className="mt-3 text-sm font-semibold text-slate-900">{t('warranty')}</p>
+        <p className="mt-1 text-sm text-slate-500">Warranty and service details stay visible.</p>
       </div>
-      <div className="flex items-center gap-2">
-        <ShieldCheckIcon className="h-5 w-5 text-blue-600" />
-        <span className="text-sm text-gray-600">{t('returns')}</span>
+      <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
+        <ShieldCheckIcon className="h-5 w-5 text-sky-700" />
+        <p className="mt-3 text-sm font-semibold text-slate-900">{t('returns')}</p>
+        <p className="mt-1 text-sm text-slate-500">Returns and exchange reassurance near the CTA.</p>
       </div>
     </div>
   );
 }
-

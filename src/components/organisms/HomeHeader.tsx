@@ -21,7 +21,7 @@ export const HomeHeader = () => {
   const displayName = user?.firstName || user?.email?.split("@")[0] || "Bạn"
 
   return (
-    <header className="surface-panel soft-grid rounded-[1.75rem] px-4 py-4 sm:px-5 sm:py-5">
+    <header className="surface-panel soft-grid rounded-[2rem] px-4 py-5 sm:px-6">
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
         <Link href="/profile">
@@ -31,7 +31,7 @@ export const HomeHeader = () => {
            </Avatar>
         </Link>
         <div className="min-w-0">
-          <p className="text-xs uppercase tracking-[0.2em] text-slate-500">{greeting}</p>
+          <p className="text-[11px] uppercase tracking-[0.24em] text-slate-500">{greeting}</p>
           <h1 className="truncate font-display text-xl font-semibold text-slate-900 sm:text-2xl">
             {displayName}
           </h1>
@@ -68,9 +68,20 @@ export const HomeHeader = () => {
         </div>
       </div>
 
-      <p className="mt-3 text-sm text-slate-600">
-        Hôm nay bạn muốn nâng cấp thiết bị nào?
-      </p>
+      <div className="mt-4 grid gap-3 sm:grid-cols-3">
+        <div className="rounded-2xl bg-white/80 px-4 py-3">
+          <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Ưu đãi hôm nay</p>
+          <p className="mt-1 text-sm font-semibold text-slate-900">Trả góp linh hoạt và giao nhanh 2h</p>
+        </div>
+        <div className="rounded-2xl bg-white/80 px-4 py-3">
+          <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Danh mục nổi bật</p>
+          <p className="mt-1 text-sm font-semibold text-slate-900">iPhone, iPad, MacBook, Watch</p>
+        </div>
+        <div className="rounded-2xl bg-slate-900 px-4 py-3 text-white">
+          <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Hỗ trợ</p>
+          <p className="mt-1 text-sm font-semibold">Tư vấn chọn máy phù hợp ngay hôm nay</p>
+        </div>
+      </div>
     </header>
   )
 }

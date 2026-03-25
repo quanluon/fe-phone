@@ -1,6 +1,12 @@
 {
   "navigation": {
     "categories": "Danh Mục",
+    "bottomNav": {
+      "home": "Trang chủ",
+      "shop": "Cửa hàng",
+      "cart": "Giỏ hàng",
+      "account": "Tôi"
+    },
     "topPopular": "Phổ Biến Nhất",
     "flashSale": "Flash Sale",
     "tvVideo": "TV & Video",
@@ -9,7 +15,7 @@
     "pages": "Trang",
     "blogs": "Blog",
     "aboutUs": "Về Chúng Tôi",
-    "contact": "Liên Hệ",
+    "contactLink": "Liên Hệ",
     "faq": "Câu Hỏi Thường Gặp",
     "privacyPolicy": "Chính Sách Bảo Mật",
     "termsOfService": "Điều Khoản Dịch Vụ",
@@ -404,6 +410,19 @@
   },
   "footer": {
     "description": "Điểm đến đáng tin cậy của bạn cho các sản phẩm và phụ kiện Apple mới nhất. Chúng tôi cung cấp giá cả cạnh tranh, giao hàng nhanh và dịch vụ khách hàng xuất sắc.",
+    "trust": {
+      "eyebrow": "Mua sắm an tâm",
+      "title": "Giao hàng nhanh, tồn kho rõ ràng và hỗ trợ trước lẫn sau khi thanh toán.",
+      "freeShipping": "Thông tin miễn phí vận chuyển",
+      "secureCheckout": "Thanh toán bảo mật",
+      "officialWarranty": "Bảo hành chính hãng",
+      "liveSupport": "Hỗ trợ trực tiếp"
+    },
+    "contactInfo": {
+      "email": "Email",
+      "phone": "Điện thoại",
+      "hours": "Giờ làm việc"
+    },
     "company": "Công Ty",
     "support": "Hỗ Trợ",
     "categories": "Danh Mục",

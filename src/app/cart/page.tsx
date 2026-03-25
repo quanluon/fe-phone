@@ -11,7 +11,8 @@ import {
   MinusIcon,
   PlusIcon,
   ShoppingBagIcon,
-  TrashIcon
+  TrashIcon,
+  ShieldCheckIcon,
 } from '@heroicons/react/24/outline';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
@@ -25,47 +26,28 @@ export default function CartPage() {
   const handleQuantityChange = (productId: string, variantId: string, newQuantity: number) => {
     if (newQuantity <= 0) {
       removeItem(productId, variantId);
-    } else {
-      updateQuantity(productId, variantId, newQuantity);
+      return;
     }
-  };
-
-  const handleRemoveItem = (productId: string, variantId: string) => {
-    removeItem(productId, variantId);
-  };
-
-  const handleClearCart = () => {
-    clearCart();
+    updateQuantity(productId, variantId, newQuantity);
   };
 
   if (items.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Header */}
-          <div className="mb-8">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4"
-            >
-              <ArrowLeftIcon className="h-4 w-4" />
-              Continue Shopping
-            </Link>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{t('title')}</h1>
-          </div>
-
-          {/* Empty Cart */}
-          <div className="text-center py-12">
-            <ShoppingBagIcon className="h-24 w-24 text-gray-300 mx-auto mb-6" />
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">{t('empty')}</h2>
-            <p className="text-gray-600 mb-8">
+      <div className="min-h-screen bg-[linear-gradient(to_bottom,_#f8fafc,_#ffffff)]">
+        <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
+          <div className="rounded-[2rem] border border-slate-200 bg-white px-6 py-12 text-center shadow-sm">
+            <ShoppingBagIcon className="mx-auto h-20 w-20 text-slate-300" />
+            <h1 className="mt-6 text-3xl font-semibold text-slate-950">{t('title')}</h1>
+            <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-slate-500 sm:text-base">
               Looks like you haven&apos;t added any items to your cart yet.
             </p>
-            <Link href="/products">
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-                {t('continueShopping')}
-              </Button>
-            </Link>
+            <div className="mt-8 flex justify-center">
+              <Link href="/products">
+                <Button variant="brand" size="xl">
+                  {t('continueShopping')}
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -73,201 +55,169 @@ export default function CartPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4"
-          >
-            <ArrowLeftIcon className="h-4 w-4" />
-            Continue Shopping
-          </Link>
-          <div className="flex items-center justify-between">
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{t('title')}</h1>
-            <button
-              onClick={handleClearCart}
-              className="text-sm text-red-600 hover:text-red-700"
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(125,211,252,0.12),_transparent_30%),linear-gradient(to_bottom,_#f8fafc,_#ffffff)] pb-28 lg:pb-0">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <Link
+              href="/products"
+              className="mb-4 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-600 shadow-sm transition-colors hover:text-slate-900"
             >
-              Clear Cart
-            </button>
+              <ArrowLeftIcon className="h-4 w-4" />
+              {t('continueShopping')}
+            </Link>
+            <h1 className="text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">{t('title')}</h1>
+            <p className="mt-2 text-sm text-slate-500">{totalItems} item{totalItems === 1 ? '' : 's'} ready for checkout.</p>
           </div>
+          <button
+            onClick={clearCart}
+            className="text-sm font-medium text-rose-600 transition-colors hover:text-rose-700"
+          >
+            Clear Cart
+          </button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Cart Items */}
-          <div className="lg:col-span-2">
-            <Card className="p-6">
-              <div className="space-y-6">
-                {items.map((item) => (
-                  <div key={`${item.product._id}-${item.variant._id}`} className="flex gap-4 pb-6 border-b border-gray-200 last:border-b-0 last:pb-0">
-                    {/* Product Image */}
-                    <div className="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0">
-                      <NextImage
-                        src={getImageUrl(item.variant.images[0] || item.product.images[0])}
-                        alt={item.product.name}
-                        width={96}
-                        height={96}
-                        className="w-full h-full object-cover rounded-lg"
-                      />
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1.35fr)_24rem]">
+          <div className="space-y-4">
+            {items.map((item) => (
+              <Card key={`${item.product._id}-${item.variant._id}`} className="border-slate-200 bg-white p-4 sm:p-5">
+                <div className="flex gap-4">
+                  <button
+                    className="h-24 w-24 shrink-0 overflow-hidden rounded-2xl bg-slate-50"
+                    onClick={() => navigateToProduct(item.product)}
+                    aria-label={item.product.name}
+                  >
+                    <NextImage
+                      src={getImageUrl(item.variant.images[0] || item.product.images[0])}
+                      alt={item.product.name}
+                      width={96}
+                      height={96}
+                      className="h-full w-full object-cover"
+                    />
+                  </button>
+
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <button
+                          onClick={() => navigateToProduct(item.product)}
+                          className="line-clamp-2 text-left text-base font-semibold text-slate-900 transition-colors hover:text-sky-800"
+                        >
+                          {item.product.name}
+                        </button>
+                        <p className="mt-1 text-sm text-slate-500">
+                          {item.variant.color} • {item.variant.storage}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => removeItem(item.product._id, item.variant._id)}
+                        className="rounded-full border border-slate-200 p-2 text-slate-400 transition-colors hover:text-rose-600"
+                        aria-label="Remove item"
+                      >
+                        <TrashIcon className="h-4 w-4" />
+                      </button>
                     </div>
 
-                    {/* Product Info */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <Link
-                            href={`/products/${item.product._id}-${item.product.slug}`}
-                            onClick={(e) => {
-                              e.preventDefault();
-                              navigateToProduct(item.product);
-                            }}
-                            className="text-sm sm:text-base font-medium text-gray-900 hover:text-blue-600 line-clamp-2"
-                          >
-                            {item.product.name}
-                          </Link>
-                          <p className="text-sm text-gray-500 mt-1">
-                            {item.variant.color} • {item.variant.storage}
-                          </p>
-                          <p className="text-sm font-medium text-gray-900 mt-2">
-                            {formatCurrency(item.variant.price, currency)}
-                          </p>
-                        </div>
-
-                        {/* Remove Button */}
-                        <button
-                          onClick={() => handleRemoveItem(item.product._id, item.variant._id)}
-                          className="p-1 text-gray-400 hover:text-red-600 transition-colors"
-                        >
-                          <TrashIcon className="h-4 w-4" />
-                        </button>
-                      </div>
-
-                      {/* Quantity Controls */}
-                      <div className="flex items-center gap-3 mt-4">
-                        <span className="text-sm text-gray-600">{t('quantity')}:</span>
-                        <div className="flex items-center border border-gray-300 rounded-md">
+                    <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                      <div className="flex items-center gap-3">
+                        <span className="text-sm text-slate-500">{t('quantity')}</span>
+                        <div className="flex items-center rounded-full border border-slate-200 bg-slate-50 p-1">
                           <button
-                            onClick={() => handleQuantityChange(
-                              item.product._id, 
-                              item.variant._id, 
-                              item.quantity - 1
-                            )}
-                            className="p-2 hover:bg-gray-50 transition-colors"
+                            onClick={() => handleQuantityChange(item.product._id, item.variant._id, item.quantity - 1)}
+                            className="rounded-full p-2 text-slate-600 transition-colors hover:bg-white"
                             disabled={item.quantity <= 1}
                           >
                             <MinusIcon className="h-4 w-4" />
                           </button>
-                          <span className="px-3 py-2 text-sm font-medium min-w-[3rem] text-center">
+                          <span className="min-w-[2.5rem] text-center text-sm font-semibold text-slate-900">
                             {item.quantity}
                           </span>
                           <button
-                            onClick={() => handleQuantityChange(
-                              item.product._id, 
-                              item.variant._id, 
-                              item.quantity + 1
-                            )}
-                            className="p-2 hover:bg-gray-50 transition-colors"
+                            onClick={() => handleQuantityChange(item.product._id, item.variant._id, item.quantity + 1)}
+                            className="rounded-full p-2 text-slate-600 transition-colors hover:bg-white"
                             disabled={item.quantity >= item.variant.stock}
                           >
                             <PlusIcon className="h-4 w-4" />
                           </button>
                         </div>
                         {item.quantity >= item.variant.stock && (
-                          <span className="text-xs text-red-600">
-                            Max stock: {item.variant.stock}
-                          </span>
+                          <span className="text-xs font-medium text-rose-600">Max stock: {item.variant.stock}</span>
                         )}
+                      </div>
+
+                      <div className="text-right">
+                        <p className="text-sm text-slate-500">Unit price</p>
+                        <p className="text-lg font-semibold text-slate-950">
+                          {formatCurrency(item.variant.price, currency)}
+                        </p>
                       </div>
                     </div>
                   </div>
-                ))}
-              </div>
-            </Card>
+                </div>
+              </Card>
+            ))}
           </div>
 
-          {/* Order Summary */}
-          <div className="lg:col-span-1">
-            <Card className="p-6 sticky top-24">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">{t('orderSummary')}</h2>
-              
-              <div className="space-y-3 mb-6">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">{t('items')} ({totalItems})</span>
-                  <span className="text-gray-900">{formatCurrency(totalPrice, currency)}</span>
+          <div className="space-y-4">
+            <Card className="sticky top-24 border-slate-200 bg-white p-6">
+              <h2 className="text-xl font-semibold text-slate-950">{t('orderSummary')}</h2>
+              <div className="mt-5 space-y-4">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-slate-500">{t('items')} ({totalItems})</span>
+                  <span className="font-medium text-slate-900">{formatCurrency(totalPrice, currency)}</span>
                 </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">{t('shipping')}</span>
-                  <span className="text-green-600">{t('free')}</span>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-slate-500">{t('shipping')}</span>
+                  <span className="font-medium text-emerald-600">{t('free')}</span>
                 </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">{t('tax')}</span>
-                  <span className="text-gray-900">{t('calculatedAtCheckout')}</span>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-slate-500">{t('tax')}</span>
+                  <span className="font-medium text-slate-900">{t('calculatedAtCheckout')}</span>
                 </div>
-                <div className="border-t border-gray-200 pt-3">
-                  <div className="flex justify-between">
-                    <span className="text-base font-semibold text-gray-900">{t('total')}</span>
-                    <span className="text-base font-semibold text-gray-900">
-                      {formatCurrency(totalPrice, currency)}
-                    </span>
+                <div className="rounded-2xl bg-slate-50 p-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-slate-600">{t('total')}</span>
+                    <span className="text-2xl font-semibold text-slate-950">{formatCurrency(totalPrice, currency)}</span>
                   </div>
                 </div>
               </div>
 
-              <div className="space-y-3">
+              <div className="mt-6 space-y-3">
                 <Link href="/orders/create">
-                  <Button
-                    size="lg"
-                    className="w-full bg-blue-600 hover:bg-blue-700"
-                  >
+                  <Button variant="brand" size="xl" className="w-full">
                     {t('checkout.title')}
                   </Button>
                 </Link>
-                
                 <Link href="/products">
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="w-full"
-                  >
+                  <Button size="lg" variant="outline" className="w-full">
                     {t('continueShopping')}
                   </Button>
                 </Link>
               </div>
 
-              {/* Security Badge */}
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <svg className="h-4 w-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                  </svg>
-                  <span>Secure checkout with SSL encryption</span>
+              <div className="mt-6 grid gap-3 text-sm text-slate-600">
+                <div className="flex items-center gap-2 rounded-2xl bg-slate-50 px-4 py-3">
+                  <ShieldCheckIcon className="h-5 w-5 text-emerald-600" />
+                  Secure checkout with SSL encryption
                 </div>
+                <div className="rounded-2xl bg-slate-50 px-4 py-3">Estimated shipping and payment details shown before order submission.</div>
               </div>
             </Card>
           </div>
         </div>
-
-        {/* Recommended Products */}
-        <div className="mt-12">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">{t('youMightAlsoLike')}</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* This would be populated with recommended products */}
-            {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="bg-white rounded-lg shadow-sm p-4 animate-pulse">
-                <div className="aspect-square bg-gray-200 rounded-lg mb-4"></div>
-                <div className="h-4 bg-gray-200 rounded mb-2"></div>
-                <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                <div className="h-6 bg-gray-200 rounded w-1/2"></div>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
 
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 p-3 backdrop-blur lg:hidden">
+        <div className="mx-auto flex max-w-7xl items-center gap-3">
+          <div className="min-w-0 flex-1">
+            <p className="text-sm text-slate-500">{totalItems} item{totalItems === 1 ? '' : 's'}</p>
+            <p className="text-lg font-semibold text-slate-950">{formatCurrency(totalPrice, currency)}</p>
+          </div>
+          <Link href="/orders/create" className="shrink-0">
+            <Button variant="brand">{t('checkout.title')}</Button>
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }
-
-

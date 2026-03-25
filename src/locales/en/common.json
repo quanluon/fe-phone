@@ -1,6 +1,12 @@
 {
   "navigation": {
     "categories": "Categories",
+    "bottomNav": {
+      "home": "Home",
+      "shop": "Shop",
+      "cart": "Cart",
+      "account": "Account"
+    },
     "topPopular": "Top Popular",
     "flashSale": "Flash Sale",
     "tvVideo": "TV & Video",
@@ -9,7 +15,7 @@
     "pages": "Pages",
     "blogs": "Blogs",
     "aboutUs": "About Us",
-    "contact": "Contact",
+    "contactLink": "Contact",
     "faq": "FAQ",
     "privacyPolicy": "Privacy Policy",
     "termsOfService": "Terms of Service",
@@ -404,6 +410,19 @@
   },
   "footer": {
     "description": "Your trusted destination for the latest Apple products and accessories. We offer competitive prices, fast shipping, and exceptional customer service.",
+    "trust": {
+      "eyebrow": "Buy with confidence",
+      "title": "Fast shipping, verified stock, and support before and after checkout.",
+      "freeShipping": "Free shipping notice",
+      "secureCheckout": "Secure checkout",
+      "officialWarranty": "Official warranty",
+      "liveSupport": "Live support"
+    },
+    "contactInfo": {
+      "email": "Email",
+      "phone": "Phone",
+      "hours": "Hours"
+    },
     "company": "Company",
     "support": "Support",
     "categories": "Categories",
@@ -717,5 +736,3 @@
     "buttonBack": "Go Back"
   }
 }
-
-

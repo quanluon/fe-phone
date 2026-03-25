@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Fraunces, Manrope } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getLocale } from 'next-intl/server';
@@ -30,17 +30,10 @@ export const metadata: Metadata = {
   icons: {
     icon: '/favicon.ico',
   },
-  manifest: '/site.manifest.json',
-  themeColor: '#1f2937',
+  manifest: '/site.webmanifest',
   appleWebApp: {
     title: CONTACT_INFO.name,
     statusBarStyle: 'default',
-  },
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
   },
   alternates: {
     canonical: '/',
@@ -156,6 +149,14 @@ export const metadata: Metadata = {
     'msapplication-TileColor': '#1f2937',
     'msapplication-TileImage': '/web-app-manifest-512x512.png',
   },
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: '#1f2937',
 };
 
 export default async function RootLayout({

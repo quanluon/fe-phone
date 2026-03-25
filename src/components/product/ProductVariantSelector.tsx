@@ -29,21 +29,21 @@ export function ProductVariantSelector({
   );
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5 rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm">
       {/* Color Selection */}
       <div>
-        <h3 className="text-sm font-medium text-gray-900 mb-2">
+        <h3 className="mb-3 text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">
           {t('color')}
         </h3>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           {product.variants.map((variant: ProductVariant) => (
             <button
               key={variant._id}
               onClick={() => onVariantChange(variant)}
-              className={`px-4 py-2 rounded-md border-2 transition-colors ${
+              className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
                 selectedVariant._id === variant._id
-                  ? 'border-blue-500 bg-blue-50 text-blue-700'
-                  : 'border-gray-300 hover:border-gray-400'
+                  ? 'border-slate-900 bg-slate-900 text-white'
+                  : 'border-slate-200 bg-slate-50 text-slate-700 hover:border-slate-300 hover:bg-white'
               }`}
             >
               {variant.color}
@@ -54,18 +54,18 @@ export function ProductVariantSelector({
 
       {/* Storage Selection */}
       <div>
-        <h3 className="text-sm font-medium text-gray-900 mb-2">
+        <h3 className="mb-3 text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">
           {t('storage')}
         </h3>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           {uniqueStorages.map((storage) => (
             <button
               key={storage as string}
               onClick={() => handleStorageChange(storage as string)}
-              className={`px-4 py-2 rounded-md border-2 transition-colors ${
+              className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
                 selectedVariant.storage === storage
-                  ? 'border-blue-500 bg-blue-50 text-blue-700'
-                  : 'border-gray-300 hover:border-gray-400'
+                  ? 'border-slate-900 bg-slate-900 text-white'
+                  : 'border-slate-200 bg-slate-50 text-slate-700 hover:border-slate-300 hover:bg-white'
               }`}
             >
               {storage as string}
@@ -76,4 +76,3 @@ export function ProductVariantSelector({
     </div>
   );
 }
-

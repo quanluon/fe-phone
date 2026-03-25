@@ -24,7 +24,7 @@ export function GuaranteeSection({ product }: GuaranteeSectionProps) {
     );
     
     return filtered;
-  }, [product?.attributes]);
+  }, [product]);
 
   // Memoize grouped guarantees
   const groupedGuarantees = useMemo(() => {
@@ -44,10 +44,10 @@ export function GuaranteeSection({ product }: GuaranteeSectionProps) {
   }
 
   return (
-    <div className="bg-white rounded-lg border border-green-200 p-6">
-      <div className="flex items-center gap-2 mb-4">
-        <ShieldCheckIcon className="h-6 w-6 text-green-600" />
-        <h3 className="text-lg font-semibold text-gray-900">
+    <div className="rounded-[2rem] border border-emerald-200 bg-emerald-50/70 p-5">
+      <div className="mb-4 flex items-center gap-2">
+        <ShieldCheckIcon className="h-6 w-6 text-emerald-600" />
+        <h3 className="text-lg font-semibold text-slate-950">
           {t('title')}
         </h3>
       </div>
@@ -55,7 +55,7 @@ export function GuaranteeSection({ product }: GuaranteeSectionProps) {
       <div className="space-y-4">
         {Object.entries(groupedGuarantees).map(([category, attributes]) => (
           <div key={category} className="space-y-2">
-            <h4 className="text-sm font-medium text-gray-700 capitalize">
+            <h4 className="text-sm font-semibold uppercase tracking-[0.14em] text-emerald-800 capitalize">
               {category === 'warranty' && t('warranty')}
               {category === 'quality' && t('quality')}
               {category === 'service' && t('service')}
@@ -64,18 +64,18 @@ export function GuaranteeSection({ product }: GuaranteeSectionProps) {
               {attributes.map((attribute, index) => (
                 <div
                   key={index}
-                  className="flex items-center gap-2 p-3 bg-green-50 rounded-lg border border-green-100"
+                  className="flex items-center gap-2 rounded-2xl border border-emerald-100 bg-white/90 p-3"
                 >
-                  <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0"></div>
+                  <div className="h-2 w-2 flex-shrink-0 rounded-full bg-emerald-500"></div>
                   <div className="flex-1">
-                    <span className="text-sm font-medium text-gray-900">
+                    <span className="text-sm font-medium text-slate-900">
                       {attribute.name}
                     </span>
                     {attribute.value && (
-                      <span className="text-sm text-gray-600 ml-1">
+                      <span className="ml-1 text-sm text-slate-600">
                         - {attribute.value}
                         {attribute.unit && (
-                          <span className="text-gray-500 ml-1">
+                          <span className="ml-1 text-slate-500">
                             {attribute.unit}
                           </span>
                         )}
@@ -89,8 +89,8 @@ export function GuaranteeSection({ product }: GuaranteeSectionProps) {
         ))}
       </div>
 
-      <div className="mt-4 p-3 bg-green-100 rounded-lg border border-green-200">
-        <p className="text-sm text-green-800 font-medium">
+      <div className="mt-4 rounded-2xl border border-emerald-200 bg-emerald-100 p-3">
+        <p className="text-sm font-medium text-emerald-900">
           {t('commitment')}
         </p>
       </div>

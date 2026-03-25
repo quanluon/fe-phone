@@ -36,26 +36,26 @@ export function ProductTabs({ product }: ProductTabsProps) {
   };
 
   return (
-    <div className="mt-12">
-      <div className="bg-white rounded-lg shadow-sm">
-        <div className="border-b border-gray-200">
-          <nav className="flex space-x-8 px-6">
+    <div>
+      <div className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-sm">
+        <div className="border-b border-slate-200">
+          <nav className="flex gap-3 overflow-x-auto px-4 py-4 sm:px-6">
             <button
               onClick={() => setActiveTab('description')}
-              className={`py-4 px-1 border-b-2 font-medium transition-colors ${
+              className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
                 activeTab === 'description'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
+                  ? 'bg-slate-900 text-white'
+                  : 'bg-slate-50 text-slate-500 hover:text-slate-700'
               }`}
             >
               {t('description')}
             </button>
             <button
               onClick={() => setActiveTab('specifications')}
-              className={`py-4 px-1 border-b-2 font-medium transition-colors ${
+              className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
                 activeTab === 'specifications'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
+                  ? 'bg-slate-900 text-white'
+                  : 'bg-slate-50 text-slate-500 hover:text-slate-700'
               }`}
             >
               {t('specifications')}
@@ -63,11 +63,11 @@ export function ProductTabs({ product }: ProductTabsProps) {
           </nav>
         </div>
 
-        <div className="p-6">
+        <div className="p-5 sm:p-6">
           {activeTab === 'description' && (
-            <div className="prose max-w-none">
+            <div className="prose prose-slate max-w-none">
               <div
-                className="text-gray-600 leading-relaxed"
+                className="leading-7 text-slate-600"
                 dangerouslySetInnerHTML={{ __html: product.description }}
               />
             </div>
@@ -83,21 +83,21 @@ export function ProductTabs({ product }: ProductTabsProps) {
                   )
                 )
               ).map(([category, attributes]) => (
-                <div key={category}>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                <div key={category} className="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-4 sm:p-5">
+                  <h3 className="mb-4 text-lg font-semibold text-slate-950">
                     {getTranslatedCategoryName(category)}
                   </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                     {attributes.map((attribute, index) => (
                       <div
                         key={index}
-                        className="flex justify-between py-2 border-b border-gray-100"
+                        className="flex items-start justify-between gap-4 rounded-2xl bg-white px-4 py-3"
                       >
-                        <span className="text-gray-600">{attribute.name}</span>
-                        <span className="text-gray-900 font-medium">
+                        <span className="text-sm text-slate-500">{attribute.name}</span>
+                        <span className="text-right text-sm font-semibold text-slate-900">
                           {attribute.value}
                           {attribute.unit && (
-                            <span className="text-gray-500 ml-1">
+                            <span className="ml-1 text-slate-500">
                               {attribute.unit}
                             </span>
                           )}
@@ -114,4 +114,3 @@ export function ProductTabs({ product }: ProductTabsProps) {
     </div>
   );
 }
-

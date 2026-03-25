@@ -37,6 +37,7 @@ export function ProductDetail({
   const params = useParams();
   const router = useRouter();
   const t = useTranslations("product.detail");
+  const tProduct = useTranslations("product");
 
   // Get product identifier from URL params
   const identifier = params.slug as string;
@@ -249,21 +250,21 @@ export function ProductDetail({
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(125,211,252,0.12),_transparent_30%),linear-gradient(to_bottom,_#f8fafc,_#ffffff)] pb-24 md:pb-0">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
         {/* Breadcrumb */}
         <ProductBreadcrumb product={productData} />
 
         {/* Back Button */}
         <button
           onClick={() => router.back()}
-          className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6"
+          className="mb-6 flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-600 shadow-sm transition-colors hover:text-slate-900"
         >
           <ArrowLeftIcon className="h-4 w-4" />
           {t("back")}
         </button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 gap-8 lg:min-h-[56rem] lg:grid-cols-[minmax(0,1.1fr)_minmax(20rem,0.9fr)] lg:items-stretch">
           {/* Product Images */}
           <ProductImageGallery
             images={allImages}
@@ -275,48 +276,72 @@ export function ProductDetail({
           />
 
           {/* Product Info */}
-          <div className="space-y-6 h-full overflow-y-auto">
-            <ProductHeader product={productData} discount={discount} />
+          <div className="lg:h-full lg:min-h-0">
+            <div className="space-y-5 lg:flex lg:h-full lg:min-h-0 lg:flex-col lg:overflow-hidden">
+              <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
+                <ProductHeader product={productData} discount={discount} />
 
-            <ProductPrice variant={selectedVariant} />
+                <div className="mt-5">
+                  <ProductPrice variant={selectedVariant} />
+                </div>
 
-            {/* Description */}
-            <p className="text-gray-600 leading-relaxed">
-              {productData.shortDescription}
-            </p>
+                <p className="mt-5 text-sm leading-7 text-slate-600 sm:text-base">
+                  {productData.shortDescription}
+                </p>
 
-            <ProductVariantSelector
-              product={productData}
-              selectedVariant={selectedVariant}
-              onVariantChange={handleVariantChange}
-            />
+                <div className="mt-5 grid gap-3 sm:grid-cols-3">
+                  <div className="rounded-2xl bg-slate-50 px-4 py-3 text-sm text-slate-600">
+                    <p className="font-semibold text-slate-900">Free shipping</p>
+                    <p>Selected orders and fast-city delivery.</p>
+                  </div>
+                  <div className="rounded-2xl bg-slate-50 px-4 py-3 text-sm text-slate-600">
+                    <p className="font-semibold text-slate-900">Easy exchanges</p>
+                    <p>Variant support and post-purchase guidance.</p>
+                  </div>
+                  <div className="rounded-2xl bg-slate-50 px-4 py-3 text-sm text-slate-600">
+                    <p className="font-semibold text-slate-900">Verified stock</p>
+                    <p>See current stock before adding to cart.</p>
+                  </div>
+                </div>
+              </div>
 
-            <ProductQuantitySelector
-              quantity={quantity}
-              availableStock={availableStock}
-              cartQuantity={cartQuantity}
-              onQuantityChange={setQuantity}
-            />
+              <div className="space-y-5 lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pr-2">
+                <ProductVariantSelector
+                  product={productData}
+                  selectedVariant={selectedVariant}
+                  onVariantChange={handleVariantChange}
+                />
 
-            <ProductActions
-              availableStock={availableStock}
-              cartQuantity={cartQuantity}
-              isAddingToCart={isAddingToCart}
-              isBuyingNow={isBuyingNow}
-              isInWishlist={isInWishlistState}
-              onAddToCart={handleAddToCart}
-              onBuyNow={handleBuyNow}
-              onToggleWishlist={handleToggleWishlist}
-              onShare={handleShare}
-            />
+                <ProductQuantitySelector
+                  quantity={quantity}
+                  availableStock={availableStock}
+                  cartQuantity={cartQuantity}
+                  onQuantityChange={setQuantity}
+                />
 
-            <ProductContactSupport />
+                <ProductActions
+                  availableStock={availableStock}
+                  cartQuantity={cartQuantity}
+                  isAddingToCart={isAddingToCart}
+                  isBuyingNow={isBuyingNow}
+                  isInWishlist={isInWishlistState}
+                  onAddToCart={handleAddToCart}
+                  onBuyNow={handleBuyNow}
+                  onToggleWishlist={handleToggleWishlist}
+                  onShare={handleShare}
+                />
 
-            <ProductFeatures />
+                <ProductContactSupport />
+
+                <ProductFeatures />
+              </div>
+            </div>
           </div>
         </div>
 
-        <ProductTabs product={productData} />
+        <div className="mt-10">
+          <ProductTabs product={productData} />
+        </div>
 
         {/* Image Preview Modal */}
         <ImagePreviewModal
@@ -327,6 +352,23 @@ export function ProductDetail({
           onIndexChange={setSelectedImageIndex}
           productName={productData.name}
         />
+      </div>
+
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 p-3 backdrop-blur md:hidden">
+        <div className="mx-auto flex max-w-7xl items-center gap-3">
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-sm font-semibold text-slate-900">{selectedVariant.color}{selectedVariant.storage ? ` • ${selectedVariant.storage}` : ''}</p>
+            <p className="text-base font-semibold text-slate-950">
+              {selectedVariant.price.toLocaleString('vi-VN')}₫
+            </p>
+          </div>
+          <Button variant="outline" onClick={handleAddToCart} disabled={availableStock === 0 || isAddingToCart}>
+            {tProduct("addToCart")}
+          </Button>
+          <Button variant="brand" onClick={handleBuyNow} disabled={availableStock === 0 || isBuyingNow}>
+            {tProduct("buyNow")}
+          </Button>
+        </div>
       </div>
     </div>
   );

@@ -47,13 +47,13 @@ export function ProductActions({
   const stockMessage = getStockMessage();
 
   return (
-    <div className="space-y-3">
-      <div className="flex gap-3">
+    <div className="space-y-4 rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_auto_auto]">
         <Button
-          size="lg"
+          size="xl"
           onClick={onAddToCart}
           disabled={availableStock === 0 || isAddingToCart}
-          className="flex-1"
+          className="w-full"
           variant="outline"
         >
           <ShoppingCartIcon className="h-5 w-5 mr-2" />
@@ -61,7 +61,7 @@ export function ProductActions({
         </Button>
 
         <Button
-          size="lg"
+          size="xl"
           variant="outline"
           onClick={onToggleWishlist}
           className="px-4"
@@ -74,7 +74,7 @@ export function ProductActions({
         </Button>
 
         <Button
-          size="lg"
+          size="xl"
           variant="outline"
           onClick={onShare}
           className="px-4"
@@ -84,14 +84,19 @@ export function ProductActions({
       </div>
 
       <Button
-        size="lg"
+        size="xl"
         onClick={onBuyNow}
         disabled={availableStock === 0 || isBuyingNow}
-        className="w-full bg-blue-600 hover:bg-blue-700"
+        className="w-full"
+        variant="brand"
       >
         {stockMessage || (isBuyingNow ? tProduct('buyingNow') : tProduct('buyNow'))}
       </Button>
+      <div className="grid gap-2 text-sm text-slate-500 sm:grid-cols-3">
+        <div className="rounded-2xl bg-slate-50 px-3 py-2">Secure checkout</div>
+        <div className="rounded-2xl bg-slate-50 px-3 py-2">Official warranty</div>
+        <div className="rounded-2xl bg-slate-50 px-3 py-2">Fast delivery available</div>
+      </div>
     </div>
   );
 }
-
