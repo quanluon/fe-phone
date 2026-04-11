@@ -149,7 +149,7 @@ function normalizeFormValues(values: ProductFormValues): ProductFormValues {
   return {
     ...values,
     shortDescription: values.shortDescription ?? null,
-    originalBasePrice: values.originalBasePrice ?? null,
+    originalBasePrice: values.originalBasePrice ?? values.basePrice ?? null,
     images: Array.isArray(values.images) ? values.images : [],
     features: Array.isArray(values.features) ? values.features : [],
     tags: Array.isArray(values.tags) ? values.tags : [],
