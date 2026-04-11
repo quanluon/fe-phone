@@ -42,7 +42,7 @@ export default function DashboardProductModal({
     }
   }, [open, initialData, form]);
 
-  const handleFinish = async (values: any) => {
+  const handleFinish = async (values: Partial<Product> & { images?: string }) => {
     const formattedValues = {
       ...values,
       images: values.images?.split('\n').map((url: string) => url.trim()).filter(Boolean) || [],
@@ -72,7 +72,7 @@ export default function DashboardProductModal({
           </Form.Item>
 
           <Form.Item name="basePrice" label="Giá bán (₫)" rules={[{ required: true, message: 'Vui lòng nhập giá' }]}>
-            <InputNumber style={{ width: '100%' }} min={0} formatter={(v) => `${v}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={(v) => v!.replace(/\$\s?|(,*)/g, '') as unknown as number}/>
+            <InputNumber<number> style={{ width: '100%' }} min={0} formatter={(v) => `${v}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={(v) => Number(v?.replace(/\$\s?|(,*)/g, ''))} />
           </Form.Item>
 
           <Form.Item name="status" label="Trạng thái" rules={[{ required: true, message: 'Trạng thái không được để trống' }]}>

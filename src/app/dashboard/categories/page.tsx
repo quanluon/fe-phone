@@ -63,9 +63,9 @@ export default function DashboardCategoriesPage() {
       dataIndex: 'image',
       key: 'image',
       width: 72,
-      render: (image: string) =>
+      render: (image: string, record: Category) =>
         image ? (
-          <Image width={40} height={40} src={image} style={{ objectFit: 'cover', borderRadius: 4 }} />
+          <Image width={40} height={40} src={image} alt={record.name} style={{ objectFit: 'cover', borderRadius: 4 }} />
         ) : (
           <div
             style={{

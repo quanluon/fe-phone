@@ -122,7 +122,7 @@ export default function DashboardUsersPage() {
           value={status}
           size="small"
           style={{ width: '100%' }}
-          onChange={(v) => handleUpdateUser(record._id, { status: v })}
+          onChange={(v) => handleUpdateUser(record._id, { status: v as "active" | "inactive" | "suspended" })}
         >
           <Option value="active"><Tag color="green" style={{ margin: 0 }}>Hoạt động</Tag></Option>
           <Option value="inactive"><Tag color="red" style={{ margin: 0 }}>Vô hiệu</Tag></Option>

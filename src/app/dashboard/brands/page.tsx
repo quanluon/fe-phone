@@ -63,9 +63,9 @@ export default function DashboardBrandsPage() {
       dataIndex: 'logo',
       key: 'logo',
       width: 72,
-      render: (logo: string) =>
+      render: (logo: string, record: Brand) =>
         logo ? (
-          <Image width={40} height={40} src={logo} style={{ objectFit: 'contain', borderRadius: 4 }} />
+          <Image width={40} height={40} src={logo} alt={record.name} style={{ objectFit: 'contain', borderRadius: 4 }} />
         ) : (
           <div
             style={{

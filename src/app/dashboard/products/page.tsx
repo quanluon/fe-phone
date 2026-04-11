@@ -136,6 +136,7 @@ export default function DashboardProductsPage() {
             width={40}
             height={40}
             src={record.images[0]}
+            alt={record.name}
             style={{ objectFit: 'cover', borderRadius: 4 }}
             preview={false}
           />
