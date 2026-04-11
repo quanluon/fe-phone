@@ -3,11 +3,10 @@
 import { Product, ProductAttribute, ProductAttributeType } from '@/types';
 import { getAttributeCategoryKey } from '@/lib/utils/attributeCategories';
 import { useTranslations } from 'next-intl';
-import { Collapse, Typography } from 'antd';
+import { Collapse } from 'antd';
 import { InfoCircleOutlined, SettingOutlined } from '@ant-design/icons';
 
 const { Panel } = Collapse;
-const { Text } = Typography;
 
 interface ProductInformationCollapseProps {
   product: Product;

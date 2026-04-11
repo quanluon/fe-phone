@@ -2,9 +2,6 @@
 
 import { NextImage } from "@/components/ui";
 import { getImageUrl } from "@/lib/utils";
-import { GuaranteeSection } from "./GuaranteeSection";
-import { Product, ProductAttributeType } from "@/types";
-import { useMemo } from "react";
 
 interface ProductImageGalleryProps {
   images: string[];
@@ -12,7 +9,6 @@ interface ProductImageGalleryProps {
   selectedIndex: number;
   onIndexChange: (index: number) => void;
   onImageClick: (index: number) => void;
-  product: Product;
   priority?: boolean;
 }
 
@@ -22,7 +18,6 @@ export function ProductImageGallery({
   selectedIndex,
   onIndexChange,
   onImageClick,
-  product,
   priority = false,
 }: ProductImageGalleryProps) {
   return (

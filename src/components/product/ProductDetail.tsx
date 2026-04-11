@@ -244,6 +244,12 @@ export function ProductDetail({ initialProduct }: ProductDetailClientProps) {
     setTrackedViewItemKey(null);
   };
 
+  const hasGuarantee = useMemo(() => {
+    return productData?.attributes?.some(
+      (attribute) => attribute.type === ProductAttributeType.GUARANTEE,
+    );
+  }, [productData]);
+
   // Loading state - only show if we don't have initial data
   if (productLoading && !productData) {
     return (
@@ -317,12 +323,6 @@ export function ProductDetail({ initialProduct }: ProductDetailClientProps) {
     ),
   ];
 
-  const hasGuarantee = useMemo(() => {
-    return productData?.attributes?.some(
-      (attribute) => attribute.type === ProductAttributeType.GUARANTEE,
-    );
-  }, [productData]);
-
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(125,211,252,0.12),_transparent_30%),linear-gradient(to_bottom,_#f8fafc,_#ffffff)] pb-24 md:pb-0">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
@@ -347,7 +347,6 @@ export function ProductDetail({ initialProduct }: ProductDetailClientProps) {
               selectedIndex={selectedImageIndex}
               onIndexChange={setSelectedImageIndex}
               onImageClick={handleImageClick}
-              product={productData}
               priority
             />
             {/* Guarantee Section */}

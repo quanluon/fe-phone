@@ -1,11 +1,12 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { Upload, message, Modal } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
-import type { UploadFile, UploadProps, RcFile } from 'antd/es/upload/interface';
-import { adminFilesApi } from '@/lib/api/admin';
-import axios from 'axios';
+import React, { useState } from "react";
+import { Upload, message, Modal } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+import type { UploadFile, UploadProps, RcFile } from "antd/es/upload/interface";
+import { adminFilesApi } from "@/lib/api/admin";
+import axios from "axios";
+import NextImage from "next/image";
 
 interface ImageUploadProps {
   value?: string[];
@@ -14,21 +15,21 @@ interface ImageUploadProps {
   folder?: string;
 }
 
-export default function ImageUpload({ 
-  value = [], 
-  onChange, 
+export default function ImageUpload({
+  value = [],
+  onChange,
   maxCount = 8,
-  folder = 'products'
+  folder = "products",
 }: ImageUploadProps) {
   const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState('');
-  const [previewTitle, setPreviewTitle] = useState('');
-  
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+
   // Convert string array to UploadFile array
   const fileList: UploadFile[] = value.map((url, index) => ({
-    uid: `-${index}`,
-    name: url.split('/').pop() || `image-${index}.jpg`,
-    status: 'done',
+    uid: url || `-${index}`,
+    name: url.split("/").pop() || `image-${index}.jpg`,
+    status: "done",
     url: url,
     thumbUrl: url,
   }));
@@ -38,57 +39,64 @@ export default function ImageUpload({
   const handlePreview = async (file: UploadFile) => {
     setPreviewImage(file.url || (file.preview as string));
     setPreviewOpen(true);
-    setPreviewTitle(file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1));
+    setPreviewTitle(
+      file.name || file.url!.substring(file.url!.lastIndexOf("/") + 1),
+    );
   };
 
-  const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+  const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
     // We only update parent when files are actually "done" or "removed"
     const urls = newFileList
-      .filter(file => file.status === 'done' && file.url)
-      .map(file => file.url as string);
-    
-    // Also include currently uploading files to avoid flickering
-    // but the actual value should only be the ones with URLs
+      .filter((file) => file.status === "done" && file.url)
+      .map((file) => file.url as string);
+
     if (onChange) {
       onChange(urls);
     }
   };
 
-  const customRequest = async (options: any) => {
+  const customRequest: UploadProps["customRequest"] = async (options) => {
     const { file, onSuccess, onError, onProgress } = options;
     const rcFile = file as RcFile;
 
     try {
       // 1. Get presigned URL
-      const { data } = await adminFilesApi.getPresignedUrl(rcFile.name, rcFile.type, folder);
+      const { data } = await adminFilesApi.getPresignedUrl(
+        rcFile.name,
+        rcFile.type,
+        folder,
+      );
       const { uploadUrl, publicUrl } = data;
 
       // 2. Upload directly to S3
       await axios.put(uploadUrl, rcFile, {
         onUploadProgress: (event) => {
-          if (event.total) {
-            onProgress({ percent: Math.round((event.loaded / event.total) * 100) });
+          if (event.total && onProgress) {
+            onProgress({
+              percent: Math.round((event.loaded / event.total) * 100),
+            });
           }
         },
       });
 
       // 3. Mark as success and set URL
-      onSuccess({ url: publicUrl }, file);
-      
+      if (onSuccess) onSuccess({ url: publicUrl });
+
       // Update form state
       const currentUrls = [...value, publicUrl];
       if (onChange) onChange(currentUrls);
-      
-      message.success(`${rcFile.name} uploaded successfully`);
-    } catch (err: any) {
-      console.error('Upload error:', err);
-      onError(err);
-      message.error(`${rcFile.name} upload failed.`);
+
+      message.success(`${rcFile.name} tải lên thành công`);
+    } catch (err: unknown) {
+      console.error("Upload error:", err);
+      const error = err as Error;
+      if (onError) onError(error);
+      message.error(`${rcFile.name} tải lên thất bại.`);
     }
   };
 
   const uploadButton = (
-    <button style={{ border: 0, background: 'none' }} type="button">
+    <button style={{ border: 0, background: "none" }} type="button">
       <PlusOutlined />
       <div style={{ marginTop: 8 }}>Tải lên</div>
     </button>
@@ -107,13 +115,20 @@ export default function ImageUpload({
       >
         {fileList.length >= maxCount ? null : uploadButton}
       </Upload>
-      <Modal 
-        open={previewOpen} 
-        title={previewTitle} 
-        footer={null} 
+      <Modal
+        open={previewOpen}
+        title={previewTitle}
+        footer={null}
         onCancel={handleCancel}
       >
-        <img alt="preview" style={{ width: '100%' }} src={previewImage} />
+        <div className="relative w-full aspect-square">
+          <NextImage
+            alt="preview"
+            fill
+            className="object-contain"
+            src={previewImage}
+          />
+        </div>
       </Modal>
     </>
   );

@@ -20,8 +20,9 @@ export default function CreateProductPage() {
       await adminProductsApi.create(values);
       message.success('Tạo sản phẩm thành công');
       router.push(`/${apiKey}/dashboard/products`);
-    } catch (error: any) {
-      message.error(error.message || 'Lỗi khi tạo sản phẩm');
+    } catch (error: unknown) {
+      const err = error as Error;
+      message.error(err.message || 'Lỗi khi tạo sản phẩm');
     } finally {
       setLoading(false);
     }

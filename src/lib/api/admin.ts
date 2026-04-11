@@ -110,6 +110,10 @@ export interface AdminProductFilters {
   order?: 'asc' | 'desc';
 }
 
+export interface AiExtractedProduct extends Partial<Product> {
+  _validationErrors?: string[];
+}
+
 export const adminProductsApi = {
   getAll: (filters?: AdminProductFilters) => {
     const params = new URLSearchParams();
@@ -130,7 +134,7 @@ export const adminProductsApi = {
   updateStatus: (id: string, status: string) =>
     patch<Product>(`/api/admin/products/${id}/status`, { status }),
   aiExtract: (data: { promptText?: string; imageUrl?: string }) =>
-    post<any>('/api/admin/products/ai-extract', data),
+    post<AiExtractedProduct>('/api/admin/products/ai-extract', data),
 };
 
 // ─── Files/Uploads ───────────────────────────────────────────────────────────
@@ -150,7 +154,8 @@ export const adminFilesApi = {
     };
   },
   getMultiplePresignedUrls: async (files: { fileName: string; contentType: string }[], folder: string = 'products') => {
-    const data = await fileApi.getMultiplePresignedUrls(files, folder);
+    const formattedFiles = files.map(f => ({ fileName: f.fileName, fileType: f.contentType }));
+    const data = await fileApi.getMultiplePresignedUrls(formattedFiles, folder);
     return {
       success: true,
       data: data.uploadUrls.map(u => ({

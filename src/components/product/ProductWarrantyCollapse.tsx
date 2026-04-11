@@ -1,7 +1,6 @@
 'use client';
 
 import { Product, ProductAttribute, ProductAttributeType } from '@/types';
-import { useTranslations } from 'next-intl';
 import { Collapse } from 'antd';
 import { ShieldCheckIcon, TruckIcon, ArrowPathIcon, CubeIcon } from '@heroicons/react/24/outline';
 
@@ -12,7 +11,6 @@ interface ProductWarrantyCollapseProps {
 }
 
 export function ProductWarrantyCollapse({ product }: ProductWarrantyCollapseProps) {
-  const t = useTranslations('product.detail');
   
   const guaranteeAttributes = product.attributes.filter(
     (attr: ProductAttribute) => attr.type === ProductAttributeType.GUARANTEE
