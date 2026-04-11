@@ -1,10 +1,10 @@
-import React from 'react';
+import { useCategories } from '@/hooks/useCategories';
+import { CONTACT_INFO, SOCIAL_LINKS } from '@/lib/constants';
+import { ShoppingCartIcon } from '@heroicons/react/24/outline';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
-import { ShoppingCartIcon } from '@heroicons/react/24/outline';
-import { SOCIAL_LINKS, CONTACT_INFO } from '@/lib/constants';
-import { useCategories } from '@/hooks/useCategories';
+import React from 'react';
 
 export const Footer: React.FC = () => {
   const t = useTranslations('footer');

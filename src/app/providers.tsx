@@ -2,10 +2,9 @@
 
 import React, { useEffect } from 'react';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { ConfigProvider } from 'antd';
+import { App as AntdApp, ConfigProvider } from 'antd';
 import dynamic from 'next/dynamic';
 import { queryClient } from '@/lib/api/queryClient';
-import { Layout } from '@/components/layout/Layout';
 import { ToastContainer } from '@/components/ui/Toast';
 import { GlobalLoading } from '@/components/ui';
 import { useAuthStore } from '@/stores/auth';
@@ -27,27 +26,24 @@ export function Providers({ children }: ProvidersProps) {
   useEffect(() => {
     initializeAuth();
   }, [initializeAuth]);
-  
+
   return (
     <QueryClientProvider client={queryClient}>
       <ConfigProvider
         theme={{
           token: {
-            // Use system fonts instead of loading external fonts
             fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
           },
-          // Disable CSS variable injection to reduce CSS
           cssVar: false,
         }}
-        // Prevent Ant Design from loading external fonts
         prefixCls="ant"
       >
-        <Layout>
+        <AntdApp>
           {children}
-        </Layout>
-        <ToastContainer toasts={toasts} onRemove={removeToast} />
-        <GlobalLoading />
-        {process.env.NODE_ENV === 'development' ? <ReactQueryDevtools initialIsOpen={false} /> : null}
+          <ToastContainer toasts={toasts} onRemove={removeToast} />
+          <GlobalLoading />
+          {process.env.NODE_ENV === 'development' ? <ReactQueryDevtools initialIsOpen={false} /> : null}
+        </AntdApp>
       </ConfigProvider>
     </QueryClientProvider>
   );

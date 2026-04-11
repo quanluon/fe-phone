@@ -1,10 +1,10 @@
 import React from 'react';
 import { Metadata } from 'next';
-import { ProductDetail } from '../../../components/product';
 import { CONTACT_INFO } from '@/lib/constants';
 import { getPrimaryVariant, getProductByIdentifier, getProductPath } from '@/lib/api/server-catalog';
 import { buildBreadcrumbJsonLd, getDefaultMetaDescription, stripHtmlTags, toAbsoluteUrl, truncateForMeta } from '@/lib/seo';
 import { Product } from '@/types';
+import { ProductDetail } from '@/components/product';
 
 export const revalidate = 300;
 
