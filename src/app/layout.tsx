@@ -82,6 +82,9 @@ export const metadata: Metadata = {
     description: defaultDescription,
     images: [toAbsoluteUrl('/web-app-manifest-512x512.png')],
   },
+  other: {
+    'fb:app_id': '1316145459266394',
+  },
   robots: {
     index: true,
     follow: true,
