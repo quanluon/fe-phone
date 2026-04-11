@@ -143,20 +143,6 @@ export default async function HomePage() {
             </div>
           </article>
         </section>
-
-        <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="max-w-4xl space-y-4">
-            <h2 className="font-display text-2xl font-semibold text-slate-950">Vì sao trang chủ cần nhiều nội dung hơn</h2>
-            <p className="text-sm leading-7 text-slate-600">
-              Trang chủ không chỉ để trang trí. Đây là nơi Google và người dùng cần thấy rõ website bạn đang bán gì, ai nên mua, mức giá ra sao
-              và vì sao nên tin bạn. Vì vậy, phần nội dung này được bổ sung để tăng khả năng index, tăng CTR và giữ người dùng ở lại lâu hơn.
-            </p>
-            <p className="text-sm leading-7 text-slate-600">
-              Bạn có thể tiếp tục mở rộng bằng các bài hướng dẫn mua, so sánh máy, tip chọn iPhone theo ngân sách, MacBook cho sinh viên và các
-              trang campaign theo từng mùa bán hàng.
-            </p>
-          </div>
-        </section>
       </div>
       <BottomNav />
     </main>
