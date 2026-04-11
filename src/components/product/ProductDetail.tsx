@@ -31,6 +31,14 @@ interface ProductDetailClientProps {
   initialProduct: Product | null;
 }
 
+function getInitialVariant(product: Product | null): ProductVariant | null {
+  if (!product?.variants?.length) {
+    return null;
+  }
+
+  return product.variants.find((variant) => variant.isActive && variant.stock > 0) || product.variants[0] || null;
+}
+
 export function ProductDetail({
   initialProduct,
 }: ProductDetailClientProps) {
@@ -46,14 +54,12 @@ export function ProductDetail({
   const productId = identifier.split("-")[0];
 
   // Fetch product data using only the _id, but use initialProduct as fallback
-  const { data: product, isLoading: productLoading } = useProduct(productId);
+  const { data: product, isLoading: productLoading } = useProduct(productId, initialProduct || undefined);
 
   // Use server-side fetched data initially, then client-side data when available
   const productData = (product as Product) || initialProduct;
 
-  const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(
-    null
-  );
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(() => getInitialVariant(initialProduct));
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
@@ -69,9 +75,9 @@ export function ProductDetail({
       productData &&
       productData.variants &&
       productData.variants.length > 0 &&
-      !selectedVariant
+      (!selectedVariant || !productData.variants.some((variant) => variant._id === selectedVariant._id))
     ) {
-      setSelectedVariant(productData.variants[0]);
+      setSelectedVariant(getInitialVariant(productData));
     }
   }, [productData, selectedVariant]);
 
@@ -273,6 +279,7 @@ export function ProductDetail({
             onIndexChange={setSelectedImageIndex}
             onImageClick={handleImageClick}
             product={productData}
+            priority
           />
 
           {/* Product Info */}

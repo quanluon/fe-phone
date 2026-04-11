@@ -78,8 +78,8 @@ const nextConfig: NextConfig = {
             // Large libraries chunk
             lib: {
               test: /[\\/]node_modules[\\/]/,
-              name: (module: any) => {
-                const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)?.[1];
+              name: (module: { context?: string }) => {
+                const packageName = module.context?.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)?.[1];
                 return `npm.${packageName?.replace('@', '')}`;
               },
               priority: 30,

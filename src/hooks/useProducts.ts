@@ -1,22 +1,32 @@
 import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import { productApi } from "@/lib/api/products";
 import { queryKeys } from "@/lib/api/queryClient";
-import { ProductQuery } from "@/types";
+import { ApiResponse, Product, ProductQuery } from "@/types";
 
 // Get all products with filters
-export const useProducts = (query: ProductQuery = {}) => {
+export const useProducts = (
+  query: ProductQuery = {},
+  initialData?: ApiResponse<Product[]>
+) => {
   return useQuery({
     queryKey: queryKeys.products.list(query),
     queryFn: () => productApi.getProducts(query),
+    initialData,
   });
 };
 
 // Get single product by ID
-export const useProduct = (id: string) => {
+export const useProduct = (id: string, initialData?: Product) => {
   return useQuery({
     queryKey: queryKeys.products.detail(id),
     queryFn: () => productApi.getProduct(id),
     enabled: !!id,
+    initialData: initialData
+      ? {
+          success: true,
+          data: initialData,
+        }
+      : undefined,
     select: (data) => data.data,
   });
 };

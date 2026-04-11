@@ -13,6 +13,7 @@ interface ProductImageGalleryProps {
   onIndexChange: (index: number) => void;
   onImageClick: (index: number) => void;
   product: Product;
+  priority?: boolean;
 }
 
 export function ProductImageGallery({
@@ -22,6 +23,7 @@ export function ProductImageGallery({
   onIndexChange,
   onImageClick,
   product,
+  priority = false,
 }: ProductImageGalleryProps) {
   const hasGuarantee = useMemo(() => {
     return product?.attributes?.some(
@@ -42,6 +44,8 @@ export function ProductImageGallery({
             width={hasGuarantee ? 400 : 800}
             height={hasGuarantee ? 400 : 800}
             className="max-w-full max-h-full w-auto h-auto object-contain"
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            priority={priority}
           />
         </div>
 
@@ -61,9 +65,10 @@ export function ProductImageGallery({
                 <NextImage
                   src={getImageUrl(image)}
                   alt={`${productName} ${index + 1}`}
-                  width={50}
-                  height={50}
+                  width={80}
+                  height={80}
                   className="w-full h-full object-cover"
+                  sizes="80px"
                 />
               </button>
             ))}

@@ -8,13 +8,14 @@ import { Product, ProductVariant } from "@/types"
 import { Heart, Plus, Star } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import React, { useState } from "react"
+import React from "react"
 
 export interface ProductCardProps {
   product: Product
   onAddToCart?: (product: Product, variant: ProductVariant) => void
   onToggleWishlist?: (product: Product) => void
   isInWishlist?: boolean
+  imagePriority?: boolean
 }
 
 export const ProductCard = ({
@@ -22,8 +23,9 @@ export const ProductCard = ({
   onAddToCart,
   onToggleWishlist,
   isInWishlist,
+  imagePriority = false,
 }: ProductCardProps) => {
-  const [selectedVariant] = useState<ProductVariant>(product.variants[0])
+  const selectedVariant = product.variants[0]
   const discountPercent =
     selectedVariant.originalPrice && selectedVariant.originalPrice > selectedVariant.price
       ? Math.round(
@@ -41,6 +43,8 @@ export const ProductCard = ({
               alt={product.name}
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-105"
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+              priority={imagePriority}
             />
           </Link>
 

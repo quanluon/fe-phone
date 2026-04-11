@@ -2,13 +2,18 @@
 
 import React from 'react';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ConfigProvider } from 'antd';
+import dynamic from 'next/dynamic';
 import { queryClient } from '@/lib/api/queryClient';
 import { Layout } from '@/components/layout/Layout';
 import { ToastContainer } from '@/components/ui/Toast';
 import { GlobalLoading } from '@/components/ui';
 import { useToastStore } from '@/stores/toast';
+
+const ReactQueryDevtools = dynamic(
+  () => import('@tanstack/react-query-devtools').then((module) => module.ReactQueryDevtools),
+  { ssr: false }
+);
 
 interface ProvidersProps {
   children: React.ReactNode;
@@ -36,11 +41,10 @@ export function Providers({ children }: ProvidersProps) {
         </Layout>
         <ToastContainer toasts={toasts} onRemove={removeToast} />
         <GlobalLoading />
-        <ReactQueryDevtools initialIsOpen={false} />
+        {process.env.NODE_ENV === 'development' ? <ReactQueryDevtools initialIsOpen={false} /> : null}
       </ConfigProvider>
     </QueryClientProvider>
   );
 }
-
 
 

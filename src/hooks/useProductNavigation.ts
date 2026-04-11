@@ -1,6 +1,4 @@
-import { useLoadingStore } from '@/stores/loading';
 import { Product } from '@/types';
-import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 
 /**
@@ -9,8 +7,6 @@ import { useRouter } from 'next/navigation';
  */
 export function useProductNavigation() {
   const router = useRouter();
-  const tCommon = useTranslations('common');
-  const { showLoading, hideLoading } = useLoadingStore();
 
   /**
    * Navigate to product detail page
@@ -26,5 +22,4 @@ export function useProductNavigation() {
 
   return { navigateToProduct };
 }
-
 

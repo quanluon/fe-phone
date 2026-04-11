@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { HeartIcon, ShoppingCartIcon, EyeIcon, StarIcon } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartSolidIcon } from '@heroicons/react/24/solid';
@@ -13,7 +14,6 @@ import { logger } from '@/lib/utils/logger';
 import { useCart } from '@/hooks/useCart';
 import { useWishlistStore } from '@/stores/wishlist';
 import { useUIStore } from '@/stores/ui';
-import { useProductNavigation } from '@/hooks/useProductNavigation';
 
 interface ProductCardProps {
   product: Product;
@@ -21,6 +21,7 @@ interface ProductCardProps {
   onAddToWishlist?: (product: Product) => void;
   onViewProduct?: (product: Product) => void;
   className?: string;
+  imagePriority?: boolean;
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({
@@ -29,14 +30,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   onAddToWishlist,
   onViewProduct,
   className,
+  imagePriority = false,
 }) => {
   const t = useTranslations('product');
+  const router = useRouter();
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(product.variants[0]);
 
   const { addItem: addToCart, getItemQuantity } = useCart();
   const { isInWishlist, toggleItem: toggleWishlist } = useWishlistStore();
   const { currency } = useUIStore();
-  const { navigateToProduct } = useProductNavigation();
   const isInWishlistState = isInWishlist(product._id);
 
   const discount = selectedVariant.originalPrice
@@ -71,7 +73,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       onViewProduct(product);
       return;
     }
-    navigateToProduct(product);
+    router.push(`/products/${product._id}-${product.slug}`);
   };
 
   return (
@@ -82,10 +84,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       <div className="relative">
         <Link
           href={`/products/${product._id}-${product.slug}`}
-          onClick={(e) => {
-            e.preventDefault();
-            handleViewProduct();
-          }}
+          onClick={() => onViewProduct?.(product)}
           className="block"
         >
           <div className="relative aspect-square overflow-hidden bg-slate-50">
@@ -95,6 +94,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-105"
               sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+              priority={imagePriority}
             />
           </div>
         </Link>
@@ -145,10 +145,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
           <Link
             href={`/products/${product._id}-${product.slug}`}
-            onClick={(e) => {
-              e.preventDefault();
-              handleViewProduct();
-            }}
+            onClick={() => onViewProduct?.(product)}
             className="block"
           >
             <h3 className="line-clamp-2 min-h-[3rem] text-base font-semibold leading-6 text-slate-900 transition-colors hover:text-sky-800">

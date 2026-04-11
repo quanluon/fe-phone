@@ -1,12 +1,19 @@
 import { useQuery } from '@tanstack/react-query';
 import { brandApi } from '@/lib/api/products';
 import { queryKeys } from '@/lib/api/queryClient';
+import { ApiResponse, Brand } from '@/types';
 
 // Get all brands
-export const useBrands = () => {
+export const useBrands = (initialData?: Brand[]) => {
   return useQuery({
     queryKey: queryKeys.brands.list(),
     queryFn: () => brandApi.getBrands(),
+    initialData: initialData
+      ? {
+          success: true,
+          data: initialData,
+        } satisfies ApiResponse<Brand[]>
+      : undefined,
     select: (data) => data.data,
   });
 };
@@ -30,4 +37,3 @@ export const useBrandBySlug = (slug: string) => {
     enabled: !!slug,
   });
 };
-

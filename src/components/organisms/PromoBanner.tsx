@@ -1,5 +1,3 @@
-"use client"
-
 import { Button } from "@/components/atoms/Button"
 import { ArrowUpRight } from "lucide-react"
 import Link from "next/link"

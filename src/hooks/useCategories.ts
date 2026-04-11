@@ -1,12 +1,19 @@
 import { useQuery } from '@tanstack/react-query';
 import { categoryApi } from '@/lib/api/products';
 import { queryKeys } from '@/lib/api/queryClient';
+import { ApiResponse, Category } from '@/types';
 
 // Get all categories
-export const useCategories = () => {
+export const useCategories = (initialData?: Category[]) => {
   return useQuery({
     queryKey: queryKeys.categories.list(),
     queryFn: () => categoryApi.getCategories(),
+    initialData: initialData
+      ? {
+          success: true,
+          data: initialData,
+        } satisfies ApiResponse<Category[]>
+      : undefined,
     select: (data) => data.data,
   });
 };
@@ -30,4 +37,3 @@ export const useCategoryBySlug = (slug: string) => {
     enabled: !!slug,
   });
 };
-
