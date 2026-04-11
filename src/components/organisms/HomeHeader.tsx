@@ -18,7 +18,7 @@ export const HomeHeader = () => {
     return "Chào buổi tối"
   }, [])
 
-  const displayName = user?.firstName || user?.email?.split("@")[0] || "Bạn"
+  const displayName = user?.firstName || user?.email?.split("@")[0] || ""
 
   return (
     <header className="surface-panel soft-grid rounded-[2rem] px-4 py-5 sm:px-6">
