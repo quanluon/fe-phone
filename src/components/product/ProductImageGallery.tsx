@@ -25,11 +25,6 @@ export function ProductImageGallery({
   product,
   priority = false,
 }: ProductImageGalleryProps) {
-  const hasGuarantee = useMemo(() => {
-    return product?.attributes?.some(
-      (attribute) => attribute.type === ProductAttributeType.GUARANTEE
-    );
-  }, [product]);
   return (
     <div className="flex h-full min-h-0 flex-col">
       <div className="flex flex-1 flex-col space-y-4">
@@ -41,9 +36,9 @@ export function ProductImageGallery({
           <NextImage
             src={getImageUrl(images[selectedIndex])}
             alt={productName}
-            width={hasGuarantee ? 400 : 800}
-            height={hasGuarantee ? 400 : 800}
-            className="max-w-full max-h-full w-auto h-auto object-contain"
+            width={800}
+            height={800}
+            className="w-full h-full object-contain"
             sizes="(max-width: 1024px) 100vw, 50vw"
             priority={priority}
           />
@@ -72,13 +67,6 @@ export function ProductImageGallery({
                 />
               </button>
             ))}
-          </div>
-        )}
-
-        {/* Guarantee Section */}
-        {hasGuarantee && (
-          <div className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm lg:max-h-[18rem] lg:overflow-y-auto">
-            {product && <GuaranteeSection product={product} />}
           </div>
         )}
       </div>

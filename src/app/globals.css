@@ -107,6 +107,15 @@
     background-color: rgb(156 163 175);
   }
 
+  /* Hide scrollbar utility */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
   /* Line clamp utilities */
   .line-clamp-1 {
     overflow: hidden;

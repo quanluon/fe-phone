@@ -8,17 +8,22 @@ import { ProductHeader } from "@/components/product/ProductHeader";
 import { ProductImageGallery } from "@/components/product/ProductImageGallery";
 import { ProductPrice } from "@/components/product/ProductPrice";
 import { ProductQuantitySelector } from "@/components/product/ProductQuantitySelector";
-import { ProductTabs } from "@/components/product/ProductTabs";
 import { ProductVariantSelector } from "@/components/product/ProductVariantSelector";
+import { ProductTabs } from "@/components/product/ProductTabs";
+import { ProductWarrantyCollapse } from "@/components/product/ProductWarrantyCollapse";
 import { Button } from "@/components/ui/Button";
 import { ImagePreviewModal } from "@/components/ui/ImagePreviewModal";
 import { useCart } from "@/hooks/useCart";
-import { trackBeginCheckout, trackShare, trackViewItem } from "@/lib/firebase/analytics";
+import {
+  trackBeginCheckout,
+  trackShare,
+  trackViewItem,
+} from "@/lib/firebase/analytics";
 import { useProduct } from "@/hooks/useProducts";
 import { calculateDiscount, getImageUrl } from "@/lib/utils";
 import { logger } from "@/lib/utils/logger";
 import { useWishlistStore } from "@/stores/wishlist";
-import { Product, ProductVariant } from "@/types";
+import { Product, ProductAttributeType, ProductVariant } from "@/types";
 import {
   ArrowLeftIcon,
   ExclamationTriangleIcon,
@@ -26,7 +31,8 @@ import {
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { GuaranteeSection } from "./GuaranteeSection";
 
 interface ProductDetailClientProps {
   initialProduct: Product | null;
@@ -37,12 +43,14 @@ function getInitialVariant(product: Product | null): ProductVariant | null {
     return null;
   }
 
-  return product.variants.find((variant) => variant.isActive && variant.stock > 0) || product.variants[0] || null;
+  return (
+    product.variants.find((variant) => variant.isActive && variant.stock > 0) ||
+    product.variants[0] ||
+    null
+  );
 }
 
-export function ProductDetail({
-  initialProduct,
-}: ProductDetailClientProps) {
+export function ProductDetail({ initialProduct }: ProductDetailClientProps) {
   const params = useParams();
   const router = useRouter();
   const t = useTranslations("product.detail");
@@ -55,18 +63,25 @@ export function ProductDetail({
   const productId = identifier.split("-")[0];
 
   // Fetch product data using only the _id, but use initialProduct as fallback
-  const { data: product, isLoading: productLoading } = useProduct(productId, initialProduct || undefined);
+  const { data: product, isLoading: productLoading } = useProduct(
+    productId,
+    initialProduct || undefined,
+  );
 
   // Use server-side fetched data initially, then client-side data when available
   const productData = (product as Product) || initialProduct;
 
-  const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(() => getInitialVariant(initialProduct));
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(
+    () => getInitialVariant(initialProduct),
+  );
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [isBuyingNow, setIsBuyingNow] = useState(false);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
-  const [trackedViewItemKey, setTrackedViewItemKey] = useState<string | null>(null);
+  const [trackedViewItemKey, setTrackedViewItemKey] = useState<string | null>(
+    null,
+  );
 
   const { addItem: addToCart, getItemQuantity } = useCart();
   const { isInWishlist, toggleItem: toggleWishlist } = useWishlistStore();
@@ -77,7 +92,10 @@ export function ProductDetail({
       productData &&
       productData.variants &&
       productData.variants.length > 0 &&
-      (!selectedVariant || !productData.variants.some((variant) => variant._id === selectedVariant._id))
+      (!selectedVariant ||
+        !productData.variants.some(
+          (variant) => variant._id === selectedVariant._id,
+        ))
     ) {
       setSelectedVariant(getInitialVariant(productData));
     }
@@ -130,13 +148,13 @@ export function ProductDetail({
             variantId: selectedVariant._id,
             error: result.error,
           },
-          "Cart validation failed"
+          "Cart validation failed",
         );
       }
     } catch (error) {
       logger.error(
         { error, productId: productData._id, variantId: selectedVariant?._id },
-        "Error adding to cart"
+        "Error adding to cart",
       );
     } finally {
       setIsAddingToCart(false);
@@ -166,13 +184,13 @@ export function ProductDetail({
             variantId: selectedVariant._id,
             error: result.error,
           },
-          "Cart validation failed"
+          "Cart validation failed",
         );
       }
     } catch (error) {
       logger.error(
         { error, productId: productData._id, variantId: selectedVariant?._id },
-        "Error buying now"
+        "Error buying now",
       );
     } finally {
       setIsBuyingNow(false);
@@ -295,9 +313,15 @@ export function ProductDetail({
   const allImages = [
     ...selectedVariant.images,
     ...productData.images.filter(
-      (img: string) => !selectedVariant.images.includes(img)
+      (img: string) => !selectedVariant.images.includes(img),
     ),
   ];
+
+  const hasGuarantee = useMemo(() => {
+    return productData?.attributes?.some(
+      (attribute) => attribute.type === ProductAttributeType.GUARANTEE,
+    );
+  }, [productData]);
 
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(125,211,252,0.12),_transparent_30%),linear-gradient(to_bottom,_#f8fafc,_#ffffff)] pb-24 md:pb-0">
@@ -314,83 +338,81 @@ export function ProductDetail({
           {t("back")}
         </button>
 
-        <div className="grid grid-cols-1 gap-8 lg:min-h-[56rem] lg:grid-cols-[minmax(0,1.1fr)_minmax(20rem,0.9fr)] lg:items-stretch">
-          {/* Product Images */}
-          <ProductImageGallery
-            images={allImages}
-            productName={productData.name}
-            selectedIndex={selectedImageIndex}
-            onIndexChange={setSelectedImageIndex}
-            onImageClick={handleImageClick}
-            product={productData}
-            priority
-          />
-
-          {/* Product Info */}
-          <div className="lg:h-full lg:min-h-0">
-            <div className="space-y-5 lg:flex lg:h-full lg:min-h-0 lg:flex-col lg:overflow-hidden">
-              <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
-                <ProductHeader product={productData} discount={discount} />
-
-                <div className="mt-5">
-                  <ProductPrice variant={selectedVariant} />
-                </div>
-
-                <p className="mt-5 text-sm leading-7 text-slate-600 sm:text-base">
-                  {productData.shortDescription}
-                </p>
-
-                <div className="mt-5 grid gap-3 sm:grid-cols-3">
-                  <div className="rounded-2xl bg-slate-50 px-4 py-3 text-sm text-slate-600">
-                    <p className="font-semibold text-slate-900">Giao hàng miễn phí</p>
-                    <p>Dành cho một số đơn hàng và giao hàng hoả tốc nội thành.</p>
-                  </div>
-                  <div className="rounded-2xl bg-slate-50 px-4 py-3 text-sm text-slate-600">
-                    <p className="font-semibold text-slate-900">Đổi trả dễ dàng</p>
-                    <p>Hỗ trợ đổi màu, dung lượng và bảo hành sau mua.</p>
-                  </div>
-                  <div className="rounded-2xl bg-slate-50 px-4 py-3 text-sm text-slate-600">
-                    <p className="font-semibold text-slate-900">Kho hàng minh bạch</p>
-                    <p>Hiển thị tồn kho thực tế trước khi đặt hàng.</p>
-                  </div>
-                </div>
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(20rem,0.9fr)] lg:items-stretch lg:gap-12">
+          {/* Component 1: Media & Commitments (Left Column) */}
+          <div className="flex flex-col">
+            <ProductImageGallery
+              images={allImages}
+              productName={productData.name}
+              selectedIndex={selectedImageIndex}
+              onIndexChange={setSelectedImageIndex}
+              onImageClick={handleImageClick}
+              product={productData}
+              priority
+            />
+            {/* Guarantee Section */}
+            {hasGuarantee ? (
+              <div className="py-5 lg:max-h-[18rem]">
+                <GuaranteeSection product={productData} />
               </div>
+            ) : (
+              <ProductWarrantyCollapse product={productData} />
+            )}
+          </div>
 
-              <div className="space-y-5 lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pr-2">
-                <ProductVariantSelector
-                  product={productData}
-                  selectedVariant={selectedVariant}
-                  onVariantChange={handleVariantChange}
-                />
+          {/* Component 2: Selection & Actions (Right Column) */}
+          <div className="lg:relative">
+            <div className="lg:absolute lg:inset-0 lg:overflow-y-auto lg:rounded-[2.5rem] lg:border lg:border-slate-100 lg:bg-white/40 lg:p-1 lg:backdrop-blur-sm scrollbar-hide">
+              <div className="space-y-6 lg:p-5">
+                <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
+                  <ProductHeader product={productData} discount={discount} />
 
-                <ProductQuantitySelector
-                  quantity={quantity}
-                  availableStock={availableStock}
-                  cartQuantity={cartQuantity}
-                  onQuantityChange={setQuantity}
-                />
+                  <div className="mt-5">
+                    <ProductPrice variant={selectedVariant} />
+                  </div>
 
-                <ProductActions
-                  availableStock={availableStock}
-                  cartQuantity={cartQuantity}
-                  isAddingToCart={isAddingToCart}
-                  isBuyingNow={isBuyingNow}
-                  isInWishlist={isInWishlistState}
-                  onAddToCart={handleAddToCart}
-                  onBuyNow={handleBuyNow}
-                  onToggleWishlist={handleToggleWishlist}
-                  onShare={handleShare}
-                />
+                  <p className="mt-5 text-sm leading-7 text-slate-600 sm:text-base">
+                    {productData.shortDescription}
+                  </p>
+                </div>
 
-                <ProductContactSupport />
+                <div className="space-y-5">
+                  <ProductVariantSelector
+                    product={productData}
+                    selectedVariant={selectedVariant}
+                    onVariantChange={handleVariantChange}
+                  />
 
-                <ProductFeatures />
+                  <ProductQuantitySelector
+                    quantity={quantity}
+                    availableStock={availableStock}
+                    cartQuantity={cartQuantity}
+                    onQuantityChange={setQuantity}
+                  />
+
+                  <ProductActions
+                    availableStock={availableStock}
+                    cartQuantity={cartQuantity}
+                    isAddingToCart={isAddingToCart}
+                    isBuyingNow={isBuyingNow}
+                    isInWishlist={isInWishlistState}
+                    onAddToCart={handleAddToCart}
+                    onBuyNow={handleBuyNow}
+                    onToggleWishlist={handleToggleWishlist}
+                    onShare={handleShare}
+                  />
+
+                  <ProductContactSupport />
+
+                  <ProductFeatures />
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="mt-10">
+        {/* Component 3: Description & Specifications (Bottom Section) */}
+        <div className="mt-12">
           <ProductTabs product={productData} />
         </div>
 
@@ -408,15 +430,26 @@ export function ProductDetail({
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 p-3 backdrop-blur md:hidden">
         <div className="mx-auto flex max-w-7xl items-center gap-3">
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-semibold text-slate-900">{selectedVariant.color}{selectedVariant.storage ? ` • ${selectedVariant.storage}` : ''}</p>
+            <p className="truncate text-sm font-semibold text-slate-900">
+              {selectedVariant.color}
+              {selectedVariant.storage ? ` • ${selectedVariant.storage}` : ""}
+            </p>
             <p className="text-base font-semibold text-slate-950">
-              {selectedVariant.price.toLocaleString('vi-VN')}₫
+              {selectedVariant.price.toLocaleString("vi-VN")}₫
             </p>
           </div>
-          <Button variant="outline" onClick={handleAddToCart} disabled={availableStock === 0 || isAddingToCart}>
+          <Button
+            variant="outline"
+            onClick={handleAddToCart}
+            disabled={availableStock === 0 || isAddingToCart}
+          >
             {tProduct("addToCart")}
           </Button>
-          <Button variant="brand" onClick={handleBuyNow} disabled={availableStock === 0 || isBuyingNow}>
+          <Button
+            variant="brand"
+            onClick={handleBuyNow}
+            disabled={availableStock === 0 || isBuyingNow}
+          >
             {tProduct("buyNow")}
           </Button>
         </div>
