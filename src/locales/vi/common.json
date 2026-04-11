@@ -164,7 +164,15 @@
       "reviewsCount": "đánh giá",
       "needHelp": "Cần hỗ trợ?",
       "callUs": "Gọi điện",
-      "emailUs": "Gửi email"
+      "emailUs": "Gửi email",
+      "variant": {
+        "outOfStock": "Hết hàng",
+        "unavailable": "Không có",
+        "notSpecified": "Chưa chọn",
+        "selectionSummaryTitle": "Lựa chọn hiện tại",
+        "inStockSummary": "Còn {count} máy có thể chọn",
+        "outOfStockSummary": "Tạm hết hàng"
+      }
     },
     "guarantee": {
       "title": "Bảo Hành & Cam Kết",

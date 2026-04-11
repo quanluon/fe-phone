@@ -164,7 +164,15 @@
       "reviewsCount": "reviews",
       "needHelp": "Need help?",
       "callUs": "Call Us",
-      "emailUs": "Email Us"
+      "emailUs": "Email Us",
+      "variant": {
+        "outOfStock": "Out of stock",
+        "unavailable": "Unavailable",
+        "notSpecified": "Not selected",
+        "selectionSummaryTitle": "Current selection",
+        "inStockSummary": "{count} units available",
+        "outOfStockSummary": "Temporarily out of stock"
+      }
     },
     "guarantee": {
       "title": "Warranty & Guarantee",
