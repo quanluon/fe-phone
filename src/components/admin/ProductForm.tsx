@@ -245,6 +245,9 @@ export default function ProductForm({
       const extracted = resData.data;
       const { _validationErrors, ...productFields } = extracted;
       const normalizedFields = normalizeFormValues(productFields);
+      const imageCount = normalizedFields.images?.length ?? 0;
+      const variantCount = normalizedFields.variants?.length ?? 0;
+      const attributeCount = normalizedFields.attributes?.length ?? 0;
 
       // Update form fields
       form.setFieldsValue({
@@ -254,10 +257,12 @@ export default function ProductForm({
 
       if (_validationErrors?.length) {
         message.warning(
-          "Dữ liệu đã trích xuất nhưng còn một số lỗi validation. Vui lòng kiểm tra lại.",
+          `AI đã điền dữ liệu: ${imageCount} ảnh, ${variantCount} biến thể, ${attributeCount} thông số. Còn một số lỗi validation, vui lòng kiểm tra lại.`,
         );
       } else {
-        message.success("Đã bóc tách dữ liệu bằng AI thành công!");
+        message.success(
+          `Đã bóc tách dữ liệu bằng AI: ${imageCount} ảnh, ${variantCount} biến thể, ${attributeCount} thông số.`,
+        );
       }
 
       setAiPopoverVisible(false);
@@ -313,6 +318,7 @@ export default function ProductForm({
   const tabItems = [
     {
       key: "basic",
+      forceRender: true,
       label: (
         <span>
           <InformationCircleIcon className="w-4 h-4 inline-block mr-1" />
@@ -446,6 +452,7 @@ export default function ProductForm({
     },
     {
       key: "images",
+      forceRender: true,
       label: (
         <span>
           <PhotoIcon className="w-4 h-4 inline-block mr-1" />
@@ -470,6 +477,7 @@ export default function ProductForm({
     },
     {
       key: "variants",
+      forceRender: true,
       label: (
         <span>
           <TagIcon className="w-4 h-4 inline-block mr-1" />
@@ -589,6 +597,7 @@ export default function ProductForm({
     },
     {
       key: "attributes",
+      forceRender: true,
       label: (
         <span>
           <ListBulletIcon className="w-4 h-4 inline-block mr-1" />
