@@ -70,7 +70,7 @@ export const metadata: Metadata = {
     locale: 'vi_VN',
     images: [
       {
-        url: toAbsoluteUrl('/web-app-manifest-512x512.png'),
+        url: toAbsoluteUrl('/android-chrome-512x512.png'),
         width: 512,
         height: 512,
         alt: CONTACT_INFO.name,
@@ -81,7 +81,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: CONTACT_INFO.title,
     description: defaultDescription,
-    images: [toAbsoluteUrl('/web-app-manifest-512x512.png')],
+    images: [toAbsoluteUrl('/android-chrome-512x512.png')],
   },
   robots: {
     index: true,

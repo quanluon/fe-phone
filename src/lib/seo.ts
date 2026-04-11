@@ -29,7 +29,7 @@ export function getSiteUrlObject(): URL {
 
 export function toAbsoluteUrl(pathOrUrl?: string | null): string {
   if (!pathOrUrl) {
-    return new URL('/web-app-manifest-512x512.png', getSiteUrl()).toString();
+    return new URL('/android-chrome-512x512.png', getSiteUrl()).toString();
   }
 
   if (/^https?:\/\//i.test(pathOrUrl)) {
@@ -80,8 +80,8 @@ export function buildOrganizationJsonLd() {
     name: CONTACT_INFO.name,
     description: getDefaultMetaDescription(),
     url: getSiteUrl(),
-    logo: toAbsoluteUrl('/web-app-manifest-512x512.png'),
-    image: toAbsoluteUrl('/web-app-manifest-512x512.png'),
+    logo: toAbsoluteUrl('/android-chrome-512x512.png'),
+    image: toAbsoluteUrl('/android-chrome-512x512.png'),
     telephone: CONTACT_INFO.phone,
     email: CONTACT_INFO.email,
     openingHours: CONTACT_INFO.hours,
