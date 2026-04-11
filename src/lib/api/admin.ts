@@ -14,6 +14,7 @@ import type {
   User,
 } from '@/types';
 import { getFirebaseIdToken } from '@/lib/firebase/auth';
+import { fileApi } from './files';
 
 // ─── Proxy fetch helper ───────────────────────────────────────────────────────
 
@@ -26,16 +27,19 @@ async function adminFetch<T>(
     ...(options.headers as Record<string, string>),
   };
 
-  // Forward Firebase token if user is logged in (proxy will also add API key)
+  // Forward Firebase token if user is logged in
   try {
     const token = await getFirebaseIdToken();
     if (token) headers['Authorization'] = `Bearer ${token}`;
   } catch {
-    // not logged in — proxy will rely solely on API key
-    headers['x-api-key'] = process.env.API_KEY || '';
+    // ignore
   }
 
-  const res = await fetch(path, { ...options, headers });
+  // Hardcode x-api-key as requested
+  headers['x-api-key'] = process.env.API_KEY || '';
+
+
+  const res = await fetch(`${path}`, { ...options, headers });
 
   if (!res.ok) {
     const err = await res.json().catch(() => ({ message: res.statusText }));
@@ -125,6 +129,37 @@ export const adminProductsApi = {
   delete: (id: string) => del(`/api/admin/products/${id}`),
   updateStatus: (id: string, status: string) =>
     patch<Product>(`/api/admin/products/${id}/status`, { status }),
+  aiExtract: (data: { promptText?: string; imageUrl?: string }) =>
+    post<any>('/api/admin/products/ai-extract', data),
+};
+
+// ─── Files/Uploads ───────────────────────────────────────────────────────────
+
+export const adminFilesApi = {
+  getPresignedUrl: async (fileName: string, contentType: string, folder: string = 'products') => {
+    // Calling fileApi directly (which calls the BE directly via Axios)
+    const data = await fileApi.getPresignedUrl(fileName, contentType, folder);
+    // Map 'url' to 'uploadUrl' for component compatibility
+    return {
+      success: true,
+      data: {
+        uploadUrl: data.url,
+        fileKey: data.key,
+        publicUrl: data.publicUrl
+      }
+    };
+  },
+  getMultiplePresignedUrls: async (files: { fileName: string; contentType: string }[], folder: string = 'products') => {
+    const data = await fileApi.getMultiplePresignedUrls(files, folder);
+    return {
+      success: true,
+      data: data.uploadUrls.map(u => ({
+        uploadUrl: u.url,
+        fileKey: u.key,
+        publicUrl: u.publicUrl
+      }))
+    };
+  },
 };
 
 // ─── Orders ───────────────────────────────────────────────────────────────────
@@ -185,20 +220,36 @@ export const adminUsersApi = {
 
 // ─── Stats ────────────────────────────────────────────────────────────────────
 
+export interface AdminProductStats {
+  overview: {
+    totalProducts: number;
+    activeProducts: number;
+    inactiveProducts: number;
+    draftProducts: number;
+    featuredProducts: number;
+    newProducts: number;
+    averagePrice: number;
+    minPrice: number;
+    maxPrice: number;
+  };
+  byType: { _id: string; count: number }[];
+  byCategory: { _id: string; count: number }[];
+}
+
+export interface AdminOrderStats {
+  totalOrders: number;
+  totalRevenue: number;
+  pendingOrders: number;
+  confirmedOrders: number;
+  processingOrders: number;
+  shippedOrders: number;
+  deliveredOrders: number;
+  cancelledOrders: number;
+  paidOrders: number;
+  pendingPaymentOrders: number;
+}
+
 export const adminStatsApi = {
-  getProductStats: () =>
-    get<{ total: number; active: number; draft: number; inactive: number }>(
-      '/api/admin/products/stats'
-    ),
-  getOrderStats: () =>
-    get<{
-      total: number;
-      pending: number;
-      confirmed: number;
-      processing: number;
-      shipped: number;
-      delivered: number;
-      cancelled: number;
-      totalRevenue: number;
-    }>('/api/admin/orders/stats'),
+  getProductStats: () => get<AdminProductStats>('/api/admin/products/stats'),
+  getOrderStats: () => get<AdminOrderStats>('/api/admin/orders/stats'),
 };

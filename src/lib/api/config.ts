@@ -17,11 +17,16 @@ const apiClient: AxiosInstance = axios.create({
 apiClient.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
     const token = await getFirebaseIdToken();
+    const adminApiKey = useAuthStore.getState().adminApiKey || process.env.NEXT_PUBLIC_ADMIN_KEY;
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     } else if (config.headers.Authorization) {
       delete config.headers.Authorization;
+    }
+
+    if (adminApiKey) {
+      config.headers["x-api-key"] = adminApiKey;
     }
 
     const storeLang = useUIStore.getState().language;

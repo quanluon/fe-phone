@@ -30,6 +30,7 @@ interface AuthState {
   authIdentity: AuthIdentity | null;
   profile: AppProfile | null;
   user: AuthUser | null;
+  adminApiKey: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
@@ -52,6 +53,7 @@ interface AuthActions {
   clearError: () => void;
   clearSession: () => void;
   setUser: (user: AuthUser | null) => void;
+  setAdminApiKey: (key: string | null) => void;
 }
 
 type AuthStore = AuthState & AuthActions;
@@ -128,6 +130,7 @@ export const useAuthStore = create<AuthStore>()(
       authIdentity: null,
       profile: null,
       user: null,
+      adminApiKey: null,
       isAuthenticated: false,
       isLoading: false,
       error: null,
@@ -391,6 +394,10 @@ export const useAuthStore = create<AuthStore>()(
           isAuthenticated: Boolean(state.firebaseUser),
         }));
       },
+
+      setAdminApiKey: (key: string | null) => {
+        set({ adminApiKey: key });
+      },
     }),
     {
       name: "auth-storage",
@@ -398,6 +405,7 @@ export const useAuthStore = create<AuthStore>()(
       partialize: (state) => ({
         profile: state.profile,
         user: state.user,
+        adminApiKey: state.adminApiKey,
       }),
       onRehydrateStorage: () => (state) => {
         if (state) {

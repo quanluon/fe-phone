@@ -11,45 +11,46 @@ import {
   TagsOutlined,
   TeamOutlined,
 } from '@ant-design/icons';
-import { App, Avatar, Button, Dropdown, Layout, Menu, Typography, Spin } from 'antd';
+import { App, Avatar, Button, Dropdown, Layout, Menu, Typography } from 'antd';
 import type { MenuProps } from 'antd';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useAuthStore } from '@/stores/auth';
+import { useEffect } from 'react';
 
 const { Sider, Header, Content } = Layout;
 const { Text } = Typography;
 
-const NAV_ITEMS = [
-  { key: '/dashboard', icon: <DashboardOutlined />, label: 'Tổng quan' },
-  { key: '/dashboard/orders', icon: <OrderedListOutlined />, label: 'Đơn hàng' },
-  { key: '/dashboard/products', icon: <ShoppingOutlined />, label: 'Sản phẩm' },
-  { key: '/dashboard/brands', icon: <AppstoreOutlined />, label: 'Thương hiệu' },
-  { key: '/dashboard/categories', icon: <TagsOutlined />, label: 'Danh mục' },
-  { key: '/dashboard/users', icon: <TeamOutlined />, label: 'Người dùng' },
+const getNavItems = (apiKey: string) => [
+  { key: `/${apiKey}/dashboard`, icon: <DashboardOutlined />, label: 'Tổng quan' },
+  { key: `/${apiKey}/dashboard/orders`, icon: <OrderedListOutlined />, label: 'Đơn hàng' },
+  { key: `/${apiKey}/dashboard/products`, icon: <ShoppingOutlined />, label: 'Sản phẩm' },
+  { key: `/${apiKey}/dashboard/brands`, icon: <AppstoreOutlined />, label: 'Thương hiệu' },
+  { key: `/${apiKey}/dashboard/categories`, icon: <TagsOutlined />, label: 'Danh mục' },
+  { key: `/${apiKey}/dashboard/users`, icon: <TeamOutlined />, label: 'Người dùng' },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
-  const { user, logout, _isInitialized } = useAuthStore();
+  const params = useParams();
+  const apiKey = params.apiKey as string;
+  const { user, logout, syncProfile, setAdminApiKey, adminApiKey } = useAuthStore();
   const { modal } = App.useApp();
 
-  // Wait for auth state to hydrate/initialize to avoid flashy redirects
-  if (!_isInitialized) {
-    return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Spin size="large" />
-      </div>
-    );
-  }
+  const NAV_ITEMS = getNavItems(apiKey);
 
-  // Guard: redirect non-admins or unauthenticated users to login
-  if (!user || user.type !== 'admin') {
-    router.replace('/auth?mode=login');
-    return null;
-  }
+  useEffect(() => {
+    if (apiKey && apiKey !== adminApiKey) {
+      setAdminApiKey(apiKey);
+      syncProfile().catch(() => {
+        router.push('/');
+      });
+    } else if (!apiKey && !adminApiKey) {
+      router.push('/');
+    }
+  }, [apiKey, adminApiKey, setAdminApiKey, syncProfile, router]);
 
   const handleLogout = () => {
     modal.confirm({
@@ -78,7 +79,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     NAV_ITEMS.slice()
       .reverse()
       .find((item) => pathname === item.key || pathname?.startsWith(item.key + '/'))?.key ??
-    '/dashboard';
+    `/${apiKey}/dashboard`;
 
   return (
     <Layout style={{ minHeight: '100vh' }}>

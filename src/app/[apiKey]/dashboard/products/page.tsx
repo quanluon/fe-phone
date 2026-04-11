@@ -18,9 +18,9 @@ import {
   Typography,
 } from 'antd';
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
+import { useParams, useRouter } from 'next/navigation';
 import { adminProductsApi, type AdminProductFilters } from '@/lib/api/admin';
 import { Pagination, Product, ProductStatus } from '@/types';
-import DashboardProductModal from './DashboardProductModal';
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -46,10 +46,10 @@ export default function DashboardProductsPage() {
     page: 1,
     limit: DEFAULT_PAGE_SIZE,
   });
-  const [modalOpen, setModalOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<Product | undefined>();
-  const [modalLoading, setModalLoading] = useState(false);
+  
   const { message } = App.useApp();
+  const router = useRouter();
+  const { apiKey } = useParams();
 
   const fetchProducts = useCallback(async () => {
     setLoading(true);
@@ -87,13 +87,11 @@ export default function DashboardProductsPage() {
   };
 
   const handleEdit = (record: Product) => {
-    setSelectedProduct(record);
-    setModalOpen(true);
+    router.push(`/${apiKey}/dashboard/products/edit/${record._id}`);
   };
 
   const handleCreate = () => {
-    setSelectedProduct(undefined);
-    setModalOpen(true);
+    router.push(`/${apiKey}/dashboard/products/create`);
   };
 
   const handleDelete = async (id: string) => {
@@ -103,25 +101,6 @@ export default function DashboardProductsPage() {
       message.success('Đã xoá sản phẩm');
     } catch {
       message.error('Không thể xoá sản phẩm');
-    }
-  };
-
-  const handleSubmitModal = async (values: Partial<Product>) => {
-    setModalLoading(true);
-    try {
-      if (selectedProduct) {
-        await adminProductsApi.update(selectedProduct._id, values);
-        message.success('Đã cập nhật sản phẩm');
-      } else {
-        await adminProductsApi.create(values);
-        message.success('Đã thêm sản phẩm mới');
-      }
-      setModalOpen(false);
-      fetchProducts();
-    } catch {
-      message.error('Có lỗi xảy ra khi lưu sản phẩm');
-    } finally {
-      setModalLoading(false);
     }
   };
 
@@ -226,9 +205,10 @@ export default function DashboardProductsPage() {
       title: 'Thao tác',
       key: 'actions',
       width: 100,
+      fixed: 'right' as const,
       render: (_, record: Product) => (
         <Space>
-          <Button type="text" icon={<EditOutlined />} onClick={() => handleEdit(record)} />
+          <Button type="text" icon={<EditOutlined style={{ color: '#1890ff' }} />} onClick={() => handleEdit(record)} />
           <Popconfirm title="Xoá sản phẩm?" onConfirm={() => handleDelete(record._id)}>
              <Button type="text" danger icon={<DeleteOutlined />} />
           </Popconfirm>
@@ -304,14 +284,6 @@ export default function DashboardProductsPage() {
           scroll={{ x: 1000 }}
         />
       </Card>
-      
-      <DashboardProductModal
-        open={modalOpen}
-        onCancel={() => setModalOpen(false)}
-        onSubmit={handleSubmitModal}
-        initialData={selectedProduct}
-        loading={modalLoading}
-      />
     </div>
   );
 }

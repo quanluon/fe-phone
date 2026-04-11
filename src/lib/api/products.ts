@@ -6,7 +6,7 @@ export const productApi = {
   // Get all products with filters
   getProducts: (query: ProductQuery = {}) => {
     const params = new URLSearchParams();
-    
+
     Object.entries(query).forEach(([key, value]) => {
       if (value !== undefined && value !== null && value !== '') {
         params.append(key, String(value));
@@ -45,7 +45,7 @@ export const productApi = {
   searchProducts: async (query: string, filters: ProductFilters = {}) => {
     const params = new URLSearchParams();
     params.append('search', query);
-    
+
     Object.entries(filters).forEach(([key, value]) => {
       if (value !== undefined && value !== null && value !== '') {
         params.append(key, String(value));
@@ -59,7 +59,7 @@ export const productApi = {
   getProductsByCategory: async (categoryId: string, query: ProductQuery = {}) => {
     const params = new URLSearchParams();
     params.append('category', categoryId);
-    
+
     Object.entries(query).forEach(([key, value]) => {
       if (value !== undefined && value !== null && value !== '') {
         params.append(key, String(value));
@@ -73,7 +73,7 @@ export const productApi = {
   getProductsByBrand: async (brandId: string, query: ProductQuery = {}) => {
     const params = new URLSearchParams();
     params.append('brand', brandId);
-    
+
     Object.entries(query).forEach(([key, value]) => {
       if (value !== undefined && value !== null && value !== '') {
         params.append(key, String(value));
@@ -111,12 +111,12 @@ export const brandApi = {
 
   // Get single brand
   getBrand: (id: string) => {
-    return api.get<Brand >(`/api/brands/${id}`);
+    return api.get<Brand>(`/api/brands/${id}`);
   },
 
   // Get brand by slug
   getBrandBySlug: (slug: string) => {
-    return api.get<Brand >(`/api/brands/slug/${slug}`);
+    return api.get<Brand>(`/api/brands/slug/${slug}`);
   },
 };
 

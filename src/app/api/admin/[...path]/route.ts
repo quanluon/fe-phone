@@ -1,3 +1,4 @@
+import logger from '@/lib/utils/logger';
 import { NextRequest, NextResponse } from 'next/server';
 
 const BE_URL = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
@@ -9,6 +10,12 @@ function buildHeaders(req: NextRequest): Record<string, string> {
   const headers: Record<string, string> = { 'Content-Type': 'application/json' };
   const auth = req.headers.get('Authorization');
   if (auth) headers['Authorization'] = auth;
+
+  // Forward x-api-key if present, otherwise inject the hardcoded one
+  const apiKey = req.headers.get('x-api-key') || process.env.API_KEY || "";
+
+  headers['x-api-key'] = apiKey;
+
   return headers;
 }
 
@@ -16,6 +23,8 @@ async function proxyRequest(req: NextRequest, context: RouteContext): Promise<Ne
   const { path } = await context.params;
   const search = req.nextUrl.search;
   const targetUrl = `${BE_URL}/admin/${path.join('/')}${search}`;
+
+  logger.info({ targetUrl }, 'targetUrl');
 
   const hasBody = req.method !== 'GET' && req.method !== 'HEAD';
   let body: string | undefined;
