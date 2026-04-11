@@ -13,6 +13,7 @@ import { ProductVariantSelector } from "@/components/product/ProductVariantSelec
 import { Button } from "@/components/ui/Button";
 import { ImagePreviewModal } from "@/components/ui/ImagePreviewModal";
 import { useCart } from "@/hooks/useCart";
+import { trackBeginCheckout, trackShare, trackViewItem } from "@/lib/firebase/analytics";
 import { useProduct } from "@/hooks/useProducts";
 import { calculateDiscount, getImageUrl } from "@/lib/utils";
 import { logger } from "@/lib/utils/logger";
@@ -65,6 +66,7 @@ export function ProductDetail({
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [isBuyingNow, setIsBuyingNow] = useState(false);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+  const [trackedViewItemKey, setTrackedViewItemKey] = useState<string | null>(null);
 
   const { addItem: addToCart, getItemQuantity } = useCart();
   const { isInWishlist, toggleItem: toggleWishlist } = useWishlistStore();
@@ -80,6 +82,25 @@ export function ProductDetail({
       setSelectedVariant(getInitialVariant(productData));
     }
   }, [productData, selectedVariant]);
+
+  useEffect(() => {
+    if (!productData || !selectedVariant) {
+      return;
+    }
+
+    const trackingKey = `${productData._id}:${selectedVariant._id}`;
+    if (trackedViewItemKey === trackingKey) {
+      return;
+    }
+
+    setTrackedViewItemKey(trackingKey);
+    void trackViewItem({
+      product: productData,
+      variant: selectedVariant,
+      quantity: 1,
+      currency: "VND",
+    });
+  }, [productData, selectedVariant, trackedViewItemKey]);
 
   const isInWishlistState = productData ? isInWishlist(productData._id) : false;
   const discount = selectedVariant?.originalPrice
@@ -131,6 +152,12 @@ export function ProductDetail({
 
       // If validation succeeded, redirect to orders page
       if (result.isValid) {
+        void trackBeginCheckout({
+          product: productData,
+          variant: selectedVariant,
+          quantity,
+          currency: "VND",
+        });
         router.push("/orders/create");
       } else {
         logger.warn(
@@ -161,12 +188,28 @@ export function ProductDetail({
     if (!productData) return;
 
     if (navigator.share) {
+      void trackShare({
+        product: productData,
+        variant: selectedVariant,
+        method: "navigator_share",
+        contentType: "product",
+        pagePath: window.location.pathname,
+        currency: "VND",
+      });
       navigator.share({
         title: productData.name,
         text: productData.description,
         url: window.location.href,
       });
     } else {
+      void trackShare({
+        product: productData,
+        variant: selectedVariant,
+        method: "clipboard",
+        contentType: "product",
+        pagePath: window.location.pathname,
+        currency: "VND",
+      });
       navigator.clipboard.writeText(window.location.href);
       // Toast notification will be shown by the toast system
     }
@@ -180,6 +223,7 @@ export function ProductDetail({
   const handleVariantChange = (variant: ProductVariant) => {
     setSelectedVariant(variant);
     setSelectedImageIndex(0);
+    setTrackedViewItemKey(null);
   };
 
   // Loading state - only show if we don't have initial data

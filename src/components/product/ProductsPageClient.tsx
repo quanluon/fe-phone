@@ -11,6 +11,7 @@ import {
   AdjustmentsHorizontalIcon,
 } from '@heroicons/react/24/outline';
 import { Input } from '@/components/atoms/Input';
+import { AnalyticsItemListTracker } from '@/components/analytics/AnalyticsItemListTracker';
 import { ProductCard } from '@/components/product/ProductCard';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
@@ -18,6 +19,7 @@ import { useBrands } from '@/hooks/useBrands';
 import { useCategories } from '@/hooks/useCategories';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useProducts } from '@/hooks/useProducts';
+import { trackFilterChange, trackSearch } from '@/lib/firebase/analytics';
 import { SORT_OPTIONS } from '@/lib/constants';
 import { type ApiResponse, type Brand, type Category, type Product, type ProductQuery } from '@/types';
 
@@ -99,6 +101,8 @@ export function ProductsPageClient({
     max: initialQueryState.maxPrice,
   });
   const [isSearchPending, setIsSearchPending] = useState(false);
+  const [lastTrackedSearch, setLastTrackedSearch] = useState('');
+  const [lastTrackedFiltersKey, setLastTrackedFiltersKey] = useState('');
 
   useEffect(() => {
     setSearchQuery(initialQueryState.search);
@@ -156,6 +160,57 @@ export function ProductsPageClient({
 
     router.replace(`/products${params.toString() ? `?${params.toString()}` : ''}`, { scroll: false });
   }, [debouncedPriceRange.max, debouncedPriceRange.min, debouncedSearchQuery, page, router, selectedBrand, selectedCategory, sortBy]);
+
+  useEffect(() => {
+    if (!debouncedSearchQuery.trim() || lastTrackedSearch === debouncedSearchQuery.trim()) {
+      return;
+    }
+
+    setLastTrackedSearch(debouncedSearchQuery.trim());
+    void trackSearch({
+      query: debouncedSearchQuery,
+      resultsCount: products?.data?.length,
+      source: 'products_page',
+      pagePath: `/products?search=${encodeURIComponent(debouncedSearchQuery.trim())}`,
+    });
+  }, [debouncedSearchQuery, lastTrackedSearch, products?.data?.length]);
+
+  useEffect(() => {
+    const filtersKey = JSON.stringify({
+      category: selectedCategory,
+      brand: selectedBrand,
+      sortBy,
+      minPrice: debouncedPriceRange.min,
+      maxPrice: debouncedPriceRange.max,
+      hasSearch: Boolean(debouncedSearchQuery.trim()),
+      resultsCount: products?.data?.length || 0,
+    });
+
+    if (filtersKey === lastTrackedFiltersKey) {
+      return;
+    }
+
+    setLastTrackedFiltersKey(filtersKey);
+    void trackFilterChange({
+      pagePath: '/products',
+      sortBy,
+      category: selectedCategory || undefined,
+      brand: selectedBrand || undefined,
+      minPrice: debouncedPriceRange.min || undefined,
+      maxPrice: debouncedPriceRange.max || undefined,
+      hasSearch: Boolean(debouncedSearchQuery.trim()),
+      resultsCount: products?.data?.length,
+    });
+  }, [
+    debouncedPriceRange.max,
+    debouncedPriceRange.min,
+    debouncedSearchQuery,
+    lastTrackedFiltersKey,
+    products?.data?.length,
+    selectedBrand,
+    selectedCategory,
+    sortBy,
+  ]);
 
   const getSortOptionLabel = (value: string) => {
     const sortKeyMap: Record<string, string> = {
@@ -377,6 +432,11 @@ export function ProductsPageClient({
           </aside>
 
           <section className="min-w-0 flex-1">
+            <AnalyticsItemListTracker
+              products={products?.data || []}
+              listName="Products Listing"
+              listId="products_listing"
+            />
             <div className="mb-4 flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm sm:px-5">
               <div>
                 <p className="text-sm font-medium text-slate-900">
@@ -420,7 +480,14 @@ export function ProductsPageClient({
               <>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
                   {products.data.map((product, index) => (
-                    <ProductCard key={product._id} product={product} imagePriority={page === 1 && index === 0} />
+                    <ProductCard
+                      key={product._id}
+                      product={product}
+                      imagePriority={page === 1 && index === 0}
+                      analyticsListName="Products Listing"
+                      analyticsListId="products_listing"
+                      analyticsIndex={index}
+                    />
                   ))}
                 </div>
 

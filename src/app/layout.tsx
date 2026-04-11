@@ -3,6 +3,7 @@ import { Fraunces, Manrope } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getLocale } from 'next-intl/server';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { FirebaseAnalyticsTracker } from '@/components/analytics/FirebaseAnalyticsTracker';
 import { LocaleInitializer } from '@/components/common/LocaleInitializer';
 import { CONTACT_INFO } from '@/lib/constants';
 import { getDefaultMetaDescription, getSiteUrlObject, toAbsoluteUrl } from '@/lib/seo';
@@ -117,6 +118,7 @@ export default async function RootLayout({
       <body className={`${manrope.variable} ${fraunces.variable} font-sans antialiased`}>
         <NextIntlClientProvider messages={messages}>
           <LocaleInitializer locale={locale as 'vi' | 'en'} />
+          <FirebaseAnalyticsTracker locale={locale} />
           <Providers>
             {children}
             <SpeedInsights />

@@ -9,6 +9,7 @@ import { HeartIcon as HeartSolidIcon } from '@heroicons/react/24/solid';
 import { Product, ProductVariant } from '@/types';
 import { Card, Badge, NextImage } from '@/components/ui';
 import { Button } from '@/components/ui/Button';
+import { trackSelectItem } from '@/lib/firebase/analytics';
 import { formatCurrency, calculateDiscount, getImageUrl } from '@/lib/utils';
 import { logger } from '@/lib/utils/logger';
 import { useCart } from '@/hooks/useCart';
@@ -22,6 +23,9 @@ interface ProductCardProps {
   onViewProduct?: (product: Product) => void;
   className?: string;
   imagePriority?: boolean;
+  analyticsListName?: string;
+  analyticsListId?: string;
+  analyticsIndex?: number;
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({
@@ -31,6 +35,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   onViewProduct,
   className,
   imagePriority = false,
+  analyticsListName,
+  analyticsListId,
+  analyticsIndex,
 }) => {
   const t = useTranslations('product');
   const router = useRouter();
@@ -69,6 +76,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   const handleViewProduct = () => {
+    void trackSelectItem({
+      product,
+      variant: selectedVariant,
+      currency: 'VND',
+      listName: analyticsListName,
+      listId: analyticsListId,
+      index: analyticsIndex,
+    });
+
     if (onViewProduct) {
       onViewProduct(product);
       return;
@@ -84,7 +100,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       <div className="relative">
         <Link
           href={`/products/${product._id}-${product.slug}`}
-          onClick={() => onViewProduct?.(product)}
+          onClick={handleViewProduct}
           className="block"
         >
           <div className="relative aspect-square overflow-hidden bg-slate-50">
@@ -145,7 +161,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
           <Link
             href={`/products/${product._id}-${product.slug}`}
-            onClick={() => onViewProduct?.(product)}
+            onClick={handleViewProduct}
             className="block"
           >
             <h3 className="line-clamp-2 min-h-[3rem] text-base font-semibold leading-6 text-slate-900 transition-colors hover:text-sky-800">

@@ -6,6 +6,7 @@ import { Input } from "@/components/atoms/Input";
 import { useLogout } from "@/hooks/useAuth";
 import { useCart } from "@/hooks/useCart";
 import { useDebounce } from "@/hooks/useDebounce";
+import { trackSearch } from "@/lib/firebase/analytics";
 import { CONTACT_INFO } from "@/lib/constants";
 import { logger } from "@/lib/utils/logger";
 import { useAuthStore } from "@/stores/auth";
@@ -39,6 +40,7 @@ export const Header: React.FC = () => {
   const { items: wishlistItems } = useWishlistStore();
   const { isAuthenticated, user } = useAuthStore();
   const logoutMutation = useLogout();
+  const [lastTrackedSearch, setLastTrackedSearch] = useState("");
 
   // Debounced search query
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
@@ -46,11 +48,21 @@ export const Header: React.FC = () => {
   // Navigate to products page when debounced search query changes
   useEffect(() => {
     if (debouncedSearchQuery.trim()) {
+      const normalizedQuery = debouncedSearchQuery.trim();
+      if (lastTrackedSearch !== normalizedQuery) {
+        setLastTrackedSearch(normalizedQuery);
+        void trackSearch({
+          query: normalizedQuery,
+          source: "header_search",
+          pagePath: `/products?search=${encodeURIComponent(normalizedQuery)}`,
+        });
+      }
+
       router.push(
-        `/products?search=${encodeURIComponent(debouncedSearchQuery.trim())}`
+        `/products?search=${encodeURIComponent(normalizedQuery)}`
       );
     }
-  }, [debouncedSearchQuery, router]);
+  }, [debouncedSearchQuery, lastTrackedSearch, router]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();

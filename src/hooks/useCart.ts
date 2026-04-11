@@ -1,4 +1,5 @@
 import { useTranslations } from "next-intl";
+import { trackAddToCart } from "@/lib/firebase/analytics";
 import { useCartStore } from "@/stores/cart";
 import { useToastStore } from "@/stores/toast";
 import { Product, ProductVariant, CartValidationResult } from "@/types";
@@ -59,6 +60,13 @@ export function useCart() {
           productName: product.name,
           color: variant.color,
         }),
+      });
+
+      void trackAddToCart({
+        product,
+        variant,
+        quantity,
+        currency: "VND",
       });
     }
 

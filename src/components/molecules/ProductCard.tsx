@@ -3,6 +3,7 @@
 import { Badge } from "@/components/atoms/Badge"
 import { Button } from "@/components/atoms/Button"
 import { Card, CardContent } from "@/components/ui/Card"
+import { trackSelectItem } from "@/lib/firebase/analytics"
 import { formatCurrency, getImageUrl } from "@/lib/utils"
 import { Product, ProductVariant } from "@/types"
 import { Heart, Plus, Star } from "lucide-react"
@@ -16,6 +17,9 @@ export interface ProductCardProps {
   onToggleWishlist?: (product: Product) => void
   isInWishlist?: boolean
   imagePriority?: boolean
+  analyticsListName?: string
+  analyticsListId?: string
+  analyticsIndex?: number
 }
 
 export const ProductCard = ({
@@ -24,6 +28,9 @@ export const ProductCard = ({
   onToggleWishlist,
   isInWishlist,
   imagePriority = false,
+  analyticsListName,
+  analyticsListId,
+  analyticsIndex,
 }: ProductCardProps) => {
   const selectedVariant = product.variants[0]
   const discountPercent =
@@ -37,7 +44,19 @@ export const ProductCard = ({
     <Card className="group relative overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
       <CardContent className="p-0">
         <div className="relative aspect-[3/4] w-full overflow-hidden bg-slate-100">
-          <Link href={`/products/${product._id}-${product.slug}`}>
+          <Link
+            href={`/products/${product._id}-${product.slug}`}
+            onClick={() => {
+              void trackSelectItem({
+                product,
+                variant: selectedVariant,
+                currency: "VND",
+                listName: analyticsListName,
+                listId: analyticsListId,
+                index: analyticsIndex,
+              })
+            }}
+          >
             <Image
               src={getImageUrl(selectedVariant.images[0] || product.images[0])}
               alt={product.name}
@@ -92,7 +111,19 @@ export const ProductCard = ({
            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
              {product.brand.name}
            </p>
-           <Link href={`/products/${product._id}-${product.slug}`}>
+           <Link
+             href={`/products/${product._id}-${product.slug}`}
+             onClick={() => {
+               void trackSelectItem({
+                 product,
+                 variant: selectedVariant,
+                 currency: "VND",
+                 listName: analyticsListName,
+                 listId: analyticsListId,
+                 index: analyticsIndex,
+               })
+             }}
+           >
              <h3 className="line-clamp-2 min-h-[2.6rem] text-base font-semibold leading-snug text-slate-900 transition group-hover:text-sky-800">
                {product.name}
              </h3>

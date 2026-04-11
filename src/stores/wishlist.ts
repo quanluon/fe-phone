@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { trackWishlistChange } from '@/lib/firebase/analytics';
 import { Product } from '@/types';
 import { createPersistStorage } from '@/lib/utils';
 
@@ -36,12 +37,28 @@ export const useWishlistStore = create<WishlistStore>()(
             items: [...state.items, product],
           };
         });
+
+        void trackWishlistChange({
+          action: 'add',
+          product,
+          currency: 'VND',
+        });
       },
 
       removeItem: (productId: string) => {
+        const existingItem = get().items.find((item) => item._id === productId);
+
         set((state) => ({
           items: state.items.filter((item) => item._id !== productId),
         }));
+
+        if (existingItem) {
+          void trackWishlistChange({
+            action: 'remove',
+            product: existingItem,
+            currency: 'VND',
+          });
+        }
       },
 
       clearWishlist: () => {
@@ -68,4 +85,3 @@ export const useWishlistStore = create<WishlistStore>()(
     }
   )
 );
-

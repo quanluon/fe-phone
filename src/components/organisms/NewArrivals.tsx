@@ -1,3 +1,4 @@
+import { AnalyticsItemListTracker } from "@/components/analytics/AnalyticsItemListTracker"
 import { ProductCard } from "@/components/molecules/ProductCard"
 import Link from "next/link"
 import React from "react"
@@ -10,6 +11,11 @@ export interface NewArrivalsProps {
 export const NewArrivals = ({ products }: NewArrivalsProps) => {
   return (
     <section className="space-y-4 pb-24">
+      <AnalyticsItemListTracker
+        products={products}
+        listName="New Arrivals"
+        listId="new_arrivals"
+      />
       <div className="flex items-end justify-between">
         <div>
           <h2 className="font-display text-2xl font-semibold text-slate-900">Sản phẩm mới về</h2>
@@ -25,7 +31,13 @@ export const NewArrivals = ({ products }: NewArrivalsProps) => {
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         {products.map((product, index) => (
           <div key={product._id} className="stagger-fade-in">
-            <ProductCard product={product} imagePriority={index === 0} />
+            <ProductCard
+              product={product}
+              imagePriority={index === 0}
+              analyticsListName="New Arrivals"
+              analyticsListId="new_arrivals"
+              analyticsIndex={index}
+            />
           </div>
         ))}
       </div>
