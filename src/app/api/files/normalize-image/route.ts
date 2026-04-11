@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
       metadata.hasAlpha ? ".png" : ".jpg",
     );
 
-    return new NextResponse(outputBuffer, {
+    return new NextResponse(outputBuffer as BodyInit, {
       status: 200,
       headers: {
         "Content-Type": outputMimeType,
