@@ -11,6 +11,7 @@ import { useToastStore } from "@/stores/toast";
 import { NextImage } from "@/components/ui";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { useUserOrders } from "@/hooks/useOrders";
+import { getImageUrl, getProductCardImage } from "@/lib/utils";
 
 const statusColors: Record<OrderStatus, string> = {
   [OrderStatus.PENDING]: "bg-yellow-100 text-yellow-800",
@@ -154,7 +155,7 @@ export default function OrdersPage() {
                     {order.items.slice(0, 3).map((item, index: number) => (
                       <NextImage
                         key={index}
-                        src={item.variant?.images?.[0] || item.product.images[0] || ""}
+                        src={getImageUrl(getProductCardImage(item.product, item.variant))}
                         alt={item.product.name}
                         className="w-12 h-12 object-cover rounded"
                       />

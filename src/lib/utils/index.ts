@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import type { Product, ProductVariant } from '@/types';
 import { logger } from './logger';
 
 // Utility function to merge Tailwind classes
@@ -188,6 +189,88 @@ export function getImageUrl(imagePath: string): string {
   //   return imagePath;
   // }
   // return `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}${imagePath}`;
+}
+
+const LOW_QUALITY_IMAGE_PATTERN =
+  /(thumb|thumbnail|small|swatch|icon|sprite|tiny|preview|placeholder|blur|low[\-_]?res|low[\-_]?quality)/i;
+const HIGH_QUALITY_IMAGE_PATTERN =
+  /(original|master|zoom|large|hi[\-_]?res|high[\-_]?res|retina|full[\-_]?size|gallery)/i;
+
+function scoreImageCandidate(imageUrl: string, index: number): number {
+  let score = Math.max(0, 100 - index);
+
+  if (HIGH_QUALITY_IMAGE_PATTERN.test(imageUrl)) {
+    score += 40;
+  }
+
+  if (LOW_QUALITY_IMAGE_PATTERN.test(imageUrl)) {
+    score -= 90;
+  }
+
+  const sizeMatches = [...imageUrl.matchAll(/(\d{2,4})[xX](\d{2,4})/g)];
+  for (const match of sizeMatches) {
+    const width = Number(match[1]);
+    const height = Number(match[2]);
+    if (!Number.isNaN(width) && !Number.isNaN(height)) {
+      score += Math.min(width, height) / 20;
+    }
+  }
+
+  try {
+    const parsedUrl = new URL(imageUrl);
+    const widthHints = ['w', 'width', 'wid', 'imwidth'];
+    for (const key of widthHints) {
+      const rawValue = parsedUrl.searchParams.get(key);
+      const width = Number(rawValue);
+      if (!Number.isNaN(width) && width > 0) {
+        score += Math.min(width, 2000) / 20;
+      }
+    }
+  } catch {
+    // Ignore malformed URLs and keep string-based scoring only.
+  }
+
+  return score;
+}
+
+function dedupeImageUrls(images: string[]): string[] {
+  return [...new Set(images.filter(Boolean))];
+}
+
+function rankImageUrls(images: string[]): string[] {
+  return dedupeImageUrls(images).sort(
+    (left, right) => scoreImageCandidate(right, 0) - scoreImageCandidate(left, 0),
+  );
+}
+
+export function getPrimaryVariant(product?: Product | null): ProductVariant | null {
+  if (!product?.variants?.length) {
+    return null;
+  }
+
+  return (
+    product.variants.find((variant) => variant.isActive && variant.stock > 0) ||
+    product.variants[0] ||
+    null
+  );
+}
+
+export function getProductDisplayImages(
+  product?: Product | null,
+  variant?: Partial<ProductVariant> | null,
+): string[] {
+  const primaryVariant = variant || getPrimaryVariant(product);
+  const rankedVariantImages = rankImageUrls(primaryVariant?.images || []);
+  const rankedProductImages = rankImageUrls(product?.images || []);
+
+  return dedupeImageUrls([...rankedVariantImages, ...rankedProductImages]);
+}
+
+export function getProductCardImage(
+  product?: Product | null,
+  variant?: Partial<ProductVariant> | null,
+): string {
+  return getProductDisplayImages(product, variant)[0] || DEFAULT_IMAGE;
 }
 
 // Default placeholder image path

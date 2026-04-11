@@ -4,7 +4,12 @@ import { Badge } from "@/components/atoms/Badge"
 import { Button } from "@/components/atoms/Button"
 import { Card, CardContent } from "@/components/ui/Card"
 import { trackSelectItem } from "@/lib/firebase/analytics"
-import { formatCurrency, getImageUrl } from "@/lib/utils"
+import {
+  formatCurrency,
+  getImageUrl,
+  getPrimaryVariant,
+  getProductCardImage,
+} from "@/lib/utils"
 import { Product, ProductVariant } from "@/types"
 import { Heart, Plus, Star } from "lucide-react"
 import Image from "next/image"
@@ -34,7 +39,7 @@ export const ProductCard = ({
   analyticsIndex,
 }: ProductCardProps) => {
   const router = useRouter()
-  const selectedVariant = product.variants[0]
+  const selectedVariant = getPrimaryVariant(product) || product.variants[0]
   const productHref = `/products/${product._id}-${product.slug}`
   const discountPercent =
     selectedVariant.originalPrice && selectedVariant.originalPrice > selectedVariant.price
@@ -50,7 +55,7 @@ export const ProductCard = ({
   return (
     <Card className="group relative overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
       <CardContent className="p-0">
-        <div className="relative aspect-[3/4] w-full overflow-hidden bg-slate-100">
+        <div className="relative aspect-[3/4] w-full overflow-hidden bg-[linear-gradient(180deg,#f8fafc_0%,#eef2f7_100%)]">
           <Link
             href={productHref}
             prefetch
@@ -69,10 +74,10 @@ export const ProductCard = ({
             }}
           >
             <Image
-              src={getImageUrl(selectedVariant.images[0] || product.images[0])}
+              src={getImageUrl(getProductCardImage(product, selectedVariant))}
               alt={product.name}
               fill
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              className="object-contain p-4 transition-transform duration-500 group-hover:scale-[1.03]"
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
               priority={imagePriority}
             />

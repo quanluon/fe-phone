@@ -20,7 +20,12 @@ import {
   trackViewItem,
 } from "@/lib/firebase/analytics";
 import { useProduct } from "@/hooks/useProducts";
-import { calculateDiscount, getImageUrl } from "@/lib/utils";
+import {
+  calculateDiscount,
+  getImageUrl,
+  getPrimaryVariant,
+  getProductDisplayImages,
+} from "@/lib/utils";
 import { logger } from "@/lib/utils/logger";
 import { useWishlistStore } from "@/stores/wishlist";
 import { Product, ProductAttributeType, ProductVariant } from "@/types";
@@ -39,15 +44,7 @@ interface ProductDetailClientProps {
 }
 
 function getInitialVariant(product: Product | null): ProductVariant | null {
-  if (!product?.variants?.length) {
-    return null;
-  }
-
-  return (
-    product.variants.find((variant) => variant.isActive && variant.stock > 0) ||
-    product.variants[0] ||
-    null
-  );
+  return getPrimaryVariant(product);
 }
 
 export function ProductDetail({ initialProduct }: ProductDetailClientProps) {
@@ -316,12 +313,7 @@ export function ProductDetail({ initialProduct }: ProductDetailClientProps) {
     return null;
   }
 
-  const allImages = [
-    ...selectedVariant.images,
-    ...productData.images.filter(
-      (img: string) => !selectedVariant.images.includes(img),
-    ),
-  ];
+  const allImages = getProductDisplayImages(productData, selectedVariant);
 
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(125,211,252,0.12),_transparent_30%),linear-gradient(to_bottom,_#f8fafc,_#ffffff)] pb-24 md:pb-0">

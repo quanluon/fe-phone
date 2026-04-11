@@ -5,7 +5,12 @@ import { Button } from '@/components/ui/Button';
 import { useCart } from '@/hooks/useCart';
 import { useProductNavigation } from '@/hooks/useProductNavigation';
 import { useWishlistStore } from '@/stores/wishlist';
-import { formatCurrency, getImageUrl } from '@/lib/utils';
+import {
+  formatCurrency,
+  getImageUrl,
+  getPrimaryVariant,
+  getProductCardImage,
+} from '@/lib/utils';
 import { useUIStore } from '@/stores/ui';
 import {
   ArrowLeftIcon,
@@ -112,7 +117,7 @@ export default function WishlistPage() {
               {/* Product Image */}
               <div className="aspect-square relative overflow-hidden">
                 <NextImage
-                  src={getImageUrl(product.images[0])}
+                  src={getImageUrl(getProductCardImage(product, getPrimaryVariant(product)))}
                   alt={product.name}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"

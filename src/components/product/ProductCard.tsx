@@ -10,7 +10,13 @@ import { Product, ProductVariant } from '@/types';
 import { Card, Badge, NextImage } from '@/components/ui';
 import { Button } from '@/components/ui/Button';
 import { trackSelectItem } from '@/lib/firebase/analytics';
-import { formatCurrency, calculateDiscount, getImageUrl } from '@/lib/utils';
+import {
+  formatCurrency,
+  calculateDiscount,
+  getImageUrl,
+  getPrimaryVariant,
+  getProductCardImage,
+} from '@/lib/utils';
 import { logger } from '@/lib/utils/logger';
 import { useCart } from '@/hooks/useCart';
 import { useWishlistStore } from '@/stores/wishlist';
@@ -42,7 +48,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const t = useTranslations('product');
   const router = useRouter();
   const productHref = `/products/${product._id}-${product.slug}`;
-  const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(product.variants[0]);
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(
+    () => getPrimaryVariant(product) || product.variants[0],
+  );
 
   const { addItem: addToCart, getItemQuantity } = useCart();
   const { isInWishlist, toggleItem: toggleWishlist } = useWishlistStore();
@@ -112,12 +120,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           onTouchStart={handlePrefetchProduct}
           className="block"
         >
-          <div className="relative aspect-square overflow-hidden bg-slate-50">
+          <div className="relative aspect-square overflow-hidden bg-[radial-gradient(circle_at_top,_#ffffff_0%,_#f8fafc_60%,_#eef2f7_100%)]">
             <NextImage
-              src={getImageUrl(selectedVariant.images[0] || product.images[0])}
+              src={getImageUrl(getProductCardImage(product, selectedVariant))}
               alt={product.name}
               fill
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              className="object-contain p-4 transition-transform duration-500 group-hover:scale-[1.03]"
               sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
               priority={imagePriority}
             />

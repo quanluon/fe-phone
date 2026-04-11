@@ -21,6 +21,7 @@ import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import { useParams, useRouter } from 'next/navigation';
 import { adminProductsApi, type AdminProductFilters } from '@/lib/api/admin';
 import { Pagination, Product, ProductStatus } from '@/types';
+import { getProductCardImage } from '@/lib/utils';
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -110,13 +111,13 @@ export default function DashboardProductsPage() {
       key: 'image',
       width: 60,
       render: (_, record: Product) =>
-        record.images?.[0] ? (
+        getProductCardImage(record) ? (
           <Image
             width={40}
             height={40}
-            src={record.images[0]}
+            src={getProductCardImage(record)}
             alt={record.name}
-            style={{ objectFit: 'cover', borderRadius: 4 }}
+            style={{ objectFit: 'contain', borderRadius: 4, background: '#f8fafc', padding: 4 }}
             preview={false}
           />
         ) : (

@@ -45,6 +45,7 @@ import RichText from "./RichText";
 const { Option } = Select;
 const { TextArea } = Input;
 const { Title, Text } = Typography;
+const PRODUCT_FORM_DRAFT_KEY = "admin-product-ai-draft-v1";
 
 interface CompactToggleProps {
   value?: boolean;
@@ -184,6 +185,50 @@ function normalizeFormValues(values: ProductFormValues): ProductFormValues {
   };
 }
 
+function saveProductFormDraft(values: ProductFormValues) {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  try {
+    window.localStorage.setItem(
+      PRODUCT_FORM_DRAFT_KEY,
+      JSON.stringify(normalizeFormValues(values)),
+    );
+  } catch {
+    // Ignore storage failures and keep the form usable.
+  }
+}
+
+function loadProductFormDraft(): ProductFormValues | null {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  try {
+    const rawDraft = window.localStorage.getItem(PRODUCT_FORM_DRAFT_KEY);
+    if (!rawDraft) {
+      return null;
+    }
+
+    return normalizeFormValues(JSON.parse(rawDraft) as ProductFormValues);
+  } catch {
+    return null;
+  }
+}
+
+function clearProductFormDraft() {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  try {
+    window.localStorage.removeItem(PRODUCT_FORM_DRAFT_KEY);
+  } catch {
+    // Ignore storage failures and keep the form usable.
+  }
+}
+
 export default function ProductForm({
   initialData,
   onSubmit,
@@ -198,6 +243,7 @@ export default function ProductForm({
   const [categories, setCategories] = useState<Category[]>([]);
   const [brands, setBrands] = useState<Brand[]>([]);
   const [metaLoading, setMetaLoading] = useState(false);
+  const [hasRestoredDraft, setHasRestoredDraft] = useState(false);
 
   // Fetch metadata
   useEffect(() => {
@@ -222,6 +268,7 @@ export default function ProductForm({
   // Set initial data
   useEffect(() => {
     if (initialData) {
+      clearProductFormDraft();
       form.setFieldsValue({
         ...initialData,
         category: initialData.category?._id || initialData.category,
@@ -248,12 +295,29 @@ export default function ProductForm({
     }
   }, [initialData, form]);
 
+  useEffect(() => {
+    if (initialData || hasRestoredDraft) {
+      return;
+    }
+
+    const savedDraft = loadProductFormDraft();
+    if (!savedDraft) {
+      setHasRestoredDraft(true);
+      return;
+    }
+
+    form.setFieldsValue(savedDraft);
+    setHasRestoredDraft(true);
+    message.info("Đã khôi phục dữ liệu AI extract từ lần trước.");
+  }, [form, hasRestoredDraft, initialData]);
+
   const handleFinish = async () => {
     const values = normalizeFormValues(form.getFieldsValue(true));
     if (!initialData) {
       values.slug = buildUniqueProductSlug(values.slug || values.name);
     }
     await onSubmit(values);
+    clearProductFormDraft();
   };
 
   const handleAiAutoFill = async () => {
@@ -279,13 +343,18 @@ export default function ProductForm({
       const attributeCount = normalizedFields.attributes?.length ?? 0;
 
       // Update form fields
-      form.setFieldsValue({
+      const nextValues = {
         ...normalizedFields,
         slug: initialData
           ? normalizedFields.slug
           : buildUniqueProductSlug(normalizedFields.slug || normalizedFields.name),
         status: ProductStatus.DRAFT,
-      });
+      };
+
+      form.setFieldsValue(nextValues);
+      if (!initialData) {
+        saveProductFormDraft(nextValues);
+      }
 
       if (_validationErrors?.length) {
         message.warning(
@@ -710,6 +779,13 @@ export default function ProductForm({
       form={form}
       layout="vertical"
       onFinish={handleFinish}
+      onValuesChange={(_, allValues) => {
+        if (initialData) {
+          return;
+        }
+
+        saveProductFormDraft(allValues as ProductFormValues);
+      }}
       className="product-form max-w-[1200px] mx-auto pb-20"
       initialValues={{
         isFeatured: false,

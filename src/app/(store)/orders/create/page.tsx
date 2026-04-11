@@ -9,6 +9,7 @@ import { useProfile } from "@/hooks/useAuth";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { useCreateOrder } from "@/hooks/useOrders";
 import { PAYMENT_METHODS } from "@/lib/constants";
+import { getImageUrl, getProductCardImage } from "@/lib/utils";
 import { logger } from "@/lib/utils/logger";
 import { ApiErrorResponse, CreateOrderRequest } from "@/types";
 import { useCartStore } from "@/stores/cart";
@@ -438,7 +439,7 @@ export default function CreateOrderPage() {
                   <div key={`${item.productId}-${item.variantId}`} className="flex items-center gap-3 rounded-[1.25rem] bg-slate-50 p-3">
                     <div className="h-16 w-16 overflow-hidden rounded-2xl bg-white">
                       <NextImage
-                        src={item.variant.images[0] || item.product.images[0]}
+                        src={getImageUrl(getProductCardImage(item.product, item.variant))}
                         alt={item.product.name}
                         className="h-full w-full object-cover"
                       />

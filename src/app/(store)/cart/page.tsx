@@ -4,7 +4,7 @@ import { Card, NextImage } from '@/components/ui';
 import { Button } from '@/components/ui/Button';
 import { useCart } from '@/hooks/useCart';
 import { useProductNavigation } from '@/hooks/useProductNavigation';
-import { formatCurrency, getImageUrl } from '@/lib/utils';
+import { formatCurrency, getImageUrl, getProductCardImage } from '@/lib/utils';
 import { useUIStore } from '@/stores/ui';
 import {
   ArrowLeftIcon,
@@ -88,7 +88,7 @@ export default function CartPage() {
                     aria-label={item.product.name}
                   >
                     <NextImage
-                      src={getImageUrl(item.variant.images[0] || item.product.images[0])}
+                      src={getImageUrl(getProductCardImage(item.product, item.variant))}
                       alt={item.product.name}
                       width={96}
                       height={96}
