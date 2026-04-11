@@ -6,11 +6,11 @@ import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { useProfile } from "@/hooks/useAuth";
+import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { useCreateOrder } from "@/hooks/useOrders";
 import { PAYMENT_METHODS } from "@/lib/constants";
 import { logger } from "@/lib/utils/logger";
 import { ApiErrorResponse, CreateOrderRequest } from "@/types";
-import { useAuthStore } from "@/stores/auth";
 import { useCartStore } from "@/stores/cart";
 import { useToastStore } from "@/stores/toast";
 import { CreditCardIcon, MapPinIcon, UserCircleIcon } from "@heroicons/react/24/outline";
@@ -81,7 +81,7 @@ export default function CreateOrderPage() {
   const t = useTranslations("orders.create");
   const tCart = useTranslations("cart");
   const { items, totalPrice, clearCart } = useCartStore();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, isLoading: authLoading } = useAuthGuard();
   const { data: userProfile } = useProfile();
   const { addToast } = useToastStore();
   const createOrderMutation = useCreateOrder();
@@ -214,6 +214,10 @@ export default function CreateOrderPage() {
   }, [totalPrice]);
 
   if (items.length === 0) {
+    return null;
+  }
+
+  if (authLoading) {
     return null;
   }
 

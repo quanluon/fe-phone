@@ -1,7 +1,9 @@
 'use client';
 
 import { Button } from '@/components/ui/Button';
+import { SocialLogin } from '@/components/auth/SocialLogin';
 import { useLogin } from '@/hooks/useAuth';
+import { getEnabledFirebaseProviders } from '@/lib/firebase/client';
 import { getErrorMessage } from '@/lib/utils';
 import { useToastStore } from '@/stores/toast';
 import { LoginRequest } from '@/types';
@@ -22,6 +24,7 @@ export function LoginForm({ onSuccess, onSwitchToForgotPassword }: LoginFormProp
   const { addToast } = useToastStore();
   const [form] = Form.useForm();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const showSocialLogin = getEnabledFirebaseProviders().length > 0;
 
   const handleSubmit = (values: LoginRequest) => {
     // Prevent multiple submissions
@@ -119,7 +122,7 @@ export function LoginForm({ onSuccess, onSwitchToForgotPassword }: LoginFormProp
         </Button>
       </Form.Item>
 
-      {/* <SocialLogin onSuccess={onSuccess} className="mt-6" /> */}
+      {showSocialLogin ? <SocialLogin onSuccess={onSuccess} className="mt-6" /> : null}
     </Form>
   );
 }

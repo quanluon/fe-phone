@@ -2,13 +2,17 @@
 
 import { FirebaseApp, FirebaseOptions, getApp, getApps, initializeApp } from 'firebase/app';
 import { Analytics, getAnalytics, isSupported } from 'firebase/analytics';
+import { Auth, getAuth } from 'firebase/auth';
 import { logger } from '@/lib/utils/logger';
 
 type FirebaseClientState = {
   app: FirebaseApp | null;
   analytics: Analytics | null;
+  auth: Auth | null;
   initialized: boolean;
 };
+
+type SocialAuthProvider = 'google' | 'facebook';
 
 const firebaseConfig: FirebaseOptions = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -23,6 +27,7 @@ const firebaseConfig: FirebaseOptions = {
 const state: FirebaseClientState = {
   app: null,
   analytics: null,
+  auth: null,
   initialized: false,
 };
 
@@ -35,6 +40,37 @@ function hasFirebaseConfig() {
       firebaseConfig.messagingSenderId &&
       firebaseConfig.appId &&
       firebaseConfig.measurementId
+  );
+}
+
+function parseBooleanEnv(value?: string) {
+  if (!value) {
+    return false;
+  }
+
+  return ['1', 'true', 'yes', 'on'].includes(value.trim().toLowerCase());
+}
+
+export function isFirebaseAuthConfigured() {
+  return hasFirebaseConfig();
+}
+
+export function isFirebaseProviderEnabled(provider: SocialAuthProvider) {
+  if (!hasFirebaseConfig()) {
+    return false;
+  }
+
+  const envMap: Record<SocialAuthProvider, string | undefined> = {
+    google: process.env.NEXT_PUBLIC_FIREBASE_ENABLE_GOOGLE_AUTH,
+    facebook: process.env.NEXT_PUBLIC_FIREBASE_ENABLE_FACEBOOK_AUTH,
+  };
+
+  return parseBooleanEnv(envMap[provider]);
+}
+
+export function getEnabledFirebaseProviders(): SocialAuthProvider[] {
+  return (['google', 'facebook'] as const).filter((provider) =>
+    isFirebaseProviderEnabled(provider)
   );
 }
 
@@ -53,6 +89,20 @@ export function getFirebaseApp(): FirebaseApp | null {
 
   state.app = getApps().length ? getApp() : initializeApp(firebaseConfig);
   return state.app;
+}
+
+export function getFirebaseAuth(): Auth | null {
+  if (state.auth) {
+    return state.auth;
+  }
+
+  const app = getFirebaseApp();
+  if (!app) {
+    return null;
+  }
+
+  state.auth = getAuth(app);
+  return state.auth;
 }
 
 export async function getFirebaseAnalytics(): Promise<Analytics | null> {

@@ -7,9 +7,9 @@ import { Order, OrderStatus, PaymentStatus } from "@/types";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
-import { useAuthStore } from "@/stores/auth";
 import { useToastStore } from "@/stores/toast";
 import { NextImage } from "@/components/ui";
+import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { useUserOrders } from "@/hooks/useOrders";
 
 const statusColors: Record<OrderStatus, string> = {
@@ -32,7 +32,7 @@ export default function OrdersPage() {
   const router = useRouter();
   const t = useTranslations('orders');
   const { addToast } = useToastStore();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, isLoading: authLoading } = useAuthGuard();
   const [page, setPage] = useState(1);
   
   const { 
@@ -44,13 +44,6 @@ export default function OrdersPage() {
   const orders = ordersData || [];
   const pagination = { pages: 1 }; // Simplified for now
   const hasMore = page < (pagination?.pages || 0);
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.push("/auth");
-      return;
-    }
-  }, [isAuthenticated, router]);
 
   useEffect(() => {
     if (error) {
@@ -82,7 +75,7 @@ export default function OrdersPage() {
           </p>
         </div>
 
-        {loading && orders.length === 0 ? (
+        {authLoading || (loading && orders.length === 0) ? (
           <div className="space-y-6">
             {[...Array(3)].map((_, i) => (
               <Card key={i} className="p-6">

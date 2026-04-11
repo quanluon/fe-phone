@@ -41,6 +41,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 }) => {
   const t = useTranslations('product');
   const router = useRouter();
+  const productHref = `/products/${product._id}-${product.slug}`;
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(product.variants[0]);
 
   const { addItem: addToCart, getItemQuantity } = useCart();
@@ -89,7 +90,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       onViewProduct(product);
       return;
     }
-    router.push(`/products/${product._id}-${product.slug}`);
+    router.push(productHref);
+  };
+
+  const handlePrefetchProduct = () => {
+    router.prefetch(productHref);
   };
 
   return (
@@ -99,8 +104,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     >
       <div className="relative">
         <Link
-          href={`/products/${product._id}-${product.slug}`}
+          href={productHref}
+          prefetch
           onClick={handleViewProduct}
+          onMouseEnter={handlePrefetchProduct}
+          onFocus={handlePrefetchProduct}
+          onTouchStart={handlePrefetchProduct}
           className="block"
         >
           <div className="relative aspect-square overflow-hidden bg-slate-50">
@@ -139,6 +148,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           </button>
           <button
             onClick={handleViewProduct}
+            onMouseEnter={handlePrefetchProduct}
+            onFocus={handlePrefetchProduct}
+            onTouchStart={handlePrefetchProduct}
             className="rounded-full border border-white/70 bg-white/90 p-2 text-slate-600 shadow-sm backdrop-blur transition-colors hover:text-slate-950"
             aria-label="View product"
           >
@@ -160,8 +172,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           </div>
 
           <Link
-            href={`/products/${product._id}-${product.slug}`}
+            href={productHref}
+            prefetch
             onClick={handleViewProduct}
+            onMouseEnter={handlePrefetchProduct}
+            onFocus={handlePrefetchProduct}
+            onTouchStart={handlePrefetchProduct}
             className="block"
           >
             <h3 className="line-clamp-2 min-h-[3rem] text-base font-semibold leading-6 text-slate-900 transition-colors hover:text-sky-800">
@@ -249,6 +265,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             size="lg"
             variant="outline"
             onClick={handleViewProduct}
+            onMouseEnter={handlePrefetchProduct}
+            onFocus={handlePrefetchProduct}
+            onTouchStart={handlePrefetchProduct}
             className="px-4"
           >
             <EyeIcon className="h-4 w-4" />

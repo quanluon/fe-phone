@@ -175,8 +175,6 @@ export const API_ENDPOINTS = {
 
 // Local storage keys
 export const STORAGE_KEYS = {
-  accessToken: 'accessToken',
-  refreshToken: 'refreshToken',
   cart: 'cart-storage',
   wishlist: 'wishlist-storage',
   auth: 'auth-storage',

@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ConfigProvider } from 'antd';
 import dynamic from 'next/dynamic';
@@ -8,6 +8,7 @@ import { queryClient } from '@/lib/api/queryClient';
 import { Layout } from '@/components/layout/Layout';
 import { ToastContainer } from '@/components/ui/Toast';
 import { GlobalLoading } from '@/components/ui';
+import { useAuthStore } from '@/stores/auth';
 import { useToastStore } from '@/stores/toast';
 
 const ReactQueryDevtools = dynamic(
@@ -21,6 +22,11 @@ interface ProvidersProps {
 
 export function Providers({ children }: ProvidersProps) {
   const { toasts, removeToast } = useToastStore();
+  const initializeAuth = useAuthStore((state) => state.initializeAuth);
+
+  useEffect(() => {
+    initializeAuth();
+  }, [initializeAuth]);
   
   return (
     <QueryClientProvider client={queryClient}>
@@ -46,5 +52,4 @@ export function Providers({ children }: ProvidersProps) {
     </QueryClientProvider>
   );
 }
-
 

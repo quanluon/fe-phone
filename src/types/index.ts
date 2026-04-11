@@ -148,7 +148,8 @@ export interface CartValidationResult {
 // User Types
 export interface User {
   _id: string;
-  cognitoId: string;
+  firebaseUid?: string;
+  authProviderUid?: string;
   email: string;
   firstName?: string;
   lastName?: string;
@@ -161,10 +162,10 @@ export interface User {
   updatedAt: string;
 }
 
-// Auth Types
-export interface AuthUser {
+export interface AppProfile {
   _id: string;
-  cognitoId: string;
+  firebaseUid?: string;
+  authProviderUid?: string;
   email: string;
   firstName?: string;
   lastName?: string;
@@ -178,11 +179,31 @@ export interface AuthUser {
   updatedAt: string;
 }
 
-export interface AuthToken {
-  accessToken: string;
-  refreshToken: string;
-  idToken: string;
-  expiresIn: number;
+export interface AuthIdentity {
+  uid: string;
+  firebaseUid: string;
+  authProviderUid: string;
+  email: string;
+  firstName?: string;
+  lastName?: string;
+  fullName?: string;
+  phone?: string;
+  profileImage?: string;
+  avatar?: string;
+  isEmailVerified: boolean;
+  isPhoneVerified: boolean;
+  createdAt: string;
+  updatedAt: string;
+  lastLoginAt?: string;
+}
+
+// Auth Types
+export interface AuthUser extends AppProfile {
+  fullName?: string;
+  avatar?: string;
+  role?: "user" | "admin";
+  isEmailVerified?: boolean;
+  isPhoneVerified?: boolean;
 }
 
 export interface LoginRequest {
@@ -193,15 +214,10 @@ export interface LoginRequest {
 export interface RegisterRequest {
   email: string;
   password: string;
+  confirmPassword?: string;
   firstName?: string;
   lastName?: string;
   phone?: string;
-}
-
-export interface AuthResponse {
-  user: AuthUser;
-  accessToken: string;
-  refreshToken: string;
 }
 
 // Filter Types
@@ -261,49 +277,21 @@ export type Currency = "USD" | "VND";
 // Country Types
 export type Country = "US" | "VN";
 
-// Auth Types
-export interface AuthUser {
-  _id: string;
-  email: string;
-  firstName?: string;
-  lastName?: string;
-  phone?: string;
-  avatar?: string;
-  role: "user" | "admin";
-  isEmailVerified: boolean;
-  isPhoneVerified: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface LoginRequest {
-  email: string;
-  password: string;
-}
-
-export interface RegisterRequest {
-  email: string;
-  password: string;
-  confirmPassword: string;
-  firstName?: string;
-  lastName?: string;
-  phone?: string;
-}
-
 export interface ForgotPasswordRequest {
   email: string;
 }
 
 export interface ResetPasswordRequest {
   token: string;
-  password: string;
-  confirmPassword: string;
+  password?: string;
+  newPassword?: string;
+  confirmPassword?: string;
 }
 
 export interface ChangePasswordRequest {
   currentPassword: string;
   newPassword: string;
-  confirmPassword: string;
+  confirmPassword?: string;
 }
 
 // Order Types

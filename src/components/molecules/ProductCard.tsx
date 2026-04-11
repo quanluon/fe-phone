@@ -10,6 +10,7 @@ import { Heart, Plus, Star } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import React from "react"
+import { useRouter } from "next/navigation"
 
 export interface ProductCardProps {
   product: Product
@@ -32,7 +33,9 @@ export const ProductCard = ({
   analyticsListId,
   analyticsIndex,
 }: ProductCardProps) => {
+  const router = useRouter()
   const selectedVariant = product.variants[0]
+  const productHref = `/products/${product._id}-${product.slug}`
   const discountPercent =
     selectedVariant.originalPrice && selectedVariant.originalPrice > selectedVariant.price
       ? Math.round(
@@ -40,12 +43,20 @@ export const ProductCard = ({
         )
       : null
 
+  const handlePrefetchProduct = () => {
+    router.prefetch(productHref)
+  }
+
   return (
     <Card className="group relative overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
       <CardContent className="p-0">
         <div className="relative aspect-[3/4] w-full overflow-hidden bg-slate-100">
           <Link
-            href={`/products/${product._id}-${product.slug}`}
+            href={productHref}
+            prefetch
+            onMouseEnter={handlePrefetchProduct}
+            onFocus={handlePrefetchProduct}
+            onTouchStart={handlePrefetchProduct}
             onClick={() => {
               void trackSelectItem({
                 product,
@@ -112,7 +123,11 @@ export const ProductCard = ({
              {product.brand.name}
            </p>
            <Link
-             href={`/products/${product._id}-${product.slug}`}
+             href={productHref}
+             prefetch
+             onMouseEnter={handlePrefetchProduct}
+             onFocus={handlePrefetchProduct}
+             onTouchStart={handlePrefetchProduct}
              onClick={() => {
                void trackSelectItem({
                  product,

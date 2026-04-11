@@ -1,7 +1,9 @@
 'use client';
 
 import { Button } from '@/components/ui/Button';
+import { SocialLogin } from '@/components/auth/SocialLogin';
 import { useRegister } from '@/hooks/useAuth';
+import { getEnabledFirebaseProviders } from '@/lib/firebase/client';
 import { getErrorMessage } from '@/lib/utils';
 import { useToastStore } from '@/stores/toast';
 import { RegisterRequest } from '@/types';
@@ -21,6 +23,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
   const { addToast } = useToastStore();
   const [form] = Form.useForm();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const showSocialLogin = getEnabledFirebaseProviders().length > 0;
 
   // Phone prefix options - currently supporting +84 (Vietnam)
   const phonePrefixOptions = [
@@ -207,7 +210,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
         </Button>
       </Form.Item>
 
-      {/* <SocialLogin onSuccess={onSuccess} className="mt-6" /> */}
+      {showSocialLogin ? <SocialLogin onSuccess={onSuccess} className="mt-6" /> : null}
     </Form>
   );
 }

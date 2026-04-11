@@ -8,18 +8,18 @@ import { useAuthStore } from '@/stores/auth';
  */
 export const useAuthGuard = (redirectTo: string = '/auth?mode=login') => {
   const router = useRouter();
-  const { isAuthenticated, _hasHydrated } = useAuthStore();
+  const { isAuthenticated, _hasHydrated, _isInitialized } = useAuthStore();
 
   useEffect(() => {
-    // Only redirect after hydration is complete
-    if (_hasHydrated && !isAuthenticated) {
+    // Only redirect after Firebase auth state has been initialized.
+    if (_hasHydrated && _isInitialized && !isAuthenticated) {
       router.push(redirectTo);
     }
-  }, [_hasHydrated, isAuthenticated, router, redirectTo]);
+  }, [_hasHydrated, _isInitialized, isAuthenticated, router, redirectTo]);
 
   return {
     isAuthenticated,
-    isHydrated: _hasHydrated,
-    isLoading: !_hasHydrated,
+    isHydrated: _hasHydrated && _isInitialized,
+    isLoading: !_hasHydrated || !_isInitialized,
   };
 };
