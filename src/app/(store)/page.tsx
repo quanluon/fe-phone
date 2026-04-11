@@ -18,6 +18,29 @@ export default async function HomePage() {
     { href: '/collections/airpods', label: 'AirPods chính hãng' },
     { href: '/collections/phu-kien', label: 'Phụ kiện Apple cần thiết' },
   ];
+  const quickHighlights = [
+    'iPhone, iPad, MacBook, Apple Watch và AirPods dễ tìm theo danh mục.',
+    'Có máy mới, máy 99% và phụ kiện để chọn theo ngân sách.',
+    'Xem nhanh hàng mới về và chuyển sang catalog đầy đủ khi cần.',
+  ];
+  const shoppingGuides = [
+    {
+      title: 'Máy 99%',
+      description: 'Dành cho người muốn tối ưu chi phí nhưng vẫn cần ngoại hình đẹp và trải nghiệm ổn định.',
+    },
+    {
+      title: 'Máy mới',
+      description: 'Phù hợp khi bạn ưu tiên pin, ngoại hình và cảm giác sử dụng mới tinh.',
+    },
+    {
+      title: 'Phụ kiện đồng bộ',
+      description: 'Tìm nhanh AirPods, sạc, cáp và các phụ kiện Apple dùng hằng ngày.',
+    },
+    {
+      title: 'Nâng cấp dễ hơn',
+      description: 'Bắt đầu từ dòng máy bạn đang quan tâm rồi lọc tiếp theo nhu cầu và tầm giá.',
+    },
+  ];
 
   return (
     <main className="min-h-screen pb-28 pt-4 sm:pt-6">
@@ -31,16 +54,15 @@ export default async function HomePage() {
           <div className="grid gap-8 px-6 py-8 lg:grid-cols-[1.3fr,0.7fr] lg:px-10 lg:py-10">
             <div className="space-y-5">
               <span className="inline-flex rounded-full border border-amber-200 bg-amber-50 px-4 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-amber-700">
-                Apple chọn nhanh, dễ tin
+                Apple chọn nhanh
               </span>
               <div className="space-y-3">
                 <h1 className="font-display text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
-                  iPhone, iPad, MacBook, Apple Watch, AirPods và phụ kiện Apple giá tốt
+                  Chọn nhanh thiết bị Apple phù hợp với nhu cầu và ngân sách
                 </h1>
                 <p className="max-w-3xl text-base leading-7 text-slate-600 sm:text-lg">
-                  Nguyen Cong Mobile là điểm đến để người dùng tìm iPhone, iPad, MacBook, Apple Watch và AirPods theo ngân sách.
-                  Website được bố trí để bạn dễ tìm sản phẩm, dễ so sánh theo danh mục và dễ quay lại khi cần lên đời máy, mua phụ kiện
-                  hoặc tìm hàng 99%.
+                  Từ iPhone, iPad, MacBook đến Apple Watch, AirPods và phụ kiện, trang chủ tập trung vào những lối vào
+                  cần thiết nhất để bạn xem hàng mới, mở đúng danh mục và đi tiếp tới sản phẩm mình đang tìm.
                 </p>
               </div>
 
@@ -61,12 +83,7 @@ export default async function HomePage() {
             </div>
 
             <div className="grid gap-3 rounded-[1.75rem] bg-slate-950 p-5 text-white">
-              {[
-                'Máy mới và máy 99% để chọn theo ngân sách.',
-                'Tư vấn nhanh, dễ so sánh, dễ chốt cấu hình phù hợp.',
-                'Tập trung hệ sinh thái Apple và phụ kiện cần thiết.',
-                'Nội dung landing page giúp tìm kiếm và điều hướng rõ ràng hơn.',
-              ].map((item) => (
+              {quickHighlights.map((item) => (
                 <div key={item} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm leading-6 text-slate-100">
                   {item}
                 </div>
@@ -76,24 +93,7 @@ export default async function HomePage() {
         </section>
 
         <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {[
-            {
-              title: 'Máy 99%',
-              description: 'Tập trung vào máy đẹp, hình thức tốt, để tối ưu chi phí nhưng vẫn có trải nghiệm ổn định.',
-            },
-            {
-              title: 'Máy mới',
-              description: 'Phù hợp cho người ưu tiên ngoại hình, pin và trải nghiệm đồng bộ mới nhất trong hệ sinh thái Apple.',
-            },
-            {
-              title: 'Trả góp và thu cũ đổi mới',
-              description: 'Tăng khả năng chốt đơn bằng thông tin dễ hiểu, giúp khách quay lại và ra quyết định nhanh hơn.',
-            },
-            {
-              title: 'Bảo hành rõ ràng',
-              description: 'Thông tin niềm tin nên xuất hiện sớm trên trang chủ để tăng CTR, giữ người dùng và hỗ trợ chuyển đổi.',
-            },
-          ].map((item) => (
+          {shoppingGuides.map((item) => (
             <article key={item.title} className="rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm">
               <h2 className="font-display text-2xl font-semibold text-slate-950">{item.title}</h2>
               <p className="mt-3 text-sm leading-6 text-slate-600">{item.description}</p>
