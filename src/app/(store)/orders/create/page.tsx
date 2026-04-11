@@ -225,7 +225,7 @@ export default function CreateOrderPage() {
     <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(125,211,252,0.12),_transparent_30%),linear-gradient(to_bottom,_#f8fafc,_#ffffff)] pb-28 lg:pb-0">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky-700">Checkout</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky-700">Thanh toán</p>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">{t("title")}</h1>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">{t("subtitle")}</p>
         </div>
@@ -240,7 +240,7 @@ export default function CreateOrderPage() {
             <UserCircleIcon className="h-6 w-6" />
             <div>
               <p className="text-sm font-semibold">{t("customerInfo.title")}</p>
-              <p className={`text-xs ${step === 1 ? "text-white/70" : "text-slate-500"}`}>Contact and delivery information</p>
+              <p className={`text-xs ${step === 1 ? "text-white/70" : "text-slate-500"}`}>Thông tin liên hệ và giao hàng</p>
             </div>
           </button>
           <button
@@ -252,7 +252,7 @@ export default function CreateOrderPage() {
             <CreditCardIcon className="h-6 w-6" />
             <div>
               <p className="text-sm font-semibold">{t("payment.title")}</p>
-              <p className={`text-xs ${step === 2 ? "text-white/70" : "text-slate-500"}`}>Payment method and notes</p>
+              <p className={`text-xs ${step === 2 ? "text-white/70" : "text-slate-500"}`}>Phương thức thanh toán và ghi chú</p>
             </div>
           </button>
         </div>
@@ -268,7 +268,7 @@ export default function CreateOrderPage() {
                     </div>
                     <div>
                       <h2 className="text-xl font-semibold text-slate-950">{t("customerInfo.title")}</h2>
-                      <p className="text-sm text-slate-500">Use your details for order confirmation and support.</p>
+                      <p className="text-sm text-slate-500">Vui lòng nhập chính xác để gọi xác nhận đơn hàng và hỗ trợ.</p>
                     </div>
                   </div>
 
@@ -371,7 +371,7 @@ export default function CreateOrderPage() {
             {step === 2 && (
               <Card className="border-slate-200 bg-white p-6">
                 <h2 className="text-xl font-semibold text-slate-950">{t("payment.title")}</h2>
-                <p className="mt-2 text-sm text-slate-500">Choose the payment option and leave optional delivery notes.</p>
+                <p className="mt-2 text-sm text-slate-500">Chọn phương thức thanh toán và thêm ghi chú giao hàng (nếu có).</p>
 
                 <div className="mt-6 space-y-3">
                   {paymentMethods.map((method) => (
@@ -464,11 +464,11 @@ export default function CreateOrderPage() {
 
               <div className="mt-5 rounded-[1.5rem] bg-slate-50 p-4">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-slate-500">Subtotal</span>
+                  <span className="text-slate-500">Tạm tính</span>
                   <span className="font-medium text-slate-900">{subtotal}</span>
                 </div>
                 <div className="mt-2 flex items-center justify-between text-sm">
-                  <span className="text-slate-500">Shipping</span>
+                  <span className="text-slate-500">Phí vận chuyển</span>
                   <span className="font-medium text-emerald-600">{tCart("free")}</span>
                 </div>
                 <div className="mt-3 border-t border-slate-200 pt-3">
@@ -480,8 +480,8 @@ export default function CreateOrderPage() {
               </div>
 
               <div className="mt-5 grid gap-3 text-sm text-slate-600">
-                <div className="rounded-[1.25rem] bg-slate-50 px-4 py-3">Secure payment and order confirmation after submission.</div>
-                <div className="rounded-[1.25rem] bg-slate-50 px-4 py-3">Shipping details remain editable before placing the order.</div>
+                <div className="rounded-[1.25rem] bg-slate-50 px-4 py-3">Thanh toán an toàn và xác nhận đơn hàng sau khi đặt.</div>
+                <div className="rounded-[1.25rem] bg-slate-50 px-4 py-3">Chi tiết giao hàng vẫn có thể sửa trước khi đặt hàng.</div>
               </div>
             </Card>
           </div>

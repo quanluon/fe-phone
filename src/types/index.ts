@@ -1,7 +1,7 @@
 import { AxiosError } from "axios";
 
 // API Response Types
-export type ApiErrorResponse = AxiosError<{ message?: string }> 
+export type ApiErrorResponse = AxiosError<{ message?: string }>
 export interface ApiResponse<T = unknown> {
   success: boolean;
   data: T;

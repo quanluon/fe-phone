@@ -186,7 +186,7 @@ export const useAuthStore = create<AuthStore>()(
             user: null,
             isAuthenticated: false,
             isLoading: false,
-            error: getErrorMessage(error) || "Login failed",
+            error: getErrorMessage(error) || "Đăng nhập thất bại",
           });
           throw error;
         }
@@ -228,7 +228,7 @@ export const useAuthStore = create<AuthStore>()(
             user: null,
             isAuthenticated: false,
             isLoading: false,
-            error: getErrorMessage(error) || "Registration failed",
+            error: getErrorMessage(error) || "Đăng ký thất bại",
           });
           throw error;
         }
@@ -265,7 +265,7 @@ export const useAuthStore = create<AuthStore>()(
               user: null,
               isAuthenticated: false,
               isLoading: false,
-              error: getErrorMessage(error) || "Social login failed",
+              error: getErrorMessage(error) || "Đăng nhập bằng mạng xã hội thất bại",
             });
             throw error;
           } finally {

@@ -71,7 +71,7 @@ export default function PrivacyPage() {
       <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-4 sm:px-6 lg:px-8">
         <section className="rounded-[2rem] border border-slate-200 bg-white px-6 py-8 shadow-[0_20px_60px_-40px_rgba(15,23,42,0.4)] sm:px-8">
           <span className="inline-flex rounded-full border border-sky-200 bg-sky-50 px-4 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-sky-700">
-            Privacy Policy
+            Chính sách bảo mật
           </span>
           <h1 className="mt-4 font-display text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
             Chính sách quyền riêng tư và xóa dữ liệu người dùng

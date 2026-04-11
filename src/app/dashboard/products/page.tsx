@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useCallback, useEffect, useState } from 'react';
-import { ReloadOutlined, SearchOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, PlusOutlined, ReloadOutlined, SearchOutlined } from '@ant-design/icons';
 import {
   App,
   Button,
@@ -11,6 +11,8 @@ import {
   Input,
   Row,
   Select,
+  Space,
+  Popconfirm,
   Table,
   Tag,
   Typography,
@@ -18,6 +20,7 @@ import {
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import { adminProductsApi, type AdminProductFilters } from '@/lib/api/admin';
 import { Pagination, Product, ProductStatus } from '@/types';
+import DashboardProductModal from './DashboardProductModal';
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -43,6 +46,9 @@ export default function DashboardProductsPage() {
     page: 1,
     limit: DEFAULT_PAGE_SIZE,
   });
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | undefined>();
+  const [modalLoading, setModalLoading] = useState(false);
   const { message } = App.useApp();
 
   const fetchProducts = useCallback(async () => {
@@ -77,6 +83,45 @@ export default function DashboardProductsPage() {
       message.success('Đã cập nhật trạng thái');
     } catch {
       message.error('Không thể cập nhật trạng thái');
+    }
+  };
+
+  const handleEdit = (record: Product) => {
+    setSelectedProduct(record);
+    setModalOpen(true);
+  };
+
+  const handleCreate = () => {
+    setSelectedProduct(undefined);
+    setModalOpen(true);
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      await adminProductsApi.delete(id);
+      setProducts(p => p.filter(x => x._id !== id));
+      message.success('Đã xoá sản phẩm');
+    } catch {
+      message.error('Không thể xoá sản phẩm');
+    }
+  };
+
+  const handleSubmitModal = async (values: Partial<Product>) => {
+    setModalLoading(true);
+    try {
+      if (selectedProduct) {
+        await adminProductsApi.update(selectedProduct._id, values);
+        message.success('Đã cập nhật sản phẩm');
+      } else {
+        await adminProductsApi.create(values);
+        message.success('Đã thêm sản phẩm mới');
+      }
+      setModalOpen(false);
+      fetchProducts();
+    } catch {
+      message.error('Có lỗi xảy ra khi lưu sản phẩm');
+    } finally {
+      setModalLoading(false);
     }
   };
 
@@ -176,6 +221,19 @@ export default function DashboardProductsPage() {
       width: 70,
       render: (v: boolean) => v ? <Tag color="blue">Mới</Tag> : null,
     },
+    {
+      title: 'Thao tác',
+      key: 'actions',
+      width: 100,
+      render: (_, record: Product) => (
+        <Space>
+          <Button type="text" icon={<EditOutlined />} onClick={() => handleEdit(record)} />
+          <Popconfirm title="Xoá sản phẩm?" onConfirm={() => handleDelete(record._id)}>
+             <Button type="text" danger icon={<DeleteOutlined />} />
+          </Popconfirm>
+        </Space>
+      ),
+    },
   ];
 
   return (
@@ -184,9 +242,14 @@ export default function DashboardProductsPage() {
         <Title level={3} style={{ margin: 0 }}>
           Sản phẩm
         </Title>
-        <Button icon={<ReloadOutlined />} onClick={fetchProducts}>
-          Làm mới
-        </Button>
+        <Space>
+          <Button icon={<ReloadOutlined />} onClick={fetchProducts}>
+            Làm mới
+          </Button>
+          <Button type="primary" icon={<PlusOutlined />} onClick={handleCreate}>
+            Thêm mới
+          </Button>
+        </Space>
       </div>
 
       <Card style={{ marginBottom: 16 }}>
@@ -240,6 +303,14 @@ export default function DashboardProductsPage() {
           scroll={{ x: 1000 }}
         />
       </Card>
+      
+      <DashboardProductModal
+        open={modalOpen}
+        onCancel={() => setModalOpen(false)}
+        onSubmit={handleSubmitModal}
+        initialData={selectedProduct}
+        loading={modalLoading}
+      />
     </div>
   );
 }

@@ -58,19 +58,19 @@ export function LandingPageShell({
                   href={viewAllHref || '/products'}
                   className="inline-flex items-center justify-center rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
                 >
-                  Xem san pham phu hop
+                  Xem sản phẩm phù hợp
                 </Link>
                 <Link
                   href="/products"
                   className="inline-flex items-center justify-center rounded-full border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-950 hover:text-slate-950"
                 >
-                  Xem toan bo catalog
+                  Xem toàn bộ danh mục
                 </Link>
               </div>
             </div>
 
             <div className="grid gap-3 rounded-[1.5rem] bg-slate-950 p-5 text-white">
-              <h2 className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-300">Ly do nhieu nguoi chon mua</h2>
+              <h2 className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-300">Lý do nhiều người chọn mua</h2>
               <div className="grid gap-3">
                 {trustPoints.map((point) => (
                   <div key={point} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm leading-6 text-slate-100">
@@ -86,12 +86,12 @@ export function LandingPageShell({
           <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
             <div className="mb-5 flex items-center justify-between gap-4">
               <div>
-                <h2 className="font-display text-2xl font-semibold text-slate-950">Danh sach noi bat</h2>
-                <p className="mt-2 text-sm text-slate-600">Trang dich nay duoc toi uu de nguoi dung tim nhanh san pham dung nhu cau va de Google de index hon.</p>
+                <h2 className="font-display text-2xl font-semibold text-slate-950">Danh sách nổi bật</h2>
+                <p className="mt-2 text-sm text-slate-600">Trang đích này được tối ưu để người dùng tìm nhanh sản phẩm đúng nhu cầu và để Google dễ index hơn.</p>
               </div>
               {viewAllHref ? (
                 <Link href={viewAllHref} className="text-sm font-semibold text-sky-700 hover:text-sky-800">
-                  Xem tat ca
+                  Xem tất cả
                 </Link>
               ) : null}
             </div>
@@ -110,7 +110,7 @@ export function LandingPageShell({
                   href="/products"
                   className="mt-5 inline-flex items-center justify-center rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
                 >
-                  Quay lai danh muc tong
+                  Quay lại danh mục tổng
                 </Link>
               </div>
             )}
@@ -118,7 +118,7 @@ export function LandingPageShell({
 
           <div className="space-y-6">
             <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
-              <h2 className="font-display text-2xl font-semibold text-slate-950">Loi di nhanh</h2>
+              <h2 className="font-display text-2xl font-semibold text-slate-950">Lối đi nhanh</h2>
               <div className="mt-4 grid gap-3">
                 {relatedLinks.map((link) => (
                   <Link
@@ -133,7 +133,7 @@ export function LandingPageShell({
             </section>
 
             <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
-              <h2 className="font-display text-2xl font-semibold text-slate-950">Cau hoi thuong gap</h2>
+              <h2 className="font-display text-2xl font-semibold text-slate-950">Câu hỏi thường gặp</h2>
               <div className="mt-4 space-y-4">
                 {faqs.map((faq) => (
                   <div key={faq.question} className="rounded-2xl bg-slate-50 px-4 py-4">

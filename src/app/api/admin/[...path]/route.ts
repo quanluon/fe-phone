@@ -1,14 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const BE_URL = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
-// Server-side only — never exposed to the browser
-const API_KEY = process.env.API_KEY;
+// Server-side proxy for admin routes
 
 type RouteContext = { params: Promise<{ path: string[] }> };
 
 function buildHeaders(req: NextRequest): Record<string, string> {
   const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-  if (API_KEY) headers['X-API-Key'] = API_KEY;
   const auth = req.headers.get('Authorization');
   if (auth) headers['Authorization'] = auth;
   return headers;
@@ -38,8 +36,8 @@ async function proxyRequest(req: NextRequest, context: RouteContext): Promise<Ne
   });
 }
 
-export const GET    = (req: NextRequest, ctx: RouteContext) => proxyRequest(req, ctx);
-export const POST   = (req: NextRequest, ctx: RouteContext) => proxyRequest(req, ctx);
-export const PUT    = (req: NextRequest, ctx: RouteContext) => proxyRequest(req, ctx);
-export const PATCH  = (req: NextRequest, ctx: RouteContext) => proxyRequest(req, ctx);
+export const GET = (req: NextRequest, ctx: RouteContext) => proxyRequest(req, ctx);
+export const POST = (req: NextRequest, ctx: RouteContext) => proxyRequest(req, ctx);
+export const PUT = (req: NextRequest, ctx: RouteContext) => proxyRequest(req, ctx);
+export const PATCH = (req: NextRequest, ctx: RouteContext) => proxyRequest(req, ctx);
 export const DELETE = (req: NextRequest, ctx: RouteContext) => proxyRequest(req, ctx);

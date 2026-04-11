@@ -11,7 +11,7 @@ import {
   TagsOutlined,
   TeamOutlined,
 } from '@ant-design/icons';
-import { App, Avatar, Button, Dropdown, Layout, Menu, Typography } from 'antd';
+import { App, Avatar, Button, Dropdown, Layout, Menu, Typography, Spin } from 'antd';
 import type { MenuProps } from 'antd';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -33,12 +33,21 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [collapsed, setCollapsed] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
-  const { user, logout } = useAuthStore();
+  const { user, logout, _isInitialized } = useAuthStore();
   const { modal } = App.useApp();
 
-  // Guard: redirect non-admins
-  if (user && user.type !== 'admin') {
-    router.replace('/');
+  // Wait for auth state to hydrate/initialize to avoid flashy redirects
+  if (!_isInitialized) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Spin size="large" />
+      </div>
+    );
+  }
+
+  // Guard: redirect non-admins or unauthenticated users to login
+  if (!user || user.type !== 'admin') {
+    router.replace('/auth?mode=login');
     return null;
   }
 

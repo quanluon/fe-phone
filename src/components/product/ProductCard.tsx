@@ -125,8 +125,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         </Link>
 
         <div className="absolute left-3 top-3 flex flex-wrap gap-2">
-          {product.isNew && <Badge variant="secondary" size="sm">New</Badge>}
-          {product.isFeatured && <Badge variant="warning" size="sm">Featured</Badge>}
+          {product.isNew && <Badge variant="secondary" size="sm">Mới</Badge>}
+          {product.isFeatured && <Badge variant="warning" size="sm">Nổi bật</Badge>}
           {discount > 0 && <Badge variant="danger" size="sm">-{discount}%</Badge>}
         </div>
 
@@ -218,7 +218,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         <div className="rounded-2xl bg-slate-50 p-3">
           <div className="flex items-end justify-between gap-3">
             <div>
-              <p className="text-xs font-medium text-slate-500">Starting at</p>
+              <p className="text-xs font-medium text-slate-500">Giá từ</p>
               <div className="flex flex-wrap items-center gap-2">
                 <span className="text-xl font-semibold text-slate-950">
                   {formatCurrency(selectedVariant.price, currency)}

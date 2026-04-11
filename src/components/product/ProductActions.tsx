@@ -93,9 +93,9 @@ export function ProductActions({
         {stockMessage || (isBuyingNow ? tProduct('buyingNow') : tProduct('buyNow'))}
       </Button>
       <div className="grid gap-2 text-sm text-slate-500 sm:grid-cols-3">
-        <div className="rounded-2xl bg-slate-50 px-3 py-2">Secure checkout</div>
-        <div className="rounded-2xl bg-slate-50 px-3 py-2">Official warranty</div>
-        <div className="rounded-2xl bg-slate-50 px-3 py-2">Fast delivery available</div>
+        <div className="rounded-2xl bg-slate-50 px-3 py-2">Thanh toán an toàn</div>
+        <div className="rounded-2xl bg-slate-50 px-3 py-2">Bảo hành chính hãng</div>
+        <div className="rounded-2xl bg-slate-50 px-3 py-2">Giao hàng siêu tốc</div>
       </div>
     </div>
   );

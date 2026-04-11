@@ -39,7 +39,7 @@ export default function CartPage() {
             <ShoppingBagIcon className="mx-auto h-20 w-20 text-slate-300" />
             <h1 className="mt-6 text-3xl font-semibold text-slate-950">{t('title')}</h1>
             <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-slate-500 sm:text-base">
-              Looks like you haven&apos;t added any items to your cart yet.
+              Giỏ hàng của bạn đang trống.
             </p>
             <div className="mt-8 flex justify-center">
               <Link href="/products">
@@ -67,13 +67,13 @@ export default function CartPage() {
               {t('continueShopping')}
             </Link>
             <h1 className="text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">{t('title')}</h1>
-            <p className="mt-2 text-sm text-slate-500">{totalItems} item{totalItems === 1 ? '' : 's'} ready for checkout.</p>
+            <p className="mt-2 text-sm text-slate-500">{totalItems} sản phẩm đã sẵn sàng thanh toán.</p>
           </div>
           <button
             onClick={clearCart}
             className="text-sm font-medium text-rose-600 transition-colors hover:text-rose-700"
           >
-            Clear Cart
+            Xoá giỏ hàng
           </button>
         </div>
 
@@ -141,12 +141,12 @@ export default function CartPage() {
                           </button>
                         </div>
                         {item.quantity >= item.variant.stock && (
-                          <span className="text-xs font-medium text-rose-600">Max stock: {item.variant.stock}</span>
+                          <span className="text-xs font-medium text-rose-600">Tối đa: {item.variant.stock}</span>
                         )}
                       </div>
 
                       <div className="text-right">
-                        <p className="text-sm text-slate-500">Unit price</p>
+                        <p className="text-sm text-slate-500">Đơn giá</p>
                         <p className="text-lg font-semibold text-slate-950">
                           {formatCurrency(item.variant.price, currency)}
                         </p>
@@ -198,9 +198,9 @@ export default function CartPage() {
               <div className="mt-6 grid gap-3 text-sm text-slate-600">
                 <div className="flex items-center gap-2 rounded-2xl bg-slate-50 px-4 py-3">
                   <ShieldCheckIcon className="h-5 w-5 text-emerald-600" />
-                  Secure checkout with SSL encryption
+                  Thanh toán an toàn với bảo mật SSL
                 </div>
-                <div className="rounded-2xl bg-slate-50 px-4 py-3">Estimated shipping and payment details shown before order submission.</div>
+                <div className="rounded-2xl bg-slate-50 px-4 py-3">Chi phí vận chuyển và thanh toán được hiển thị rõ trước khi đặt hàng.</div>
               </div>
             </Card>
           </div>
@@ -210,7 +210,7 @@ export default function CartPage() {
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 p-3 backdrop-blur lg:hidden">
         <div className="mx-auto flex max-w-7xl items-center gap-3">
           <div className="min-w-0 flex-1">
-            <p className="text-sm text-slate-500">{totalItems} item{totalItems === 1 ? '' : 's'}</p>
+            <p className="text-sm text-slate-500">{totalItems} sản phẩm</p>
             <p className="text-lg font-semibold text-slate-950">{formatCurrency(totalPrice, currency)}</p>
           </div>
           <Link href="/orders/create" className="shrink-0">

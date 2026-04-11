@@ -61,6 +61,16 @@ export default function DashboardUsersPage() {
     setFilters((prev) => ({ ...prev, page: pag.current ?? 1, limit: pag.pageSize ?? DEFAULT_PAGE_SIZE }));
   };
 
+  const handleUpdateUser = async (id: string, data: Partial<User>) => {
+    try {
+      await adminUsersApi.update(id, data);
+      setUsers((prev) => prev.map((u) => (u._id === id ? { ...u, ...data } : u)));
+      message.success('Đã cập nhật người dùng');
+    } catch {
+      message.error('Không thể cập nhật người dùng');
+    }
+  };
+
   const columns: ColumnsType<User> = [
     {
       title: '',
@@ -107,19 +117,18 @@ export default function DashboardUsersPage() {
       dataIndex: 'status',
       key: 'status',
       width: 120,
-      render: (status: string) => {
-        const colorMap: Record<string, string> = {
-          active: 'green',
-          inactive: 'red',
-          suspended: 'orange',
-        };
-        const labelMap: Record<string, string> = {
-          active: 'Hoạt động',
-          inactive: 'Vô hiệu',
-          suspended: 'Tạm khoá',
-        };
-        return <Tag color={colorMap[status] ?? 'default'}>{labelMap[status] ?? status}</Tag>;
-      },
+      render: (status: string, record: User) => (
+        <Select
+          value={status}
+          size="small"
+          style={{ width: '100%' }}
+          onChange={(v) => handleUpdateUser(record._id, { status: v })}
+        >
+          <Option value="active"><Tag color="green" style={{ margin: 0 }}>Hoạt động</Tag></Option>
+          <Option value="inactive"><Tag color="red" style={{ margin: 0 }}>Vô hiệu</Tag></Option>
+          <Option value="suspended"><Tag color="orange" style={{ margin: 0 }}>Tạm khoá</Tag></Option>
+        </Select>
+      ),
     },
     {
       title: 'Đăng nhập lần cuối',

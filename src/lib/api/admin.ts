@@ -120,6 +120,8 @@ export const adminProductsApi = {
     return get<Product[]>(`/api/admin/products?${params}`);
   },
   getById: (id: string) => get<Product>(`/api/admin/products/${id}`),
+  create: (data: Partial<Product>) => post<Product>('/api/admin/products', data),
+  update: (id: string, data: Partial<Product>) => put<Product>(`/api/admin/products/${id}`, data),
   delete: (id: string) => del(`/api/admin/products/${id}`),
   updateStatus: (id: string, status: string) =>
     patch<Product>(`/api/admin/products/${id}/status`, { status }),
@@ -178,6 +180,7 @@ export const adminUsersApi = {
     return get<User[]>(`/api/admin/users?${params}`);
   },
   getById: (id: string) => get<User>(`/api/admin/users/${id}`),
+  update: (id: string, data: Partial<User>) => put<User>(`/api/admin/users/${id}`, data),
 };
 
 // ─── Stats ────────────────────────────────────────────────────────────────────

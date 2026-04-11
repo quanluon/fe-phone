@@ -342,16 +342,16 @@ export function ProductDetail({
 
                 <div className="mt-5 grid gap-3 sm:grid-cols-3">
                   <div className="rounded-2xl bg-slate-50 px-4 py-3 text-sm text-slate-600">
-                    <p className="font-semibold text-slate-900">Free shipping</p>
-                    <p>Selected orders and fast-city delivery.</p>
+                    <p className="font-semibold text-slate-900">Giao hàng miễn phí</p>
+                    <p>Dành cho một số đơn hàng và giao hàng hoả tốc nội thành.</p>
                   </div>
                   <div className="rounded-2xl bg-slate-50 px-4 py-3 text-sm text-slate-600">
-                    <p className="font-semibold text-slate-900">Easy exchanges</p>
-                    <p>Variant support and post-purchase guidance.</p>
+                    <p className="font-semibold text-slate-900">Đổi trả dễ dàng</p>
+                    <p>Hỗ trợ đổi màu, dung lượng và bảo hành sau mua.</p>
                   </div>
                   <div className="rounded-2xl bg-slate-50 px-4 py-3 text-sm text-slate-600">
-                    <p className="font-semibold text-slate-900">Verified stock</p>
-                    <p>See current stock before adding to cart.</p>
+                    <p className="font-semibold text-slate-900">Kho hàng minh bạch</p>
+                    <p>Hiển thị tồn kho thực tế trước khi đặt hàng.</p>
                   </div>
                 </div>
               </div>

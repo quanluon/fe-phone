@@ -295,7 +295,7 @@ export function ProductsPageClient({
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg font-semibold text-slate-900">{t('filters')}</h2>
-          <p className="text-sm text-slate-500">Refine results by category, brand, and budget.</p>
+          <p className="text-sm text-slate-500">Lọc kết quả theo danh mục, thương hiệu và giá cả.</p>
         </div>
         <button
           onClick={() => setShowFilters(false)}
@@ -389,7 +389,7 @@ export function ProductsPageClient({
         <section className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div className="space-y-2">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky-700">Shop all products</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky-700">Mua sắm tất cả sản phẩm</p>
               <h1 className="text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
                 {t('title')}
               </h1>
@@ -459,13 +459,13 @@ export function ProductsPageClient({
             <div className="mb-4 flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm sm:px-5">
               <div>
                 <p className="text-sm font-medium text-slate-900">
-                  {products?.pagination?.total || 0} products
+                  {products?.pagination?.total || 0} sản phẩm
                 </p>
-                <p className="text-xs text-slate-500">Sorted for easier comparison and faster buying decisions.</p>
+                <p className="text-xs text-slate-500">Sắp xếp để dễ nhận biết và quyết định nhanh hơn.</p>
               </div>
               <div className="hidden items-center gap-2 rounded-full bg-slate-50 px-3 py-2 text-sm text-slate-500 sm:flex">
                 <AdjustmentsHorizontalIcon className="h-4 w-4" />
-                {activeFiltersCount} active filter{activeFiltersCount === 1 ? '' : 's'}
+                {activeFiltersCount} bộ lọc đang bật
               </div>
             </div>
 
@@ -490,7 +490,7 @@ export function ProductsPageClient({
             ) : !products?.data?.length ? (
               <div className="rounded-[2rem] border border-slate-200 bg-white p-10 text-center shadow-sm">
                 <p className="text-lg font-semibold text-slate-900">{t('noProductsFound')}</p>
-                <p className="mt-2 text-sm text-slate-500">Try a broader search or clear some filters to discover more products.</p>
+                <p className="mt-2 text-sm text-slate-500">Thử tìm kiếm khác hoặc xoá bộ lọc để xem các sản phẩm khác.</p>
                 <Button className="mt-5" variant="outline" onClick={clearFilters}>
                   {t('clearFilters')}
                 </Button>
@@ -513,7 +513,7 @@ export function ProductsPageClient({
                 {totalPages > 1 && (
                   <div className="mt-8 flex flex-col items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white px-4 py-4 shadow-sm sm:flex-row">
                     <p className="text-sm text-slate-500">
-                      Page {page} of {totalPages}
+                      Trang {page} / {totalPages}
                     </p>
                     <div className="flex items-center gap-2">
                       <Button
@@ -521,14 +521,14 @@ export function ProductsPageClient({
                         onClick={() => setPage((current) => Math.max(1, current - 1))}
                         disabled={page <= 1}
                       >
-                        Previous
+                        Trước
                       </Button>
                       <Button
                         variant="brand"
                         onClick={() => setPage((current) => Math.min(totalPages, current + 1))}
                         disabled={page >= totalPages}
                       >
-                        Next
+                        Sau
                       </Button>
                     </div>
                   </div>
