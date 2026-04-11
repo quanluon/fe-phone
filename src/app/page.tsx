@@ -11,12 +11,12 @@ export default async function HomePage() {
   const [newProducts, categories] = await Promise.all([getNewProducts(4), getCategories()]);
   const featuredCategories = categories.slice(0, 6);
   const featuredCollections = [
-    { href: '/collections/iphone', label: 'iPhone cu dep gia tot' },
-    { href: '/collections/ipad', label: 'iPad hoc tap va giai tri' },
-    { href: '/collections/macbook', label: 'MacBook cho sinh vien va van phong' },
-    { href: '/collections/apple-watch', label: 'Apple Watch cho suc khoe va tap luyen' },
-    { href: '/collections/airpods', label: 'AirPods chinh hang' },
-    { href: '/collections/phu-kien', label: 'Phu kien Apple can thiet' },
+    { href: '/collections/iphone', label: 'iPhone cũ đẹp giá tốt' },
+    { href: '/collections/ipad', label: 'iPad học tập và giải trí' },
+    { href: '/collections/macbook', label: 'MacBook cho sinh viên và văn phòng' },
+    { href: '/collections/apple-watch', label: 'Apple Watch cho sức khỏe và tập luyện' },
+    { href: '/collections/airpods', label: 'AirPods chính hãng' },
+    { href: '/collections/phu-kien', label: 'Phụ kiện Apple cần thiết' },
   ];
 
   return (
@@ -31,16 +31,16 @@ export default async function HomePage() {
           <div className="grid gap-8 px-6 py-8 lg:grid-cols-[1.3fr,0.7fr] lg:px-10 lg:py-10">
             <div className="space-y-5">
               <span className="inline-flex rounded-full border border-amber-200 bg-amber-50 px-4 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-amber-700">
-                Apple chon nhanh, de tin
+                Apple chọn nhanh, dễ tin
               </span>
               <div className="space-y-3">
                 <h1 className="font-display text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
-                  iPhone, iPad, MacBook, Apple Watch, AirPods va phu kien Apple gia tot
+                  iPhone, iPad, MacBook, Apple Watch, AirPods và phụ kiện Apple giá tốt
                 </h1>
                 <p className="max-w-3xl text-base leading-7 text-slate-600 sm:text-lg">
-                  Nguyen Cong Mobile la diem den de nguoi dung tim iPhone, iPad, MacBook, Apple Watch va AirPods theo ngan sach.
-                  Website duoc bo tri de ban de tim san pham, de so sanh theo danh muc va de quay lai khi can len doi may, mua phu kien
-                  hoac tim hang 99%.
+                  Nguyen Cong Mobile là điểm đến để người dùng tìm iPhone, iPad, MacBook, Apple Watch và AirPods theo ngân sách.
+                  Website được bố trí để bạn dễ tìm sản phẩm, dễ so sánh theo danh mục và dễ quay lại khi cần lên đời máy, mua phụ kiện
+                  hoặc tìm hàng 99%.
                 </p>
               </div>
 
@@ -49,23 +49,23 @@ export default async function HomePage() {
                   href="/products"
                   className="inline-flex items-center justify-center rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
                 >
-                  Xem toan bo san pham
+                  Xem toàn bộ sản phẩm
                 </Link>
                 <Link
                   href="/collections/iphone"
                   className="inline-flex items-center justify-center rounded-full border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-950 hover:text-slate-950"
                 >
-                  Bat dau tu iPhone
+                  Bắt đầu từ iPhone
                 </Link>
               </div>
             </div>
 
             <div className="grid gap-3 rounded-[1.75rem] bg-slate-950 p-5 text-white">
               {[
-                'May moi va may 99% de chon theo ngan sach.',
-                'Tu van nhanh, de so sanh, de chot cau hinh phu hop.',
-                'Tap trung he sinh thai Apple va phu kien can thiet.',
-                'Noi dung landing page giup tim kiem va dieu huong ro rang hon.',
+                'Máy mới và máy 99% để chọn theo ngân sách.',
+                'Tư vấn nhanh, dễ so sánh, dễ chốt cấu hình phù hợp.',
+                'Tập trung hệ sinh thái Apple và phụ kiện cần thiết.',
+                'Nội dung landing page giúp tìm kiếm và điều hướng rõ ràng hơn.',
               ].map((item) => (
                 <div key={item} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm leading-6 text-slate-100">
                   {item}
@@ -78,20 +78,20 @@ export default async function HomePage() {
         <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {[
             {
-              title: 'May 99%',
-              description: 'Tap trung vao may dep, hinh thuc tot, de toi uu chi phi nhung van co trai nghiem on dinh.',
+              title: 'Máy 99%',
+              description: 'Tập trung vào máy đẹp, hình thức tốt, để tối ưu chi phí nhưng vẫn có trải nghiệm ổn định.',
             },
             {
-              title: 'May moi',
-              description: 'Phu hop cho nguoi uu tien ngoai hinh, pin va trai nghiem dong bo moi nhat trong he sinh thai Apple.',
+              title: 'Máy mới',
+              description: 'Phù hợp cho người ưu tiên ngoại hình, pin và trải nghiệm đồng bộ mới nhất trong hệ sinh thái Apple.',
             },
             {
-              title: 'Tra gop va thu cu doi moi',
-              description: 'Tang kha nang chot don bang thong tin de hieu, giup khach quay lai va ra quyet dinh nhanh hon.',
+              title: 'Trả góp và thu cũ đổi mới',
+              description: 'Tăng khả năng chốt đơn bằng thông tin dễ hiểu, giúp khách quay lại và ra quyết định nhanh hơn.',
             },
             {
-              title: 'Bao hanh ro rang',
-              description: 'Trust content can xuat hien som tren trang chu de tang CTR, giu nguoi dung va ho tro conversion.',
+              title: 'Bảo hành rõ ràng',
+              description: 'Thông tin niềm tin nên xuất hiện sớm trên trang chủ để tăng CTR, giữ người dùng và hỗ trợ chuyển đổi.',
             },
           ].map((item) => (
             <article key={item.title} className="rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm">
@@ -105,8 +105,8 @@ export default async function HomePage() {
           <article className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <h2 className="font-display text-2xl font-semibold text-slate-950">Danh muc noi bat</h2>
-                <p className="mt-2 text-sm text-slate-600">Mo rong entry point de Google va nguoi dung co them cach vao website.</p>
+                <h2 className="font-display text-2xl font-semibold text-slate-950">Danh mục nổi bật</h2>
+                <p className="mt-2 text-sm text-slate-600">Mở rộng entry point để Google và người dùng có thêm cách vào website.</p>
               </div>
               <Link href="/products" className="text-sm font-semibold text-sky-700 hover:text-sky-800">
                 Xem catalog
@@ -126,9 +126,9 @@ export default async function HomePage() {
           </article>
 
           <article className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
-            <h2 className="font-display text-2xl font-semibold text-slate-950">Bo suu tap theo nhu cau that</h2>
+            <h2 className="font-display text-2xl font-semibold text-slate-950">Bộ sưu tập theo nhu cầu thật</h2>
             <p className="mt-2 text-sm text-slate-600">
-              Day la nhom URL co the chia se len Facebook, TikTok, Zalo hoac dung lam landing page cho organic va ads.
+              Đây là nhóm URL có thể chia sẻ lên Facebook, TikTok, Zalo hoặc dùng làm landing page cho organic và ads.
             </p>
             <div className="mt-5 grid gap-3 sm:grid-cols-2">
               {featuredCollections.map((collection) => (
@@ -146,14 +146,14 @@ export default async function HomePage() {
 
         <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
           <div className="max-w-4xl space-y-4">
-            <h2 className="font-display text-2xl font-semibold text-slate-950">Vi sao trang chu can nhieu noi dung hon</h2>
+            <h2 className="font-display text-2xl font-semibold text-slate-950">Vì sao trang chủ cần nhiều nội dung hơn</h2>
             <p className="text-sm leading-7 text-slate-600">
-              Trang chu khong chi de trang tri. Day la noi Google va nguoi dung can thay ro website ban dang ban gi, ai nen mua, muc gia ra sao
-              va vi sao nen tin ban. Vi vay, phan noi dung nay duoc bo sung de tang kha nang index, tang CTR va giu nguoi dung o lai lau hon.
+              Trang chủ không chỉ để trang trí. Đây là nơi Google và người dùng cần thấy rõ website bạn đang bán gì, ai nên mua, mức giá ra sao
+              và vì sao nên tin bạn. Vì vậy, phần nội dung này được bổ sung để tăng khả năng index, tăng CTR và giữ người dùng ở lại lâu hơn.
             </p>
             <p className="text-sm leading-7 text-slate-600">
-              Ban co the tiep tuc mo rong bang cac bai huong dan mua, so sanh may, tip chon iPhone theo ngan sach, MacBook cho sinh vien va cac
-              trang campaign theo tung mua ban hang.
+              Bạn có thể tiếp tục mở rộng bằng các bài hướng dẫn mua, so sánh máy, tip chọn iPhone theo ngân sách, MacBook cho sinh viên và các
+              trang campaign theo từng mùa bán hàng.
             </p>
           </div>
         </section>

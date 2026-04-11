@@ -3,9 +3,9 @@ import Link from 'next/link';
 import { CONTACT_INFO } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'Chinh sach quyen rieng tu',
+  title: 'Chính Sách Bảo Mật',
   description:
-    'Chinh sach quyen rieng tu va huong dan xoa du lieu nguoi dung tai Nguyen Cong Mobile.',
+    'Chính sách quyền riêng tư và hướng dẫn xóa dữ liệu người dùng tại Nguyen Cong Mobile.',
   alternates: {
     canonical: '/privacy',
   },
@@ -13,54 +13,54 @@ export const metadata: Metadata = {
 
 const sections = [
   {
-    title: '1. Thong tin chung',
+    title: '1. Thông tin chung',
     content: [
-      'Nguyen Cong Mobile thu thap thong tin co ban cua khach hang de ho tro dat hang, giao hang, xac nhan don, cham soc sau ban va cai thien trai nghiem su dung website.',
-      'Thong tin co the bao gom ho ten, email, so dien thoai, dia chi giao hang va cac du lieu can thiet de xu ly don hang.',
+      'Nguyen Cong Mobile thu thập thông tin cơ bản của khách hàng để hỗ trợ đặt hàng, giao hàng, xác nhận đơn, chăm sóc sau bán và cải thiện trải nghiệm sử dụng website.',
+      'Thông tin có thể bao gồm họ tên, email, số điện thoại, địa chỉ giao hàng và các dữ liệu cần thiết để xử lý đơn hàng.',
     ],
   },
   {
-    title: '2. Muc dich su dung du lieu',
+    title: '2. Mục đích sử dụng dữ liệu',
     content: [
-      'Thong tin cua ban duoc su dung de tiep nhan va xu ly don hang, lien he xac nhan san pham, ho tro bao hanh, giai dap yeu cau va gui thong tin cap nhat lien quan den don hang.',
-      'Chung toi khong ban, cho thue hoac chia se du lieu ca nhan cua ban cho ben thu ba cho muc dich thuong mai khong lien quan.',
+      'Thông tin của bạn được sử dụng để tiếp nhận và xử lý đơn hàng, liên hệ xác nhận sản phẩm, hỗ trợ bảo hành, giải đáp yêu cầu và gửi thông tin cập nhật liên quan đến đơn hàng.',
+      'Chúng tôi không bán, cho thuê hoặc chia sẻ dữ liệu cá nhân của bạn cho bên thứ ba cho mục đích thương mại không liên quan.',
     ],
   },
   {
-    title: '3. Bao mat thong tin',
+    title: '3. Bảo mật thông tin',
     content: [
-      'Website va he thong quan tri noi bo ap dung cac bien phap ky thuat va quy trinh van hanh phu hop de han che truy cap trai phep, mat mat du lieu hoac su dung sai muc dich.',
-      'Chi nhung bo phan can thiet cho viec xu ly don hang, ho tro khach hang va van hanh he thong moi duoc phep tiep can du lieu lien quan.',
+      'Website và hệ thống quản trị nội bộ áp dụng các biện pháp kỹ thuật và quy trình vận hành phù hợp để hạn chế truy cập trái phép, mất mát dữ liệu hoặc sử dụng sai mục đích.',
+      'Chỉ những bộ phận cần thiết cho việc xử lý đơn hàng, hỗ trợ khách hàng và vận hành hệ thống mới được phép tiếp cận dữ liệu liên quan.',
     ],
   },
   {
-    title: '4. Chia se voi doi tac',
+    title: '4. Chia sẻ với đối tác',
     content: [
-      'Trong truong hop can thiet de hoan tat don hang, chung toi co the chia se mot phan thong tin voi don vi van chuyen, cong thanh toan hoac nha cung cap dich vu ky thuat lien quan.',
-      'Cac ben lien quan chi duoc su dung du lieu trong pham vi can thiet de hoan tat dich vu cho ban.',
+      'Trong trường hợp cần thiết để hoàn tất đơn hàng, chúng tôi có thể chia sẻ một phần thông tin với đơn vị vận chuyển, cổng thanh toán hoặc nhà cung cấp dịch vụ kỹ thuật liên quan.',
+      'Các bên liên quan chỉ được sử dụng dữ liệu trong phạm vi cần thiết để hoàn tất dịch vụ cho bạn.',
     ],
   },
   {
-    title: '5. Quyen cua nguoi dung',
+    title: '5. Quyền của người dùng',
     content: [
-      'Ban co quyen yeu cau xem, sua doi, cap nhat hoac xoa du lieu ca nhan ma chung toi dang luu tru, trong pham vi phu hop voi quy dinh phap luat va nghia vu van hanh cua doanh nghiep.',
-      'Neu can chinh sua thong tin tai khoan hoac du lieu don hang, ban co the lien he truc tiep voi chung toi qua email hoac so dien thoai ben duoi.',
+      'Bạn có quyền yêu cầu xem, sửa đổi, cập nhật hoặc xóa dữ liệu cá nhân mà chúng tôi đang lưu trữ, trong phạm vi phù hợp với quy định pháp luật và nghĩa vụ vận hành của doanh nghiệp.',
+      'Nếu cần chỉnh sửa thông tin tài khoản hoặc dữ liệu đơn hàng, bạn có thể liên hệ trực tiếp với chúng tôi qua email hoặc số điện thoại bên dưới.',
     ],
   },
   {
-    title: '6. Huong dan xoa du lieu nguoi dung',
+    title: '6. Hướng dẫn xóa dữ liệu người dùng',
     content: [
-      `De yeu cau xoa du lieu, vui long gui email den ${CONTACT_INFO.email} hoac lien he qua so dien thoai ${CONTACT_INFO.phone}.`,
-      'Trong yeu cau, vui long cung cap email, so dien thoai hoac thong tin don hang lien quan de chung toi xac minh va xu ly nhanh hon.',
-      'Sau khi xac minh thong tin, chung toi se thuc hien viec xoa hoac an danh du lieu khong con can thiet trong thoi gian hop ly.',
+      `Để yêu cầu xóa dữ liệu, vui lòng gửi email đến ${CONTACT_INFO.email} hoặc liên hệ qua số điện thoại ${CONTACT_INFO.phone}.`,
+      'Trong yêu cầu, vui lòng cung cấp email, số điện thoại hoặc thông tin đơn hàng liên quan để chúng tôi xác minh và xử lý nhanh hơn.',
+      'Sau khi xác minh thông tin, chúng tôi sẽ thực hiện việc xóa hoặc ẩn danh dữ liệu không còn cần thiết trong thời gian hợp lý.',
     ],
   },
   {
-    title: '7. Lien he',
+    title: '7. Liên hệ',
     content: [
       `Email: ${CONTACT_INFO.email}`,
-      `Dien thoai: ${CONTACT_INFO.phone}`,
-      'Neu ban co cau hoi ve chinh sach bao mat hoac quy trinh xu ly du lieu, vui long lien he voi chung toi de duoc ho tro.',
+      `Điện thoại: ${CONTACT_INFO.phone}`,
+      'Nếu bạn có câu hỏi về chính sách bảo mật hoặc quy trình xử lý dữ liệu, vui lòng liên hệ với chúng tôi để được hỗ trợ.',
     ],
   },
 ];
@@ -74,24 +74,24 @@ export default function PrivacyPage() {
             Privacy Policy
           </span>
           <h1 className="mt-4 font-display text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
-            Chinh sach quyen rieng tu va xoa du lieu nguoi dung
+            Chính sách quyền riêng tư và xóa dữ liệu người dùng
           </h1>
           <p className="mt-4 text-base leading-7 text-slate-600">
-            Trang nay duoc su dung de cong bo cach Nguyen Cong Mobile thu thap, su dung, bao ve va xu ly yeu cau xoa du lieu cua nguoi dung
-            khi dat hang hoac su dung website.
+            Trang này được sử dụng để công bố cách Nguyen Cong Mobile thu thập, sử dụng, bảo vệ và xử lý yêu cầu xóa dữ liệu của người dùng
+            khi đặt hàng hoặc sử dụng website.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <a
               href={`mailto:${CONTACT_INFO.email}`}
               className="inline-flex items-center justify-center rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
             >
-              Gui email yeu cau xoa du lieu
+              Gửi email yêu cầu xóa dữ liệu
             </a>
             <a
               href={`tel:${CONTACT_INFO.phoneLink}`}
               className="inline-flex items-center justify-center rounded-full border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-950 hover:text-slate-950"
             >
-              Goi {CONTACT_INFO.phone}
+              Gọi {CONTACT_INFO.phone}
             </a>
           </div>
         </section>
@@ -112,14 +112,14 @@ export default function PrivacyPage() {
         </section>
 
         <section className="rounded-[1.75rem] border border-amber-200 bg-amber-50 px-6 py-6 text-sm leading-7 text-amber-900 shadow-sm sm:px-8">
-          Facebook App Dashboard co the dung chinh URL nay cho ca hai truong:
+          Facebook App Dashboard có thể dùng chính URL này cho cả hai trường:
           {' '}
           <strong>Privacy Policy URL</strong>
           {' '}
-          va
+          và
           {' '}
           <strong>Data Deletion Instructions URL</strong>.
-          Neu can, ban co the dan link:
+          Nếu cần, bạn có thể dán link:
           {' '}
           <Link href="/privacy" className="font-semibold underline underline-offset-4">
             /privacy

@@ -26,9 +26,9 @@ export const Footer: React.FC = () => {
     ],
     legal: [
       { label: t('privacyPolicy'), href: '/privacy' },
-      { label: t('termsOfService'), href: '/#' },
-      { label: t('cookiePolicy'), href: '/#' },
-      { label: t('accessibility'), href: '/#' },
+      { label: t('termsOfService'), href: '/terms' },
+      { label: t('cookiePolicy'), href: '/cookies' },
+      { label: t('accessibility'), href: '/accessibility' },
     ]
   };
 

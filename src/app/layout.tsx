@@ -24,6 +24,7 @@ const fraunces = Fraunces({
 
 const siteUrl = getSiteUrlObject();
 const defaultDescription = getDefaultMetaDescription();
+const FACEBOOK_APP_ID = '1316145459266394';
 
 export const metadata: Metadata = {
   metadataBase: siteUrl,
@@ -82,9 +83,6 @@ export const metadata: Metadata = {
     description: defaultDescription,
     images: [toAbsoluteUrl('/web-app-manifest-512x512.png')],
   },
-  other: {
-    'fb:app_id': '1446129360310415',
-  },
   robots: {
     index: true,
     follow: true,
@@ -118,6 +116,7 @@ export default async function RootLayout({
       <head>
         <link rel="preconnect" href="https://d10gwy2ckxccqn.cloudfront.net" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://d10gwy2ckxccqn.cloudfront.net" />
+        <meta property="fb:app_id" content={FACEBOOK_APP_ID} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} />
       </head>
       <body className={`${manrope.variable} ${fraunces.variable} font-sans antialiased`}>
