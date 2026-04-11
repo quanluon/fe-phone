@@ -83,7 +83,7 @@ export const metadata: Metadata = {
     images: [toAbsoluteUrl('/web-app-manifest-512x512.png')],
   },
   other: {
-    'fb:app_id': '1316145459266394',
+    'fb:app_id': '1446129360310415',
   },
   robots: {
     index: true,
