@@ -26,7 +26,14 @@ import {
   InformationCircleIcon,
 } from "@heroicons/react/24/solid";
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
-import { Product, ProductStatus, ProductType, Category, Brand } from "@/types";
+import {
+  Product,
+  ProductStatus,
+  ProductType,
+  Category,
+  Brand,
+  ProductVariant,
+} from "@/types";
 import {
   adminProductsApi,
   adminCategoriesApi,
@@ -86,8 +93,71 @@ const CompactToggle = ({
 
 export interface ProductFormProps {
   initialData?: Product;
-  onSubmit: (values: Partial<Product>) => Promise<void>;
+  onSubmit: (values: ProductFormValues) => Promise<void>;
   loading?: boolean;
+}
+
+type ProductVariantFormValues = Omit<
+  Partial<ProductVariant>,
+  | "storage"
+  | "size"
+  | "connectivity"
+  | "simType"
+  | "originalPrice"
+  | "images"
+  | "attributes"
+> & {
+  storage?: string | null;
+  size?: string | null;
+  connectivity?: string | null;
+  simType?: string | null;
+  originalPrice?: number | null;
+  images?: string[] | null;
+  attributes?: ProductVariant["attributes"];
+};
+
+export type ProductFormValues = Omit<
+  Partial<Product>,
+  "shortDescription" | "originalBasePrice" | "variants" | "attributes" | "images"
+> & {
+  shortDescription?: string | null;
+  originalBasePrice?: number | null;
+  variants?: ProductVariantFormValues[];
+  attributes?: Product["attributes"];
+  images?: string[];
+};
+
+function normalizeVariant(variant: ProductVariantFormValues) {
+  return {
+    name: variant?.name ?? "",
+    color: variant?.color ?? "",
+    colorCode: variant?.colorCode ?? "#000000",
+    storage: variant?.storage ?? null,
+    size: variant?.size ?? null,
+    connectivity: variant?.connectivity ?? null,
+    simType: variant?.simType ?? null,
+    price: variant?.price ?? 0,
+    originalPrice: variant?.originalPrice ?? null,
+    stock: variant?.stock ?? 0,
+    images: Array.isArray(variant?.images) ? variant.images : [],
+    attributes: Array.isArray(variant?.attributes) ? variant.attributes : [],
+    isActive: variant?.isActive ?? true,
+  };
+}
+
+function normalizeFormValues(values: ProductFormValues): ProductFormValues {
+  return {
+    ...values,
+    shortDescription: values.shortDescription ?? null,
+    originalBasePrice: values.originalBasePrice ?? null,
+    images: Array.isArray(values.images) ? values.images : [],
+    features: Array.isArray(values.features) ? values.features : [],
+    tags: Array.isArray(values.tags) ? values.tags : [],
+    attributes: Array.isArray(values.attributes) ? values.attributes : [],
+    variants: Array.isArray(values.variants)
+      ? values.variants.map(normalizeVariant)
+      : [],
+  };
 }
 
 export default function ProductForm({
@@ -152,8 +222,8 @@ export default function ProductForm({
     }
   }, [initialData, form]);
 
-  const handleFinish = async (values: Partial<Product>) => {
-    // Basic cleanup before submit
+  const handleFinish = async () => {
+    const values = normalizeFormValues(form.getFieldsValue(true));
     await onSubmit(values);
   };
 
@@ -174,10 +244,11 @@ export default function ProductForm({
 
       const extracted = resData.data;
       const { _validationErrors, ...productFields } = extracted;
+      const normalizedFields = normalizeFormValues(productFields);
 
       // Update form fields
       form.setFieldsValue({
-        ...productFields,
+        ...normalizedFields,
         status: ProductStatus.DRAFT,
       });
 

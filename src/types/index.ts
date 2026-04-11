@@ -35,12 +35,12 @@ export interface ProductVariant {
   name: string;
   color: string;
   colorCode: string;
-  storage?: string;
-  size?: string;
-  connectivity?: string;
-  simType?: string;
+  storage?: string | null;
+  size?: string | null;
+  connectivity?: string | null;
+  simType?: string | null;
   price: number;
-  originalPrice?: number;
+  originalPrice?: number | null;
   stock: number;
   images: string[];
   attributes: ProductAttribute[];
@@ -54,13 +54,13 @@ export interface Product {
   name: string;
   slug: string;
   description: string; // Rich text content (HTML)
-  shortDescription?: string; // Plain text
+  shortDescription?: string | null; // Plain text
   category: Category;
   brand: Brand;
   productType: ProductType;
   variants: ProductVariant[];
   basePrice: number;
-  originalBasePrice?: number;
+  originalBasePrice?: number | null;
   images: string[];
   features: string[];
   attributes: ProductAttribute[]; // Structured attributes

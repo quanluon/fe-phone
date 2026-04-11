@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { App, Breadcrumb, Spin } from "antd";
 import Link from "next/link";
-import ProductForm from "@/components/admin/ProductForm";
+import ProductForm, { ProductFormValues } from "@/components/admin/ProductForm";
 import { adminProductsApi } from "@/lib/api/admin";
 import { Product } from "@/types";
 
@@ -33,10 +33,10 @@ export default function EditProductPage() {
     if (id && apiKey) fetchProduct();
   }, [id, apiKey, message, router]);
 
-  const handleUpdate = async (values: Partial<Product>) => {
+  const handleUpdate = async (values: ProductFormValues) => {
     setLoading(true);
     try {
-      await adminProductsApi.update(id as string, values);
+      await adminProductsApi.update(id as string, values as Partial<Product>);
       message.success("Cập nhật sản phẩm thành công");
       router.push(`/${apiKey}/dashboard/products`);
     } catch (error: unknown) {

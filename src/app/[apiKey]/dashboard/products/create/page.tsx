@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { App, Breadcrumb } from 'antd';
 import Link from 'next/link';
-import ProductForm from '@/components/admin/ProductForm';
+import ProductForm, { ProductFormValues } from '@/components/admin/ProductForm';
 import { adminProductsApi } from '@/lib/api/admin';
 import { Product } from '@/types';
 
@@ -14,10 +14,10 @@ export default function CreateProductPage() {
   const { apiKey } = useParams();
   const { message } = App.useApp();
 
-  const handleCreate = async (values: Partial<Product>) => {
+  const handleCreate = async (values: ProductFormValues) => {
     setLoading(true);
     try {
-      await adminProductsApi.create(values);
+      await adminProductsApi.create(values as Partial<Product>);
       message.success('Tạo sản phẩm thành công');
       router.push(`/${apiKey}/dashboard/products`);
     } catch (error: unknown) {
