@@ -15,6 +15,72 @@ interface ImageUploadProps {
   folder?: string;
 }
 
+const SUPPORTED_UPLOAD_MIME_TYPES = new Set([
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/gif",
+  "image/webp",
+  "image/svg+xml",
+]);
+
+const SUPPORTED_UPLOAD_EXTENSIONS = [
+  ".jpeg",
+  ".jpg",
+  ".png",
+  ".gif",
+  ".webp",
+  ".svg",
+];
+
+function hasSupportedUploadExtension(fileName: string) {
+  const lowerFileName = fileName.toLowerCase();
+  return SUPPORTED_UPLOAD_EXTENSIONS.some((extension) =>
+    lowerFileName.endsWith(extension),
+  );
+}
+
+function shouldNormalizeBeforeUpload(file: RcFile) {
+  return (
+    file.type.startsWith("image/") &&
+    (!SUPPORTED_UPLOAD_MIME_TYPES.has(file.type.toLowerCase()) ||
+      !hasSupportedUploadExtension(file.name))
+  );
+}
+
+async function normalizeImageForUpload(file: RcFile): Promise<File> {
+  if (!shouldNormalizeBeforeUpload(file)) {
+    return file;
+  }
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await fetch("/api/files/normalize-image", {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!response.ok) {
+    const errorMessage =
+      (await response.text()) || "Không thể chuyển đổi ảnh trước khi tải lên.";
+    throw new Error(errorMessage);
+  }
+
+  const normalizedBlob = await response.blob();
+  const normalizedFileName =
+    response.headers.get("x-file-name") || file.name.replace(/\.[^.]+$/, ".jpg");
+  const normalizedFileType =
+    response.headers.get("content-type") ||
+    normalizedBlob.type ||
+    "image/jpeg";
+
+  return new File([normalizedBlob], normalizedFileName, {
+    type: normalizedFileType,
+    lastModified: Date.now(),
+  });
+}
+
 export default function ImageUpload({
   value = [],
   onChange,
@@ -60,16 +126,21 @@ export default function ImageUpload({
     const rcFile = file as RcFile;
 
     try {
+      const uploadFile = await normalizeImageForUpload(rcFile);
+
       // 1. Get presigned URL
       const { data } = await adminFilesApi.getPresignedUrl(
-        rcFile.name,
-        rcFile.type,
+        uploadFile.name,
+        uploadFile.type,
         folder,
       );
       const { uploadUrl, publicUrl } = data;
 
       // 2. Upload directly to S3
-      await axios.put(uploadUrl, rcFile, {
+      await axios.put(uploadUrl, uploadFile, {
+        headers: {
+          "Content-Type": uploadFile.type,
+        },
         onUploadProgress: (event) => {
           if (event.total && onProgress) {
             onProgress({
