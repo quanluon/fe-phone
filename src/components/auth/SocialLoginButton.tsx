@@ -61,10 +61,15 @@ export const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
   return (
     <Button
       type="default"
+      htmlType="button"
       size="large"
       loading={loading}
       disabled={disabled}
-      onClick={onClick}
+      onClick={(event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        onClick();
+      }}
       className={`w-full flex items-center justify-center space-x-3 ${config.bgColor} ${config.textColor} ${className}`}
       style={{
         height: '48px',

@@ -6,7 +6,7 @@ import { getErrorMessage } from '@/lib/utils';
 import { logger } from '@/lib/utils/logger';
 import { useToastStore } from '@/stores/toast';
 import { useTranslations } from 'next-intl';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { SocialLoginButton } from './SocialLoginButton';
 
 interface SocialLoginProps {
@@ -24,10 +24,16 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
   const { addToast } = useToastStore();
   const socialLoginMutation = useSocialLogin();
   const [loadingProvider, setLoadingProvider] = useState<'facebook' | 'google' | null>(null);
+  const isHandlingSocialLoginRef = useRef(false);
   const enabledProviders = getEnabledFirebaseProviders();
 
   const handleSocialLogin = async (provider: 'facebook' | 'google') => {
+    if (isHandlingSocialLoginRef.current || socialLoginMutation.isPending || loadingProvider) {
+      return;
+    }
+
     try {
+      isHandlingSocialLoginRef.current = true;
       setLoadingProvider(provider);
 
       await socialLoginMutation.mutateAsync(provider);
@@ -48,6 +54,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
       onError?.(errorMessage);
     } finally {
       setLoadingProvider(null);
+      isHandlingSocialLoginRef.current = false;
     }
   };
 

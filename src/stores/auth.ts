@@ -57,6 +57,7 @@ interface AuthActions {
 type AuthStore = AuthState & AuthActions;
 
 let unsubscribeAuthObserver: (() => void) | null = null;
+let activeSocialLoginRequest: Promise<void> | null = null;
 
 function mapFirebaseUserToIdentity(firebaseUser: FirebaseAuthUser): AuthIdentity {
   const [firstName, ...remainingNameParts] = (firebaseUser.displayName || "").split(" ").filter(Boolean);
@@ -234,35 +235,45 @@ export const useAuthStore = create<AuthStore>()(
       },
 
       socialLogin: async (provider: "facebook" | "google") => {
-        set({ isLoading: true, error: null });
-        try {
-          const credential =
-            provider === "google"
-              ? await signInWithFirebaseGoogle()
-              : await signInWithFirebaseFacebook();
-          const authIdentity = mapFirebaseUserToIdentity(credential.user);
-
-          set({
-            firebaseUser: credential.user,
-            authIdentity,
-            profile: null,
-            user: mapFirebaseUserToAuthUser(credential.user),
-            isAuthenticated: true,
-          });
-
-          await get().syncProfile();
-        } catch (error: unknown) {
-          set({
-            firebaseUser: null,
-            authIdentity: null,
-            profile: null,
-            user: null,
-            isAuthenticated: false,
-            isLoading: false,
-            error: getErrorMessage(error) || "Social login failed",
-          });
-          throw error;
+        if (activeSocialLoginRequest) {
+          return activeSocialLoginRequest;
         }
+
+        set({ isLoading: true, error: null });
+        activeSocialLoginRequest = (async () => {
+          try {
+            const credential =
+              provider === "google"
+                ? await signInWithFirebaseGoogle()
+                : await signInWithFirebaseFacebook();
+            const authIdentity = mapFirebaseUserToIdentity(credential.user);
+
+            set({
+              firebaseUser: credential.user,
+              authIdentity,
+              profile: null,
+              user: mapFirebaseUserToAuthUser(credential.user),
+              isAuthenticated: true,
+            });
+
+            await get().syncProfile();
+          } catch (error: unknown) {
+            set({
+              firebaseUser: null,
+              authIdentity: null,
+              profile: null,
+              user: null,
+              isAuthenticated: false,
+              isLoading: false,
+              error: getErrorMessage(error) || "Social login failed",
+            });
+            throw error;
+          } finally {
+            activeSocialLoginRequest = null;
+          }
+        })();
+
+        return activeSocialLoginRequest;
       },
 
       logout: async () => {
