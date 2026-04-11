@@ -127,6 +127,30 @@ export type ProductFormValues = Omit<
   images?: string[];
 };
 
+function toSlug(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+function formatSlugTimestamp(date = new Date()) {
+  const pad = (value: number) => String(value).padStart(2, "0");
+
+  return [
+    date.getFullYear(),
+    pad(date.getMonth() + 1),
+    pad(date.getDate()),
+    pad(date.getHours()),
+    pad(date.getMinutes()),
+    pad(date.getSeconds()),
+  ].join("");
+}
+
+function buildUniqueProductSlug(baseValue?: string | null) {
+  return `${toSlug(baseValue || "product")}-${formatSlugTimestamp()}`;
+}
+
 function normalizeVariant(variant: ProductVariantFormValues) {
   return {
     name: variant?.name ?? "",
@@ -169,6 +193,7 @@ export default function ProductForm({
   const [aiLoading, setAiLoading] = useState(false);
   const [aiPrompt, setAiPrompt] = useState("");
   const [aiPopoverVisible, setAiPopoverVisible] = useState(false);
+  const [isSlugTouched, setIsSlugTouched] = useState(false);
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [brands, setBrands] = useState<Brand[]>([]);
@@ -208,6 +233,7 @@ export default function ProductForm({
         isFeatured: false,
         isNew: true,
         productType: ProductType.IPHONE,
+        slug: buildUniqueProductSlug(),
         variants: [
           {
             name: "Tiêu chuẩn",
@@ -224,6 +250,9 @@ export default function ProductForm({
 
   const handleFinish = async () => {
     const values = normalizeFormValues(form.getFieldsValue(true));
+    if (!initialData) {
+      values.slug = buildUniqueProductSlug(values.slug || values.name);
+    }
     await onSubmit(values);
   };
 
@@ -252,6 +281,9 @@ export default function ProductForm({
       // Update form fields
       form.setFieldsValue({
         ...normalizedFields,
+        slug: initialData
+          ? normalizedFields.slug
+          : buildUniqueProductSlug(normalizedFields.slug || normalizedFields.name),
         status: ProductStatus.DRAFT,
       });
 
@@ -333,7 +365,17 @@ export default function ProductForm({
               label="Tên sản phẩm"
               rules={[{ required: true, message: "Vui lòng nhập tên" }]}
             >
-              <Input placeholder="Ví dụ: iPhone 15 Pro Max" size="large" />
+              <Input
+                placeholder="Ví dụ: iPhone 15 Pro Max"
+                size="large"
+                onChange={(event) => {
+                  if (initialData || isSlugTouched) return;
+                  form.setFieldValue(
+                    "slug",
+                    buildUniqueProductSlug(event.target.value),
+                  );
+                }}
+              />
             </Form.Item>
 
             <Form.Item
@@ -341,7 +383,10 @@ export default function ProductForm({
               label="Slug (Đường dẫn)"
               rules={[{ required: true, message: "Vui lòng nhập slug" }]}
             >
-              <Input placeholder="ví-dụ-iphone-15-pro-max" />
+              <Input
+                placeholder="ví-dụ-iphone-15-pro-max"
+                onChange={() => setIsSlugTouched(true)}
+              />
             </Form.Item>
 
             <Form.Item name="shortDescription" label="Mô tả ngắn">
@@ -694,7 +739,7 @@ export default function ProductForm({
           {!initialData && (
             <Popover
               content={aiContent}
-              title="🪄 Magic AI Extract (S3 Embedded)"
+              title="🪄 Magic AI Extract"
               trigger="click"
               open={aiPopoverVisible}
               onOpenChange={setAiPopoverVisible}

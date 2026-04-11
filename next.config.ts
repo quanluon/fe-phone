@@ -26,6 +26,14 @@ const nextConfig: NextConfig = {
   // Image optimization (Vercel handles this automatically)
   images: {
     remotePatterns: [
+      {
+        protocol: 'https' as const,
+        hostname: '**',
+      },
+      {
+        protocol: 'http' as const,
+        hostname: '**',
+      },
       ...httpsHostnames.map((hostname) => ({
         protocol: 'https' as const,
         hostname,
