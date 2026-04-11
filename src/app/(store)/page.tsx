@@ -106,7 +106,6 @@ export default async function HomePage() {
             <div className="flex items-center justify-between gap-4">
               <div>
                 <h2 className="font-display text-2xl font-semibold text-slate-950">Danh mục nổi bật</h2>
-                <p className="mt-2 text-sm text-slate-600">Mở rộng entry point để Google và người dùng có thêm cách vào website.</p>
               </div>
               <Link href="/products" className="text-sm font-semibold text-sky-700 hover:text-sky-800">
                 Xem catalog
@@ -127,9 +126,6 @@ export default async function HomePage() {
 
           <article className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
             <h2 className="font-display text-2xl font-semibold text-slate-950">Bộ sưu tập theo nhu cầu thật</h2>
-            <p className="mt-2 text-sm text-slate-600">
-              Đây là nhóm URL có thể chia sẻ lên Facebook, TikTok, Zalo hoặc dùng làm landing page cho organic và ads.
-            </p>
             <div className="mt-5 grid gap-3 sm:grid-cols-2">
               {featuredCollections.map((collection) => (
                 <Link
