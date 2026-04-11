@@ -274,13 +274,77 @@ export function uniqueBy<T>(array: T[], key: keyof T): T[] {
 }
 
 // Error helpers
+const AUTH_ERROR_MESSAGES: Record<string, string> = {
+  'auth/too-many-requests': 'Bạn đã thử quá nhiều lần trong thời gian ngắn. Vui lòng chờ một lúc rồi thử lại.',
+  'auth/invalid-credential': 'Email hoặc mật khẩu không đúng. Vui lòng kiểm tra lại và thử lại.',
+  'auth/wrong-password': 'Mật khẩu không đúng. Vui lòng thử lại.',
+  'auth/user-not-found': 'Không tìm thấy tài khoản với email này.',
+  'auth/user-disabled': 'Tài khoản này đã bị vô hiệu hóa. Vui lòng liên hệ hỗ trợ.',
+  'auth/invalid-email': 'Địa chỉ email không hợp lệ. Vui lòng kiểm tra lại.',
+  'auth/email-already-in-use': 'Email này đã được sử dụng. Vui lòng đăng nhập hoặc dùng email khác.',
+  'auth/weak-password': 'Mật khẩu quá yếu. Vui lòng dùng mật khẩu mạnh hơn.',
+  'auth/network-request-failed': 'Không thể kết nối đến máy chủ. Vui lòng kiểm tra mạng và thử lại.',
+  'auth/popup-closed-by-user': 'Bạn đã đóng cửa sổ đăng nhập trước khi hoàn tất.',
+  'auth/popup-blocked': 'Trình duyệt đã chặn cửa sổ đăng nhập. Vui lòng cho phép popup và thử lại.',
+  'auth/cancelled-popup-request': 'Yêu cầu đăng nhập trước đó đã bị hủy. Vui lòng thử lại.',
+  'auth/account-exists-with-different-credential':
+    'Email này đã tồn tại với một phương thức đăng nhập khác. Vui lòng dùng đúng phương thức đã đăng ký trước đó.',
+  'auth/operation-not-allowed': 'Phương thức đăng nhập này hiện chưa được bật. Vui lòng liên hệ quản trị viên.',
+  'auth/requires-recent-login': 'Vui lòng đăng nhập lại rồi thử thực hiện thao tác này.',
+  'auth/invalid-action-code': 'Liên kết hoặc mã xác nhận không còn hợp lệ. Vui lòng yêu cầu lại.',
+  'auth/expired-action-code': 'Liên kết hoặc mã xác nhận đã hết hạn. Vui lòng yêu cầu lại.',
+  'auth/missing-password': 'Vui lòng nhập mật khẩu.',
+  'auth/missing-email': 'Vui lòng nhập email.',
+};
+
+function extractAuthErrorCode(error: unknown): string | null {
+  if (!error || typeof error !== 'object') {
+    return null;
+  }
+
+  if ('code' in error && typeof error.code === 'string' && error.code.startsWith('auth/')) {
+    return error.code;
+  }
+
+  if ('message' in error && typeof error.message === 'string') {
+    const matchedCode = error.message.match(/auth\/[a-z-]+/i);
+    if (matchedCode?.[0]) {
+      return matchedCode[0].toLowerCase();
+    }
+  }
+
+  return null;
+}
+
+function getFriendlyAuthErrorMessage(error: unknown): string | null {
+  const errorCode = extractAuthErrorCode(error);
+  if (!errorCode) {
+    return null;
+  }
+
+  return AUTH_ERROR_MESSAGES[errorCode] || null;
+}
+
 export function getErrorMessage(error: unknown,defaultMessage: string = 'An unexpected error occurred'): string {
+  const friendlyAuthMessage = getFriendlyAuthErrorMessage(error);
+  if (friendlyAuthMessage) {
+    return friendlyAuthMessage;
+  }
+
   if (error && typeof error === 'object' && 'response' in error) {
     const errorWithResponse = error as { response?: { data?: { message?: string } } };
     if (errorWithResponse.response?.data?.message) {
-      return errorWithResponse.response.data.message;
+      const backendMessage = errorWithResponse.response.data.message;
+      const matchedCode = backendMessage.match(/auth\/[a-z-]+/i)?.[0]?.toLowerCase();
+
+      if (matchedCode && AUTH_ERROR_MESSAGES[matchedCode]) {
+        return AUTH_ERROR_MESSAGES[matchedCode];
+      }
+
+      return backendMessage;
     }
   }
+
   if (error && typeof error === 'object' && 'message' in error) {
     const errorWithMessage = error as { message?: string };
     if (errorWithMessage.message) {
@@ -289,4 +353,3 @@ export function getErrorMessage(error: unknown,defaultMessage: string = 'An unex
   }
   return defaultMessage;
 }
-
