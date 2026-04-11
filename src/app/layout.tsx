@@ -6,7 +6,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import { FirebaseAnalyticsTracker } from '@/components/analytics/FirebaseAnalyticsTracker';
 import { LocaleInitializer } from '@/components/common/LocaleInitializer';
 import { CONTACT_INFO } from '@/lib/constants';
-import { getDefaultMetaDescription, getSiteUrlObject, toAbsoluteUrl } from '@/lib/seo';
+import { buildOrganizationJsonLd, getDefaultMetaDescription, getSiteUrlObject, toAbsoluteUrl } from '@/lib/seo';
 import { Providers } from './providers';
 import './globals.css';
 
@@ -108,12 +108,14 @@ export default async function RootLayout({
 }) {
   const messages = await getMessages();
   const locale = await getLocale();
+  const organizationJsonLd = buildOrganizationJsonLd();
 
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://d10gwy2ckxccqn.cloudfront.net" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://d10gwy2ckxccqn.cloudfront.net" />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} />
       </head>
       <body className={`${manrope.variable} ${fraunces.variable} font-sans antialiased`}>
         <NextIntlClientProvider messages={messages}>

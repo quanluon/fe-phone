@@ -29,6 +29,7 @@ type QueryState = {
   search: string;
   category: string;
   brand: string;
+  productType: string;
   sortBy: string;
   page: number;
   minPrice: string;
@@ -40,12 +41,14 @@ type ProductsPageClientProps = {
   initialCategories: Category[];
   initialBrands: Brand[];
   initialQueryState: QueryState;
+  basePath?: string;
 };
 
 function buildProductsQuery({
   search,
   category,
   brand,
+  productType,
   sortBy,
   page,
   minPrice,
@@ -67,6 +70,7 @@ function buildProductsQuery({
   if (search) query.search = search;
   if (category) query.category = category;
   if (brand) query.brand = brand;
+  if (productType) query.productType = productType as ProductQuery['productType'];
   if (minPrice) query.minPrice = Number(minPrice);
   if (maxPrice) query.maxPrice = Number(maxPrice);
 
@@ -86,6 +90,7 @@ export function ProductsPageClient({
   initialCategories,
   initialBrands,
   initialQueryState,
+  basePath = '/products',
 }: ProductsPageClientProps) {
   const t = useTranslations('products');
   const router = useRouter();
@@ -94,6 +99,7 @@ export function ProductsPageClient({
   const [searchQuery, setSearchQuery] = useState(initialQueryState.search);
   const [selectedCategory, setSelectedCategory] = useState(initialQueryState.category);
   const [selectedBrand, setSelectedBrand] = useState(initialQueryState.brand);
+  const [selectedProductType, setSelectedProductType] = useState(initialQueryState.productType);
   const [sortBy, setSortBy] = useState(initialQueryState.sortBy);
   const [page, setPage] = useState(initialQueryState.page);
   const [priceRange, setPriceRange] = useState({
@@ -108,6 +114,7 @@ export function ProductsPageClient({
     setSearchQuery(initialQueryState.search);
     setSelectedCategory(initialQueryState.category);
     setSelectedBrand(initialQueryState.brand);
+    setSelectedProductType(initialQueryState.productType);
     setSortBy(initialQueryState.sortBy);
     setPage(initialQueryState.page);
     setPriceRange({
@@ -129,12 +136,13 @@ export function ProductsPageClient({
         search: debouncedSearchQuery,
         category: selectedCategory,
         brand: selectedBrand,
+        productType: selectedProductType,
         sortBy,
         page,
         minPrice: debouncedPriceRange.min,
         maxPrice: debouncedPriceRange.max,
       }),
-    [debouncedPriceRange.max, debouncedPriceRange.min, debouncedSearchQuery, page, selectedBrand, selectedCategory, sortBy]
+    [debouncedPriceRange.max, debouncedPriceRange.min, debouncedSearchQuery, page, selectedBrand, selectedCategory, selectedProductType, sortBy]
   );
 
   const initialQuery = useMemo(() => buildProductsQuery(initialQueryState), [initialQueryState]);
@@ -153,13 +161,14 @@ export function ProductsPageClient({
     if (debouncedSearchQuery) params.set('search', debouncedSearchQuery);
     if (selectedCategory) params.set('category', selectedCategory);
     if (selectedBrand) params.set('brand', selectedBrand);
+    if (selectedProductType) params.set('productType', selectedProductType);
     if (sortBy) params.set('sortBy', sortBy);
     if (debouncedPriceRange.min) params.set('minPrice', debouncedPriceRange.min);
     if (debouncedPriceRange.max) params.set('maxPrice', debouncedPriceRange.max);
     if (page > 1) params.set('page', String(page));
 
-    router.replace(`/products${params.toString() ? `?${params.toString()}` : ''}`, { scroll: false });
-  }, [debouncedPriceRange.max, debouncedPriceRange.min, debouncedSearchQuery, page, router, selectedBrand, selectedCategory, sortBy]);
+    router.replace(`${basePath}${params.toString() ? `?${params.toString()}` : ''}`, { scroll: false });
+  }, [basePath, debouncedPriceRange.max, debouncedPriceRange.min, debouncedSearchQuery, page, router, selectedBrand, selectedCategory, selectedProductType, sortBy]);
 
   useEffect(() => {
     if (!debouncedSearchQuery.trim() || lastTrackedSearch === debouncedSearchQuery.trim()) {
@@ -171,9 +180,9 @@ export function ProductsPageClient({
       query: debouncedSearchQuery,
       resultsCount: products?.data?.length,
       source: 'products_page',
-      pagePath: `/products?search=${encodeURIComponent(debouncedSearchQuery.trim())}`,
+      pagePath: `${basePath}?search=${encodeURIComponent(debouncedSearchQuery.trim())}`,
     });
-  }, [debouncedSearchQuery, lastTrackedSearch, products?.data?.length]);
+  }, [basePath, debouncedSearchQuery, lastTrackedSearch, products?.data?.length]);
 
   useEffect(() => {
     const filtersKey = JSON.stringify({
@@ -192,10 +201,11 @@ export function ProductsPageClient({
 
     setLastTrackedFiltersKey(filtersKey);
     void trackFilterChange({
-      pagePath: '/products',
+      pagePath: basePath,
       sortBy,
       category: selectedCategory || undefined,
       brand: selectedBrand || undefined,
+      productType: selectedProductType || undefined,
       minPrice: debouncedPriceRange.min || undefined,
       maxPrice: debouncedPriceRange.max || undefined,
       hasSearch: Boolean(debouncedSearchQuery.trim()),
@@ -205,10 +215,12 @@ export function ProductsPageClient({
     debouncedPriceRange.max,
     debouncedPriceRange.min,
     debouncedSearchQuery,
+    basePath,
     lastTrackedFiltersKey,
     products?.data?.length,
     selectedBrand,
     selectedCategory,
+    selectedProductType,
     sortBy,
   ]);
 
@@ -239,6 +251,12 @@ export function ProductsPageClient({
           onRemove: () => setSelectedBrand(''),
         }
       : null,
+    selectedProductType
+      ? {
+          label: selectedProductType,
+          onRemove: () => setSelectedProductType(''),
+        }
+      : null,
     debouncedPriceRange.min
       ? {
           label: `${t('minPrice')}: ${debouncedPriceRange.min}`,
@@ -260,10 +278,11 @@ export function ProductsPageClient({
     setSearchQuery('');
     setSelectedCategory('');
     setSelectedBrand('');
+    setSelectedProductType('');
     setSortBy('created_at_desc');
     setPriceRange({ min: '', max: '' });
     setPage(1);
-    router.push('/products');
+    router.push(basePath);
   };
 
   const updateFilterAndResetPage = (callback: () => void) => {

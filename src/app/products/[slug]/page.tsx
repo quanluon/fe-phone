@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 import { ProductDetail } from '../../../components/product';
 import { CONTACT_INFO } from '@/lib/constants';
 import { getPrimaryVariant, getProductByIdentifier, getProductPath } from '@/lib/api/server-catalog';
-import { getDefaultMetaDescription, stripHtmlTags, toAbsoluteUrl, truncateForMeta } from '@/lib/seo';
+import { buildBreadcrumbJsonLd, getDefaultMetaDescription, stripHtmlTags, toAbsoluteUrl, truncateForMeta } from '@/lib/seo';
 import { Product } from '@/types';
 
 export const revalidate = 300;
@@ -108,9 +108,23 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
   const { slug } = await params;
   const product = await getProductByIdentifier(slug);
   const jsonLd = product ? buildProductJsonLd(product, slug) : null;
+  const breadcrumbJsonLd = product
+    ? buildBreadcrumbJsonLd([
+        { name: 'Trang chu', path: '/' },
+        { name: 'San pham', path: '/products' },
+        { name: product.category.name, path: `/categories/${product.category.slug}` },
+        { name: product.name, path: getProductPath({ _id: product._id, slug }) },
+      ])
+    : null;
 
   return (
     <>
+      {breadcrumbJsonLd ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        />
+      ) : null}
       {jsonLd ? (
         <script
           type="application/ld+json"

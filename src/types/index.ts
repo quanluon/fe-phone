@@ -224,7 +224,7 @@ export interface RegisterRequest {
 export interface ProductFilters {
   category?: string;
   brand?: string;
-  productType?: ProductType;
+  productType?: ProductType | string;
   minPrice?: number;
   maxPrice?: number;
   color?: string;

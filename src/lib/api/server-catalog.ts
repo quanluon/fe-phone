@@ -106,3 +106,13 @@ export async function getBrands(revalidate: number = PUBLIC_REVALIDATE_SECONDS):
   const response = await fetchPublicApi<BrandListResponse>(`/api/brands`, revalidate);
   return response?.data?.filter((brand) => brand.isActive) ?? [];
 }
+
+export async function getCategoryBySlug(slug: string, revalidate: number = PUBLIC_REVALIDATE_SECONDS): Promise<Category | null> {
+  const categories = await getCategories(revalidate);
+  return categories.find((category) => category.slug === slug) || null;
+}
+
+export async function getBrandBySlug(slug: string, revalidate: number = PUBLIC_REVALIDATE_SECONDS): Promise<Brand | null> {
+  const brands = await getBrands(revalidate);
+  return brands.find((brand) => brand.slug === slug) || null;
+}

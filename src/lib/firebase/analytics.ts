@@ -282,6 +282,7 @@ export async function trackFilterChange(params: {
   sortBy?: string;
   category?: string;
   brand?: string;
+  productType?: string;
   minPrice?: string;
   maxPrice?: string;
   hasSearch?: boolean;
@@ -292,6 +293,7 @@ export async function trackFilterChange(params: {
     sort_by: params.sortBy,
     category: params.category,
     brand: params.brand,
+    product_type: params.productType,
     min_price: params.minPrice,
     max_price: params.maxPrice,
     has_search: params.hasSearch,

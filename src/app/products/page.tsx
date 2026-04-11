@@ -1,8 +1,25 @@
 import { ProductsPageClient } from '@/components/product/ProductsPageClient';
 import { DEFAULT_PRODUCTS_PAGE_SIZE, getBrands, getCategories, getProducts } from '@/lib/api/server-catalog';
+import { CONTACT_INFO } from '@/lib/constants';
+import { getDefaultMetaDescription } from '@/lib/seo';
+import type { Metadata } from 'next';
 
 type ProductsPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
+
+export const metadata: Metadata = {
+  title: 'Danh sach san pham Apple gia tot',
+  description: 'Xem danh sach iPhone, iPad, MacBook, Apple Watch, AirPods va phu kien Apple tai Nguyen Cong Mobile.',
+  alternates: {
+    canonical: '/products',
+  },
+  openGraph: {
+    title: `Danh sach san pham | ${CONTACT_INFO.name}`,
+    description: getDefaultMetaDescription(),
+    url: '/products',
+    locale: 'vi_VN',
+  },
 };
 
 function getSingleValue(value: string | string[] | undefined): string {
@@ -19,6 +36,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
     search: getSingleValue(resolvedSearchParams.search),
     category: getSingleValue(resolvedSearchParams.category),
     brand: getSingleValue(resolvedSearchParams.brand),
+    productType: getSingleValue(resolvedSearchParams.productType),
     sortBy: getSingleValue(resolvedSearchParams.sortBy) || 'created_at_desc',
     page: Math.max(1, Number(getSingleValue(resolvedSearchParams.page) || '1') || 1),
     minPrice: getSingleValue(resolvedSearchParams.minPrice),
@@ -31,6 +49,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
     search: initialQueryState.search || undefined,
     category: initialQueryState.category || undefined,
     brand: initialQueryState.brand || undefined,
+    productType: initialQueryState.productType || undefined,
     minPrice: initialQueryState.minPrice ? Number(initialQueryState.minPrice) : undefined,
     maxPrice: initialQueryState.maxPrice ? Number(initialQueryState.maxPrice) : undefined,
     sort: initialQueryState.sortBy.includes('price')
