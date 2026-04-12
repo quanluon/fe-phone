@@ -22,7 +22,7 @@ export const NewArrivals = ({ products }: NewArrivalsProps) => {
           <p className="text-sm text-slate-500">Lựa chọn mới nhất được cập nhật hằng ngày.</p>
         </div>
         <Link
-          href="/products?sort=createdAt&order=desc"
+          href="/products?sortBy=created_at_desc"
           className="text-sm font-semibold text-sky-800 transition hover:text-sky-700"
         >
           Xem tất cả

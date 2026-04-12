@@ -39,7 +39,7 @@ export const NewArrivalsSection: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 sm:mb-8 gap-4 sm:gap-0">
           <h2 className="text-xl sm:text-2xl font-bold text-gray-900">{t('title')}</h2>
-          <Link href="/products?isNew=true">
+          <Link href="/products?sortBy=created_at_desc">
             <Button variant="outline" className="w-full sm:w-auto">{t('viewAll')}</Button>
           </Link>
         </div>

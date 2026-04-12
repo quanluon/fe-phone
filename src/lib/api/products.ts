@@ -33,7 +33,7 @@ export const productApi = {
 
   // Get new products
   getNewProducts: async (limit: number = 8) => {
-    return api.get<Product[]>(`/api/products?isNew=true&limit=${limit}`);
+    return api.get<Product[]>(`/api/products?sort=createdAt&order=desc&limit=${limit}`);
   },
 
   // Get best selling products (mock implementation)
@@ -119,4 +119,3 @@ export const brandApi = {
     return api.get<Brand>(`/api/brands/slug/${slug}`);
   },
 };
-

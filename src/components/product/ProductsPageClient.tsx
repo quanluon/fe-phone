@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import {
@@ -148,12 +148,13 @@ export function ProductsPageClient({
   const initialQuery = useMemo(() => buildProductsQuery(initialQueryState), [initialQueryState]);
   const shouldUseInitialProducts = serializeQuery(query) === serializeQuery(initialQuery);
 
-  const { data: products, isLoading, error } = useProducts(
+  const { data: products, isLoading, isFetching, error } = useProducts(
     query,
     shouldUseInitialProducts ? initialProducts ?? undefined : undefined
   );
   const { data: categories = initialCategories } = useCategories(initialCategories);
   const { data: brands = initialBrands } = useBrands(initialBrands);
+  const isProductsLoading = isLoading || isFetching;
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -167,7 +168,7 @@ export function ProductsPageClient({
     if (debouncedPriceRange.max) params.set('maxPrice', debouncedPriceRange.max);
     if (page > 1) params.set('page', String(page));
 
-    router.replace(`${basePath}${params.toString() ? `?${params.toString()}` : ''}`, { scroll: false });
+    router.replace(`${basePath}${params.toString() ? `?${params.toString()}` : ''}`, { scroll: true });
   }, [basePath, debouncedPriceRange.max, debouncedPriceRange.min, debouncedSearchQuery, page, router, selectedBrand, selectedCategory, selectedProductType, sortBy]);
 
   useEffect(() => {
@@ -394,7 +395,9 @@ export function ProductsPageClient({
                 {t('title')}
               </h1>
               <p className="max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">
-                {products?.pagination?.total
+                {isProductsLoading
+                  ? t('loadingProducts')
+                  : products?.pagination?.total
                   ? t('productsCount', { count: products.pagination.total })
                   : t('discoverProducts')}
               </p>
@@ -459,7 +462,9 @@ export function ProductsPageClient({
             <div className="mb-4 flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm sm:px-5">
               <div>
                 <p className="text-sm font-medium text-slate-900">
-                  {products?.pagination?.total || 0} sản phẩm
+                  {isProductsLoading
+                    ? t('loadingProducts')
+                    : `${products?.pagination?.total || 0} sản phẩm`}
                 </p>
                 <p className="text-xs text-slate-500">Sắp xếp để dễ nhận biết và quyết định nhanh hơn.</p>
               </div>
@@ -469,7 +474,7 @@ export function ProductsPageClient({
               </div>
             </div>
 
-            {isLoading ? (
+            {isProductsLoading ? (
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
                 {Array.from({ length: 6 }).map((_, index) => (
                   <div key={index} className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-4 shadow-sm">

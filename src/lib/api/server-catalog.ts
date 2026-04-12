@@ -71,7 +71,7 @@ export async function getProducts(query: ProductQuery = {}, revalidate: number =
 }
 
 export async function getNewProducts(limit: number = 4, revalidate: number = PUBLIC_REVALIDATE_SECONDS): Promise<Product[]> {
-  const response = await getProducts({ isNew: true, limit, sort: 'createdAt', order: 'desc' }, revalidate);
+  const response = await getProducts({ limit, sort: 'createdAt', order: 'desc' }, revalidate);
   return response?.data?.filter(isProductIndexable) ?? [];
 }
 
