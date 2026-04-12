@@ -6,6 +6,7 @@ import {
   Input,
   InputNumber,
   Select,
+  ColorPicker,
   Tag,
   Button,
   Popover,
@@ -17,6 +18,7 @@ import {
   Row,
   Col,
   Typography,
+  Switch,
 } from "antd";
 import {
   SparklesIcon,
@@ -30,6 +32,7 @@ import {
   Product,
   ProductStatus,
   ProductType,
+  ProductAttributeType,
   Category,
   Brand,
   ProductVariant,
@@ -170,6 +173,19 @@ function normalizeVariant(variant: ProductVariantFormValues) {
   };
 }
 
+function normalizeAttributes(
+  attributes: Product["attributes"] | undefined,
+): Product["attributes"] {
+  return Array.isArray(attributes)
+    ? attributes.map((attribute) => ({
+        ...attribute,
+        type: attribute?.type ?? ProductAttributeType.CUSTOM,
+        unit: attribute?.unit ?? undefined,
+        category: attribute?.category ?? undefined,
+      }))
+    : [];
+}
+
 function normalizeFormValues(values: ProductFormValues): ProductFormValues {
   return {
     ...values,
@@ -178,7 +194,7 @@ function normalizeFormValues(values: ProductFormValues): ProductFormValues {
     images: Array.isArray(values.images) ? values.images : [],
     features: Array.isArray(values.features) ? values.features : [],
     tags: Array.isArray(values.tags) ? values.tags : [],
-    attributes: Array.isArray(values.attributes) ? values.attributes : [],
+    attributes: normalizeAttributes(values.attributes),
     variants: Array.isArray(values.variants)
       ? values.variants.map(normalizeVariant)
       : [],
@@ -460,7 +476,7 @@ export default function ProductForm({
 
             <Form.Item name="shortDescription" label="Mô tả ngắn">
               <TextArea
-                rows={2}
+                rows={5}
                 placeholder="Tóm tắt ngắn gọn về sản phẩm..."
               />
             </Form.Item>
@@ -468,6 +484,42 @@ export default function ProductForm({
             <Form.Item name="description" label="Nội dung chi tiết (HTML)">
               <RichText placeholder="Mô tả chi tiết sản phẩm..." />
             </Form.Item>
+
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item name="metaTitle" label="Meta title">
+                  <Input placeholder="Tiêu đề SEO..." />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item name="metaDescription" label="Meta description">
+                  <TextArea rows={2} placeholder="Mô tả SEO..." />
+                </Form.Item>
+              </Col>
+            </Row>
+
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item name="tags" label="Tags">
+                  <Select
+                    mode="tags"
+                    tokenSeparators={[","]}
+                    placeholder="apple, macbook, m5..."
+                    maxTagCount={4}
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item name="features" label="Điểm nổi bật">
+                  <Select
+                    mode="tags"
+                    tokenSeparators={[","]}
+                    placeholder="Chip M5 mạnh mẽ, Màn hình Liquid Retina XDR..."
+                    maxTagCount={1}
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
           </Col>
 
           <Col span={8}>
@@ -560,6 +612,27 @@ export default function ProductForm({
                 </Select>
               </Form.Item>
             </Card>
+
+            <Card title="Nguồn crawl" size="small" className="mt-4">
+              <Form.Item name={["source", "provider"]} label="Provider">
+                <Input placeholder="thegioididong / cellphones" disabled />
+              </Form.Item>
+              <Form.Item name={["source", "categoryKey"]} label="Category key">
+                <Input placeholder="iphone / macbook" disabled />
+              </Form.Item>
+              <Form.Item name={["source", "groupKey"]} label="Group key">
+                <Input placeholder="provider-category-model" disabled />
+              </Form.Item>
+              <Form.Item name={["source", "externalId"]} label="External ID">
+                <Input placeholder="SKU / ID nguồn" disabled />
+              </Form.Item>
+              <Form.Item name={["source", "url"]} label="Canonical URL">
+                <Input.TextArea rows={3} placeholder="URL nguồn chính" disabled />
+              </Form.Item>
+              <Form.Item name={["source", "memberUrls"]} label="Nguồn đã gom">
+                <Select mode="tags" open={false} placeholder="Danh sách URL nguồn" disabled />
+              </Form.Item>
+            </Card>
           </Col>
         </Row>
       ),
@@ -644,7 +717,16 @@ export default function ProductForm({
                         name={[name, "colorCode"]}
                         label="Mã màu"
                       >
-                        <Input placeholder="#000000" />
+                        <ColorPicker
+                          format="hex"
+                          showText
+                          onChange={(value) => {
+                            form.setFieldValue(
+                              ["variants", name, "colorCode"],
+                              value.toHexString(),
+                            );
+                          }}
+                        />
                       </Form.Item>
                     </Col>
                     <Col span={3}>
@@ -687,6 +769,54 @@ export default function ProductForm({
                       </Form.Item>
                     </Col>
                   </Row>
+                  <Row gutter={16}>
+                    <Col span={6}>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "storage"]}
+                        label="Storage"
+                      >
+                        <Input placeholder="128GB / 1TB" />
+                      </Form.Item>
+                    </Col>
+                    <Col span={6}>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "size"]}
+                        label="Size"
+                      >
+                        <Input placeholder='6.1 inch / 14 inch' />
+                      </Form.Item>
+                    </Col>
+                    <Col span={6}>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "connectivity"]}
+                        label="Kết nối"
+                      >
+                        <Input placeholder="Wi‑Fi / 5G / Wi‑Fi + Cellular" />
+                      </Form.Item>
+                    </Col>
+                    <Col span={3}>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "simType"]}
+                        label="SIM"
+                      >
+                        <Input placeholder="eSIM / Dual SIM" />
+                      </Form.Item>
+                    </Col>
+                    <Col span={3}>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "isActive"]}
+                        label="Đang bật"
+                        valuePropName="checked"
+                      >
+                        <Switch />
+                      </Form.Item>
+                    </Col>
+                  </Row>
                   <Form.Item
                     {...restField}
                     name={[name, "images"]}
@@ -694,11 +824,76 @@ export default function ProductForm({
                   >
                     <ImageUpload maxCount={5} folder="products/variants" />
                   </Form.Item>
+                  <Form.List name={[name, "attributes"]}>
+                    {(
+                      variantAttributeFields,
+                      { add: addVariantAttribute, remove: removeVariantAttribute },
+                    ) => (
+                      <Card size="small" title="Thông số riêng của biến thể">
+                        <Row gutter={12} className="mb-2 font-bold px-2">
+                          <Col span={5}>Nhóm</Col>
+                          <Col span={5}>Tên</Col>
+                          <Col span={5}>Giá trị</Col>
+                          <Col span={3}>Đơn vị</Col>
+                          <Col span={4}>Loại</Col>
+                          <Col span={2}></Col>
+                        </Row>
+                        {variantAttributeFields.map(({ key: attrKey, name: attrName, ...variantAttrField }) => (
+                          <Row key={attrKey} gutter={12} className="mb-2">
+                            <Col span={5}>
+                              <Form.Item {...variantAttrField} name={[attrName, "category"]}>
+                                <Input placeholder="Màn hình" />
+                              </Form.Item>
+                            </Col>
+                            <Col span={5}>
+                              <Form.Item {...variantAttrField} name={[attrName, "name"]}>
+                                <Input placeholder="Độ sáng" />
+                              </Form.Item>
+                            </Col>
+                            <Col span={5}>
+                              <Form.Item {...variantAttrField} name={[attrName, "value"]}>
+                                <Input placeholder="1600" />
+                              </Form.Item>
+                            </Col>
+                            <Col span={3}>
+                              <Form.Item {...variantAttrField} name={[attrName, "unit"]}>
+                                <Input placeholder="nits" />
+                              </Form.Item>
+                            </Col>
+                            <Col span={4}>
+                              <Form.Item {...variantAttrField} name={[attrName, "type"]}>
+                                <Select>
+                                  <Option value={ProductAttributeType.CUSTOM}>custom</Option>
+                                  <Option value={ProductAttributeType.GUARANTEE}>guarantee</Option>
+                                </Select>
+                              </Form.Item>
+                            </Col>
+                            <Col span={2}>
+                              <Button
+                                type="text"
+                                danger
+                                icon={<DeleteOutlined />}
+                                onClick={() => removeVariantAttribute(attrName)}
+                              />
+                            </Col>
+                          </Row>
+                        ))}
+                        <Button
+                          type="dashed"
+                          onClick={() => addVariantAttribute({ type: ProductAttributeType.CUSTOM })}
+                          block
+                          icon={<PlusOutlined />}
+                        >
+                          Thêm thông số riêng
+                        </Button>
+                      </Card>
+                    )}
+                  </Form.List>
                 </Card>
               ))}
               <Button
                 type="dashed"
-                onClick={() => add()}
+                onClick={() => add({ isActive: true, images: [], attributes: [] })}
                 block
                 icon={<PlusOutlined />}
               >
@@ -723,9 +918,11 @@ export default function ProductForm({
           {(fields, { add, remove }) => (
             <>
               <Row gutter={16} className="mb-2 font-bold px-4">
-                <Col span={6}>Nhóm</Col>
-                <Col span={8}>Tên thông số</Col>
-                <Col span={8}>Giá trị</Col>
+                <Col span={5}>Nhóm</Col>
+                <Col span={5}>Tên thông số</Col>
+                <Col span={6}>Giá trị</Col>
+                <Col span={3}>Đơn vị</Col>
+                <Col span={3}>Loại</Col>
                 <Col span={2}></Col>
               </Row>
               {fields.map(({ key, name, ...restField }) => (
@@ -733,19 +930,32 @@ export default function ProductForm({
                   key={key}
                   className="flex gap-4 mb-2 p-4 border rounded hover:bg-gray-50 transition-colors"
                 >
-                  <Col span={6}>
+                  <Col span={5}>
                     <Form.Item {...restField} name={[name, "category"]} noStyle>
                       <Input placeholder="Màn hình" />
                     </Form.Item>
                   </Col>
-                  <Col span={8}>
+                  <Col span={5}>
                     <Form.Item {...restField} name={[name, "name"]} noStyle>
                       <Input placeholder="Độ phân giải" />
                     </Form.Item>
                   </Col>
-                  <Col span={8}>
+                  <Col span={6}>
                     <Form.Item {...restField} name={[name, "value"]} noStyle>
                       <Input placeholder="2K+" />
+                    </Form.Item>
+                  </Col>
+                  <Col span={3}>
+                    <Form.Item {...restField} name={[name, "unit"]} noStyle>
+                      <Input placeholder="inch" />
+                    </Form.Item>
+                  </Col>
+                  <Col span={3}>
+                    <Form.Item {...restField} name={[name, "type"]} noStyle>
+                      <Select placeholder="Loại">
+                        <Option value={ProductAttributeType.CUSTOM}>custom</Option>
+                        <Option value={ProductAttributeType.GUARANTEE}>guarantee</Option>
+                      </Select>
                     </Form.Item>
                   </Col>
                   <Col span={2}>
@@ -760,7 +970,7 @@ export default function ProductForm({
               ))}
               <Button
                 type="dashed"
-                onClick={() => add()}
+                onClick={() => add({ type: ProductAttributeType.CUSTOM })}
                 block
                 icon={<PlusOutlined />}
                 className="mt-4"

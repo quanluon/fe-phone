@@ -19,8 +19,13 @@ import {
 } from 'antd';
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import { useParams, useRouter } from 'next/navigation';
-import { adminProductsApi, type AdminProductFilters } from '@/lib/api/admin';
-import { Pagination, Product, ProductStatus } from '@/types';
+import {
+  adminBrandsApi,
+  adminCategoriesApi,
+  adminProductsApi,
+  type AdminProductFilters,
+} from '@/lib/api/admin';
+import { Brand, Category, Pagination, Product, ProductStatus } from '@/types';
 import { getProductCardImage } from '@/lib/utils';
 
 const { Title } = Typography;
@@ -36,6 +41,8 @@ const STATUS_OPTIONS: { value: ProductStatus; label: string; color: string }[] =
 
 export default function DashboardProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [brands, setBrands] = useState<Brand[]>([]);
   const [loading, setLoading] = useState(false);
   const [pagination, setPagination] = useState<Pagination>({
     page: 1,
@@ -68,6 +75,23 @@ export default function DashboardProductsPage() {
   useEffect(() => {
     fetchProducts();
   }, [fetchProducts]);
+
+  useEffect(() => {
+    const fetchMeta = async () => {
+      try {
+        const [categoriesRes, brandsRes] = await Promise.all([
+          adminCategoriesApi.getAll(),
+          adminBrandsApi.getAll(),
+        ]);
+        setCategories(categoriesRes.data ?? []);
+        setBrands(brandsRes.data ?? []);
+      } catch {
+        message.error('Không thể tải bộ lọc danh mục hoặc thương hiệu');
+      }
+    };
+
+    void fetchMeta();
+  }, [message]);
 
   const handleTableChange = (pag: TablePaginationConfig) => {
     setFilters((prev) => ({
@@ -259,6 +283,36 @@ export default function DashboardProductsPage() {
                 </Option>
               ))}
             </Select>
+          </Col>
+          <Col xs={24} sm={12} md={5}>
+            <Select
+              placeholder="Danh mục"
+              value={filters.category}
+              onChange={(value) => setFilters((prev) => ({ ...prev, category: value, page: 1 }))}
+              allowClear
+              showSearch
+              optionFilterProp="label"
+              style={{ width: '100%' }}
+              options={categories.map((category) => ({
+                value: category._id,
+                label: category.name,
+              }))}
+            />
+          </Col>
+          <Col xs={24} sm={12} md={5}>
+            <Select
+              placeholder="Thương hiệu"
+              value={filters.brand}
+              onChange={(value) => setFilters((prev) => ({ ...prev, brand: value, page: 1 }))}
+              allowClear
+              showSearch
+              optionFilterProp="label"
+              style={{ width: '100%' }}
+              options={brands.map((brand) => ({
+                value: brand._id,
+                label: brand.name,
+              }))}
+            />
           </Col>
           <Col>
             <Button onClick={() => setFilters({ page: 1, limit: DEFAULT_PAGE_SIZE })}>

@@ -49,6 +49,16 @@ export interface ProductVariant {
   updatedAt: string;
 }
 
+export interface ProductSource {
+  provider: string;
+  url: string;
+  externalId?: string;
+  categoryKey: string;
+  groupKey?: string;
+  memberUrls?: string[];
+  lastCrawledAt?: string;
+}
+
 export interface Product {
   _id: string;
   name: string;
@@ -64,6 +74,7 @@ export interface Product {
   images: string[];
   features: string[];
   attributes: ProductAttribute[]; // Structured attributes
+  source?: ProductSource;
   status: ProductStatus;
   isFeatured: boolean;
   isNew: boolean;

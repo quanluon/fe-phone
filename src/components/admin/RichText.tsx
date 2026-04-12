@@ -29,7 +29,7 @@ const ReactQuill = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="h-40 bg-gray-50 animate-pulse border rounded-md" />
+      <div className="h-56 bg-gray-50 animate-pulse border rounded-md" />
     ),
   },
 );
@@ -45,7 +45,7 @@ export default function RichText({
   value,
   onChange,
   placeholder,
-  height = 300,
+  height = 420,
 }: RichTextProps) {
   const quillRef = useRef<ReactQuillType>(null);
 
@@ -144,6 +144,7 @@ export default function RichText({
           background-color: #f9fafb;
         }
         .rich-text-editor .ql-editor {
+          min-height: ${typeof height === "number" ? `${Math.max(height - 42, 240)}px` : "360px"};
           font-size: 15px;
           line-height: 1.6;
         }
