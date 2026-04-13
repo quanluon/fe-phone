@@ -61,6 +61,10 @@ type AuthStore = AuthState & AuthActions;
 let unsubscribeAuthObserver: (() => void) | null = null;
 let activeSocialLoginRequest: Promise<void> | null = null;
 
+function hasPersistedAuthSession(state: Pick<AuthState, "user" | "authIdentity" | "isAuthenticated">) {
+  return Boolean(state.isAuthenticated || state.user || state.authIdentity);
+}
+
 function mapFirebaseUserToIdentity(firebaseUser: FirebaseAuthUser): AuthIdentity {
   const [firstName, ...remainingNameParts] = (firebaseUser.displayName || "").split(" ").filter(Boolean);
   const lastName = remainingNameParts.join(" ");
@@ -391,7 +395,7 @@ export const useAuthStore = create<AuthStore>()(
         set((state) => ({
           user,
           profile: user,
-          isAuthenticated: Boolean(state.firebaseUser),
+          isAuthenticated: Boolean(user || state.firebaseUser || state.authIdentity),
         }));
       },
 
@@ -403,14 +407,18 @@ export const useAuthStore = create<AuthStore>()(
       name: "auth-storage",
       storage: createPersistStorage(),
       partialize: (state) => ({
+        authIdentity: state.authIdentity,
         profile: state.profile,
         user: state.user,
+        isAuthenticated: state.isAuthenticated,
         adminApiKey: state.adminApiKey,
       }),
       onRehydrateStorage: () => (state) => {
         if (state) {
+          const hasPersistedSession = hasPersistedAuthSession(state);
           state.isLoading = false;
           state.error = null;
+          state.isAuthenticated = hasPersistedSession;
           state._hasHydrated = true;
         }
       },
