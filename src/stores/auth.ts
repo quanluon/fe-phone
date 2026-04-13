@@ -11,6 +11,7 @@ import {
   signInWithFirebaseGoogle,
   signOutFromFirebase,
   subscribeToFirebaseAuthState,
+  waitForFirebaseAuthReady,
 } from "@/lib/firebase/auth";
 import { createPersistStorage, getErrorMessage } from "@/lib/utils";
 import {
@@ -293,15 +294,22 @@ export const useAuthStore = create<AuthStore>()(
       },
 
       handleUnauthorized: async () => {
-        get().clearSession();
-        const firebaseUser = getCurrentFirebaseUser();
+        const firebaseUser = getCurrentFirebaseUser() || (await waitForFirebaseAuthReady());
+
         if (firebaseUser) {
-          try {
-            await signOutFromFirebase();
-          } catch {
-            // Ignore sign-out failures during unauthorized cleanup.
-          }
+          set({
+            firebaseUser,
+            authIdentity: mapFirebaseUserToIdentity(firebaseUser),
+            user: get().user ?? mapFirebaseUserToAuthUser(firebaseUser),
+            isAuthenticated: true,
+            isLoading: false,
+            error: null,
+            _hasHydrated: true,
+          });
+          return;
         }
+
+        get().clearSession();
       },
 
       syncProfile: async () => {

@@ -20,6 +20,8 @@ import {
 import { ChangePasswordRequest, LoginRequest, RegisterRequest } from '@/types';
 import { getFirebaseAuth } from './client';
 
+let authReadyPromise: Promise<User | null> | null = null;
+
 function getRequiredAuth() {
   const auth = getFirebaseAuth();
   if (!auth) {
@@ -31,6 +33,26 @@ function getRequiredAuth() {
 
 export function subscribeToFirebaseAuthState(callback: (user: User | null) => void) {
   return onAuthStateChanged(getRequiredAuth(), callback);
+}
+
+export async function waitForFirebaseAuthReady(): Promise<User | null> {
+  const auth = getRequiredAuth();
+
+  if (auth.currentUser) {
+    return auth.currentUser;
+  }
+
+  if (!authReadyPromise) {
+    authReadyPromise = new Promise((resolve) => {
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        unsubscribe();
+        authReadyPromise = null;
+        resolve(user);
+      });
+    });
+  }
+
+  return authReadyPromise;
 }
 
 export async function signInWithFirebaseEmail(credentials: LoginRequest): Promise<UserCredential> {
@@ -89,7 +111,11 @@ export async function changeFirebasePassword(data: ChangePasswordRequest) {
 
 export async function getFirebaseIdToken(forceRefresh: boolean = false): Promise<string | null> {
   const auth = getFirebaseAuth();
-  const currentUser = auth?.currentUser;
+  if (!auth) {
+    return null;
+  }
+
+  const currentUser = auth.currentUser || (await waitForFirebaseAuthReady());
 
   if (!currentUser) {
     return null;
