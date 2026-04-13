@@ -1,10 +1,10 @@
 import { useCategories } from '@/hooks/useCategories';
 import { CONTACT_INFO, SOCIAL_LINKS } from '@/lib/constants';
-import { ShoppingCartIcon } from '@heroicons/react/24/outline';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React from 'react';
+import { WebLogo } from '../common/WebLogo';
 
 export const Footer: React.FC = () => {
   const t = useTranslations('footer');
@@ -60,9 +60,7 @@ export const Footer: React.FC = () => {
           {/* Company Info */}
           <div className="sm:col-span-2 lg:col-span-2">
             <Link href="/" className="mb-5 flex items-center space-x-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white text-slate-950">
-                <ShoppingCartIcon className="h-5 w-5" />
-              </div>
+              <WebLogo />
               <span className="text-lg font-bold uppercase tracking-[0.18em]">{CONTACT_INFO.name}</span>
             </Link>
             <p className="mb-5 max-w-md text-sm leading-6 text-slate-300 sm:text-base">

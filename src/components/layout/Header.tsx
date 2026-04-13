@@ -1,6 +1,7 @@
 "use client";
 
 import { CartSidebar } from "@/components/cart/CartSidebar";
+import { WebLogo } from "@/components/common/WebLogo";
 import { DynamicNavigation } from "@/components/layout/DynamicNavigation";
 import { Input } from "@/components/atoms/Input";
 import { useLogout } from "@/hooks/useAuth";
@@ -169,9 +170,7 @@ export const Header: React.FC = () => {
           <div className="flex min-h-16 items-center gap-3 py-3">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2 rounded-full pr-2">
-              <div className="hidden h-10 w-10 items-center justify-center rounded-2xl bg-slate-900 text-white sm:flex">
-                <ShoppingCartIcon className="h-5 w-5" />
-              </div>
+              <WebLogo className="hidden h-10 w-10 sm:block" priority />
               <span className="text-sm font-bold uppercase tracking-[0.18em] text-slate-900 sm:text-base">
                 {CONTACT_INFO.name}
               </span>
