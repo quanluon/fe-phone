@@ -170,16 +170,6 @@ export function ProductVariantSelector({
                   className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-all ${getOptionClasses(state)}`}
                 >
                   <span>{storage}</span>
-                  {state === 'out-of-stock' ? (
-                    <span className="text-[11px] font-semibold uppercase tracking-wide">
-                      {t('variant.outOfStock')}
-                    </span>
-                  ) : null}
-                  {state === 'unavailable' ? (
-                    <span className="text-[11px] font-semibold uppercase tracking-wide">
-                      {t('variant.unavailable')}
-                    </span>
-                  ) : null}
                 </button>
               );
             })}
