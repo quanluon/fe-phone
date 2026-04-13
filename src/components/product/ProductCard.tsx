@@ -1,27 +1,27 @@
 'use client';
 
-import React, { useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
-import { HeartIcon, ShoppingCartIcon, EyeIcon, StarIcon } from '@heroicons/react/24/outline';
-import { HeartIcon as HeartSolidIcon } from '@heroicons/react/24/solid';
-import { Product, ProductVariant } from '@/types';
-import { Card, Badge, NextImage } from '@/components/ui';
+import { Badge, Card, NextImage } from '@/components/ui';
 import { Button } from '@/components/ui/Button';
+import { useCart } from '@/hooks/useCart';
 import { trackSelectItem } from '@/lib/firebase/analytics';
-import { CONTACT_INFO } from '@/lib/constants';
 import {
-  formatCurrency,
   calculateDiscount,
+  formatCurrency,
   getImageUrl,
   getPrimaryVariant,
   getProductCardImage,
 } from '@/lib/utils';
 import { logger } from '@/lib/utils/logger';
-import { useCart } from '@/hooks/useCart';
-import { useWishlistStore } from '@/stores/wishlist';
 import { useUIStore } from '@/stores/ui';
+import { useWishlistStore } from '@/stores/wishlist';
+import { Product, ProductVariant } from '@/types';
+import { EyeIcon, HeartIcon, ShoppingCartIcon, StarIcon } from '@heroicons/react/24/outline';
+import { HeartIcon as HeartSolidIcon } from '@heroicons/react/24/solid';
+import { useTranslations } from 'next-intl';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
+import { ContactPrice } from '../molecules/ContactPrice';
 
 interface ProductCardProps {
   product: Product;
@@ -255,12 +255,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
           <div className="flex gap-2">
             {isContactOnly ? (
-              <Button size="lg" variant="brand" asChild className="flex-1">
-                <Link href={`tel:${CONTACT_INFO.phoneLink}`}>
-                  <ShoppingCartIcon className="h-4 w-4" />
-                  Liên hệ
-                </Link>
-              </Button>
+              <ContactPrice/>
             ) : (
               <Button
                 size="lg"

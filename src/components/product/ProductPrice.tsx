@@ -3,6 +3,7 @@
 import { formatCurrency } from '@/lib/utils';
 import { useUIStore } from '@/stores/ui';
 import { ProductVariant } from '@/types';
+import { ContactPrice } from '../molecules/ContactPrice';
 
 interface ProductPriceProps {
   variant: ProductVariant;
@@ -16,7 +17,7 @@ export function ProductPrice({ variant }: ProductPriceProps) {
       <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Today&apos;s price</p>
       <div className="mt-2 flex flex-wrap items-end gap-3">
         <span className="text-3xl font-semibold text-slate-950">
-          {formatCurrency(variant.price, currency)}
+          {variant.price ? formatCurrency(variant.price, currency) : <ContactPrice />}
         </span>
         {variant.originalPrice && variant.originalPrice > variant.price && (
           <span className="text-lg text-slate-400 line-through">
