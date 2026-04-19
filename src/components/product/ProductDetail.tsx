@@ -25,6 +25,7 @@ import {
   getImageUrl,
   getPrimaryVariant,
   getProductDisplayImages,
+  shouldHideProductPrice,
 } from "@/lib/utils";
 import { logger } from "@/lib/utils/logger";
 import { useWishlistStore } from "@/stores/wishlist";
@@ -38,6 +39,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { GuaranteeSection } from "./GuaranteeSection";
+import { ContactPrice } from "../molecules/ContactPrice";
 
 interface ProductDetailClientProps {
   initialProduct: Product | null;
@@ -121,6 +123,7 @@ export function ProductDetail({ initialProduct }: ProductDetailClientProps) {
   const discount = selectedVariant?.originalPrice
     ? calculateDiscount(selectedVariant.price, selectedVariant.originalPrice)
     : 0;
+  const isContactOnly = shouldHideProductPrice(productData, selectedVariant);
 
   // Calculate available stock considering cart quantity
   const cartQuantity = selectedVariant
@@ -356,10 +359,10 @@ export function ProductDetail({ initialProduct }: ProductDetailClientProps) {
             <div className="lg:absolute lg:inset-0 lg:overflow-y-auto lg:rounded-[2.5rem] lg:border lg:border-slate-100 lg:bg-white/40 lg:p-1 lg:backdrop-blur-sm scrollbar-hide">
               <div className="space-y-6 lg:p-5">
                 <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
-                  <ProductHeader product={productData} discount={discount} />
+                  <ProductHeader product={productData} discount={isContactOnly ? 0 : discount} />
 
                   <div className="mt-5">
-                    <ProductPrice variant={selectedVariant} />
+                    <ProductPrice product={productData} variant={selectedVariant} />
                   </div>
 
                   <p className="mt-5 text-sm leading-7 text-slate-600 sm:text-base">
@@ -381,17 +384,21 @@ export function ProductDetail({ initialProduct }: ProductDetailClientProps) {
                     onQuantityChange={setQuantity}
                   />
 
-                  <ProductActions
-                    availableStock={availableStock}
-                    cartQuantity={cartQuantity}
-                    isAddingToCart={isAddingToCart}
-                    isBuyingNow={isBuyingNow}
-                    isInWishlist={isInWishlistState}
-                    onAddToCart={handleAddToCart}
-                    onBuyNow={handleBuyNow}
-                    onToggleWishlist={handleToggleWishlist}
-                    onShare={handleShare}
-                  />
+                  {isContactOnly ? (
+                    <ProductContactSupport />
+                  ) : (
+                    <ProductActions
+                      availableStock={availableStock}
+                      cartQuantity={cartQuantity}
+                      isAddingToCart={isAddingToCart}
+                      isBuyingNow={isBuyingNow}
+                      isInWishlist={isInWishlistState}
+                      onAddToCart={handleAddToCart}
+                      onBuyNow={handleBuyNow}
+                      onToggleWishlist={handleToggleWishlist}
+                      onShare={handleShare}
+                    />
+                  )}
 
                   <ProductContactSupport />
 
@@ -426,23 +433,29 @@ export function ProductDetail({ initialProduct }: ProductDetailClientProps) {
               {selectedVariant.storage ? ` • ${selectedVariant.storage}` : ""}
             </p>
             <p className="text-base font-semibold text-slate-950">
-              {selectedVariant.price.toLocaleString("vi-VN")}₫
+              {isContactOnly ? "Liên hệ" : selectedVariant.price.toLocaleString("vi-VN") + "₫"}
             </p>
           </div>
-          <Button
-            variant="outline"
-            onClick={handleAddToCart}
-            disabled={availableStock === 0 || isAddingToCart}
-          >
-            {tProduct("addToCart")}
-          </Button>
-          <Button
-            variant="brand"
-            onClick={handleBuyNow}
-            disabled={availableStock === 0 || isBuyingNow}
-          >
-            {tProduct("buyNow")}
-          </Button>
+          {isContactOnly ? (
+            <ContactPrice />
+          ) : (
+            <>
+              <Button
+                variant="outline"
+                onClick={handleAddToCart}
+                disabled={availableStock === 0 || isAddingToCart}
+              >
+                {tProduct("addToCart")}
+              </Button>
+              <Button
+                variant="brand"
+                onClick={handleBuyNow}
+                disabled={availableStock === 0 || isBuyingNow}
+              >
+                {tProduct("buyNow")}
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </div>

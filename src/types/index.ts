@@ -78,6 +78,7 @@ export interface Product {
   status: ProductStatus;
   isFeatured: boolean;
   isNew: boolean;
+  isHiddenPrice: boolean;
   tags: string[];
   metaTitle?: string;
   metaDescription?: string;

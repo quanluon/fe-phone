@@ -10,6 +10,7 @@ import {
   getImageUrl,
   getPrimaryVariant,
   getProductCardImage,
+  shouldHideProductPrice,
 } from '@/lib/utils';
 import { useUIStore } from '@/stores/ui';
 import {
@@ -21,6 +22,7 @@ import {
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { Product } from '@/types';
+import { CONTACT_INFO } from '@/lib/constants';
 
 export default function WishlistPage() {
   const t = useTranslations('wishlist');
@@ -36,6 +38,10 @@ export default function WishlistPage() {
   const handleAddToCart = (product: Product) => {
     // Add the first variant to cart (you might want to show variant selection)
     if (product.variants && product.variants.length > 0) {
+      if (shouldHideProductPrice(product, product.variants[0])) {
+        window.location.href = `tel:${CONTACT_INFO.phoneLink}`;
+        return;
+      }
       addToCart(product, product.variants[0], 1);
     }
   };
@@ -113,6 +119,11 @@ export default function WishlistPage() {
         {/* Wishlist Items */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {wishlistItems.map((product) => (
+            (() => {
+              const primaryVariant = getPrimaryVariant(product) || product.variants[0];
+              const isContactOnly = shouldHideProductPrice(product, primaryVariant);
+
+              return (
             <Card key={product._id} className="group relative overflow-hidden">
               {/* Product Image */}
               <div className="aspect-square relative overflow-hidden">
@@ -141,14 +152,14 @@ export default function WishlistPage() {
                 
                 {/* Price */}
                 <div className="mb-4">
-                  {product.variants && product.variants.length > 0 && (
+                  {primaryVariant && (
                     <div className="flex items-center gap-2">
                       <span className="text-lg font-bold text-gray-900">
-                        {formatCurrency(product.variants[0].price, currency)}
+                        {isContactOnly ? 'Liên hệ' : formatCurrency(primaryVariant.price, currency)}
                       </span>
-                      {product.variants[0].originalPrice && (
+                      {!isContactOnly && primaryVariant.originalPrice && (
                         <span className="text-sm text-gray-500 line-through">
-                          {formatCurrency(product.variants[0].originalPrice, currency)}
+                          {formatCurrency(primaryVariant.originalPrice, currency)}
                         </span>
                       )}
                     </div>
@@ -163,7 +174,7 @@ export default function WishlistPage() {
                     disabled={!product.variants || product.variants.length === 0}
                   >
                     <ShoppingBagIcon className="h-4 w-4 mr-2" />
-                    {t('addToCart')}
+                    {isContactOnly ? 'Liên hệ' : t('addToCart')}
                   </Button>
                   
                   <Link 
@@ -180,6 +191,8 @@ export default function WishlistPage() {
                 </div>
               </div>
             </Card>
+              );
+            })()
           ))}
         </div>
 

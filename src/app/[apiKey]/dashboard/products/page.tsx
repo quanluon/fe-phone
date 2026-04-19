@@ -111,6 +111,20 @@ export default function DashboardProductsPage() {
     }
   };
 
+  const handleHiddenPriceToggle = async (record: Product, nextValue: boolean) => {
+    try {
+      await adminProductsApi.update(record._id, { isHiddenPrice: nextValue });
+      setProducts((prev) =>
+        prev.map((product) =>
+          product._id === record._id ? { ...product, isHiddenPrice: nextValue } : product,
+        ),
+      );
+      message.success(nextValue ? 'Đã bật ẩn giá' : 'Đã hiện giá trở lại');
+    } catch {
+      message.error('Không thể cập nhật trạng thái ẩn giá');
+    }
+  };
+
   const handleEdit = (record: Product) => {
     router.push(`/${apiKey}/dashboard/products/edit/${record._id}`);
   };
@@ -190,7 +204,26 @@ export default function DashboardProductsPage() {
       key: 'basePrice',
       width: 130,
       sorter: true,
-      render: (price: number) => <span style={{ fontWeight: 500 }}>{price.toLocaleString('vi-VN')}₫</span>,
+      render: (price: number, record: Product) => (
+        <span style={{ fontWeight: 500 }}>
+          {record.isHiddenPrice ? 'Liên hệ' : `${price.toLocaleString('vi-VN')}₫`}
+        </span>
+      ),
+    },
+    {
+      title: 'Ẩn giá',
+      dataIndex: 'isHiddenPrice',
+      key: 'isHiddenPrice',
+      width: 110,
+      render: (value: boolean, record: Product) => (
+        <Button
+          size="small"
+          type={value ? 'primary' : 'default'}
+          onClick={() => handleHiddenPriceToggle(record, !value)}
+        >
+          {value ? 'Đang ẩn' : 'Đang hiện'}
+        </Button>
+      ),
     },
     {
       title: 'Trạng thái',

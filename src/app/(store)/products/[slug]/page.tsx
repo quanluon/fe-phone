@@ -61,6 +61,16 @@ function buildProductJsonLd(product: Product, slug: string) {
   const totalStock = product.variants.reduce((sum, variant) => sum + Math.max(variant.stock, 0), 0);
   const productUrl = toAbsoluteUrl(getProductPath({ _id: product._id, slug }));
   const primaryImage = product.images?.length ? product.images.map((image) => toAbsoluteUrl(image)) : [toAbsoluteUrl('/images/placeholder.svg')];
+  const offers = product.isHiddenPrice
+    ? undefined
+    : {
+        '@type': 'Offer',
+        url: productUrl,
+        priceCurrency: 'VND',
+        price: primaryVariant?.price ?? product.basePrice,
+        availability: totalStock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+        itemCondition: 'https://schema.org/NewCondition',
+      };
 
   return {
     '@context': 'https://schema.org',
@@ -75,14 +85,7 @@ function buildProductJsonLd(product: Product, slug: string) {
       '@type': 'Brand',
       name: product.brand.name,
     },
-    offers: {
-      '@type': 'Offer',
-      url: productUrl,
-      priceCurrency: 'VND',
-      price: primaryVariant?.price ?? product.basePrice,
-      availability: totalStock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
-      itemCondition: 'https://schema.org/NewCondition',
-    },
+    ...(offers ? { offers } : {}),
   };
 }
 

@@ -11,6 +11,7 @@ import {
   getImageUrl,
   getPrimaryVariant,
   getProductCardImage,
+  shouldHideProductPrice,
 } from "@/lib/utils"
 import { Product, ProductVariant } from "@/types"
 import { Heart, Plus, Star } from "lucide-react"
@@ -43,7 +44,7 @@ export const ProductCard = ({
   const router = useRouter()
   const selectedVariant = getPrimaryVariant(product) || product.variants[0]
   const productHref = `/products/${product._id}-${product.slug}`
-  const isContactOnly = selectedVariant.price <= 0
+  const isContactOnly = shouldHideProductPrice(product, selectedVariant)
   const { addItem: addToCart } = useCart()
   const discountPercent =
     selectedVariant.originalPrice && selectedVariant.originalPrice > selectedVariant.price

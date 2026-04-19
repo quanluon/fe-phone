@@ -255,6 +255,22 @@ export function getPrimaryVariant(product?: Product | null): ProductVariant | nu
   );
 }
 
+export function shouldHideProductPrice(
+  product?: Product | null,
+  variant?: Partial<ProductVariant> | null,
+): boolean {
+  if (!product) {
+    return false;
+  }
+
+  if (product.isHiddenPrice) {
+    return true;
+  }
+
+  const targetVariant = variant || getPrimaryVariant(product);
+  return (targetVariant?.price ?? product.basePrice ?? 0) <= 0;
+}
+
 export function getProductDisplayImages(
   product?: Product | null,
   variant?: Partial<ProductVariant> | null,

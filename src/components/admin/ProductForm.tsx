@@ -198,6 +198,7 @@ function normalizeFormValues(values: ProductFormValues): ProductFormValues {
     variants: Array.isArray(values.variants)
       ? values.variants.map(normalizeVariant)
       : [],
+    isHiddenPrice: Boolean(values.isHiddenPrice),
   };
 }
 
@@ -295,6 +296,7 @@ export default function ProductForm({
         status: ProductStatus.DRAFT,
         isFeatured: false,
         isNew: true,
+        isHiddenPrice: false,
         productType: ProductType.IPHONE,
         slug: buildUniqueProductSlug(),
         variants: [
@@ -594,6 +596,15 @@ export default function ProductForm({
                   parser={(v) => Number(v?.replace(/\$\s?|(,*)/g, ""))}
                   placeholder="Giá bán chưa giảm..."
                 />
+              </Form.Item>
+
+              <Form.Item
+                name="isHiddenPrice"
+                label="Ẩn giá trên website"
+                valuePropName="checked"
+                extra="Khi bật, mọi chỗ trên FE sẽ hiển thị Liên hệ thay vì giá."
+              >
+                <Switch checkedChildren="Ẩn giá" unCheckedChildren="Hiện giá" />
               </Form.Item>
             </Card>
 
@@ -1000,6 +1011,7 @@ export default function ProductForm({
       initialValues={{
         isFeatured: false,
         isNew: false,
+        isHiddenPrice: false,
         productType: ProductType.MACBOOK,
       }}
     >
@@ -1019,6 +1031,9 @@ export default function ProductForm({
             </Form.Item>
             <Form.Item name="isNew" valuePropName="value" noStyle>
               <CompactToggle label="Mới" activeColor="#1890ff" />
+            </Form.Item>
+            <Form.Item name="isHiddenPrice" valuePropName="value" noStyle>
+              <CompactToggle label="Ẩn giá" activeColor="#13c2c2" />
             </Form.Item>
           </div>
 

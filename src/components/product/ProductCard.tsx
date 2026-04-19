@@ -10,6 +10,7 @@ import {
   getImageUrl,
   getPrimaryVariant,
   getProductCardImage,
+  shouldHideProductPrice,
 } from '@/lib/utils';
 import { logger } from '@/lib/utils/logger';
 import { useUIStore } from '@/stores/ui';
@@ -62,7 +63,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     ? calculateDiscount(selectedVariant.price, selectedVariant.originalPrice)
     : 0;
 
-  const isContactOnly = selectedVariant.price <= 0;
+  const isContactOnly = shouldHideProductPrice(product, selectedVariant);
   const cartQuantity = getItemQuantity(product._id, selectedVariant._id);
   const availableStock = selectedVariant.stock - cartQuantity;
 
@@ -136,7 +137,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         <div className="absolute left-3 top-3 flex flex-wrap gap-2">
           {product.isNew && <Badge variant="secondary" size="sm">Mới</Badge>}
           {product.isFeatured && <Badge variant="warning" size="sm">Nổi bật</Badge>}
-          {!!(discount > 0 && product?.basePrice) && <Badge variant="danger" size="sm">-{discount}%</Badge>}
+          {!!(discount > 0 && product?.basePrice && !isContactOnly) && <Badge variant="danger" size="sm">-{discount}%</Badge>}
         </div>
 
         <div className="absolute right-3 top-3 flex flex-col gap-2">
