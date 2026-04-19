@@ -377,12 +377,14 @@ export function ProductDetail({ initialProduct }: ProductDetailClientProps) {
                     onVariantChange={handleVariantChange}
                   />
 
-                  <ProductQuantitySelector
-                    quantity={quantity}
-                    availableStock={availableStock}
-                    cartQuantity={cartQuantity}
-                    onQuantityChange={setQuantity}
-                  />
+                  {!isContactOnly && (
+                    <ProductQuantitySelector
+                      quantity={quantity}
+                      availableStock={availableStock}
+                      cartQuantity={cartQuantity}
+                      onQuantityChange={setQuantity}
+                    />
+                  )}
 
                   {isContactOnly ? (
                     <ProductContactSupport />
@@ -400,7 +402,7 @@ export function ProductDetail({ initialProduct }: ProductDetailClientProps) {
                     />
                   )}
 
-                  <ProductContactSupport />
+                  {!isContactOnly && <ProductContactSupport />}
 
                   <ProductFeatures />
                 </div>
